@@ -1,4 +1,5 @@
 import { authorizationInstance } from '@/api/instance'
+import { getPagingPath } from '@/api/utils/common/getPagingPath'
 import { AnswerRecord, Paging, PagingRequestParams } from '@/types'
 
 type AnswerRecordPagingResponse = {
@@ -7,7 +8,7 @@ type AnswerRecordPagingResponse = {
 
 export const getAnswerRecordPaging = async (params: PagingRequestParams) => {
   const response = await authorizationInstance.get<AnswerRecordPagingResponse>(
-    getAnswerRecordPagingPath(params)
+    getPagingPath('/api/answer/record', params)
   )
 
   const { data } = response
@@ -17,26 +18,4 @@ export const getAnswerRecordPaging = async (params: PagingRequestParams) => {
     nextPageToken:
       data.page !== data.totalPages ? (data.page + 1).toString() : undefined,
   }
-}
-
-const getAnswerRecordPagingPath = ({
-  page,
-  size,
-  sort,
-}: PagingRequestParams) => {
-  const params = new URLSearchParams()
-
-  if (size) {
-    params.append('size', size.toString())
-  }
-
-  if (page) {
-    params.append('page', page.toString())
-  }
-
-  if (sort) {
-    sort.forEach((sortField) => params.append('sort', sortField))
-  }
-
-  return `/api/answer/record?${params}`
 }
