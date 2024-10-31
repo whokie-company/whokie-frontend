@@ -1,19 +1,11 @@
 import { authorizationInstance } from '@/api/instance'
-import { AnswerRecord, Paging } from '@/types'
-
-export type AnswerRecordPagingRequestParams = {
-  size?: number
-  page?: string
-  sort?: string[]
-}
+import { AnswerRecord, Paging, PagingRequestParams } from '@/types'
 
 type AnswerRecordPagingResponse = {
   content: AnswerRecord[]
 } & Paging
 
-export const getAnswerRecordPaging = async (
-  params: AnswerRecordPagingRequestParams
-) => {
+export const getAnswerRecordPaging = async (params: PagingRequestParams) => {
   const response = await authorizationInstance.get<AnswerRecordPagingResponse>(
     getAnswerRecordPagingPath(params)
   )
@@ -31,7 +23,7 @@ const getAnswerRecordPagingPath = ({
   page,
   size,
   sort,
-}: AnswerRecordPagingRequestParams) => {
+}: PagingRequestParams) => {
   const params = new URLSearchParams()
 
   if (size) {
