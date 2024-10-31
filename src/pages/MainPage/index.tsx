@@ -43,13 +43,7 @@ const Content = ({
     <Box bg="secondary_background" borderRadius="20px" textAlign="center">
       <Question questionIndex={questionIndex} />
       <Box p={24}>
-        <Flex
-          direction="column"
-          position="absolute"
-          bottom={32}
-          left="50%"
-          transform="translateX(-45%)"
-        >
+        <Flex direction="column" align="center">
           <ProfileGrid
             profiles={picked.slice(0, 3)}
             onProfileSelect={handleProfileSelect}
