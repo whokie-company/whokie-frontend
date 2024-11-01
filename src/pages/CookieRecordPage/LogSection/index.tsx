@@ -3,8 +3,9 @@ import { format } from 'date-fns'
 
 import { useAnswerRecordPaging } from '@/api/services/answer/record-paging/useAnswerRecordPaging'
 import { convertToDailyCookies } from '@/api/utils/answer/convertToDailyCookies'
-import { CookieLogText } from '@/components/CookieLogText'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
+
+import { CookieLogText } from '../CookieLogText'
 
 export const LogSection = () => {
   const { answerRecords, hasNextPage, isFetchingNextPage, fetchNextPage } =
