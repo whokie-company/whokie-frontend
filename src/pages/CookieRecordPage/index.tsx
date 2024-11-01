@@ -1,18 +1,11 @@
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
-import {
-  Center,
-  Flex,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-} from '@chakra-ui/react'
+import { Flex, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 
 import { Loading } from '@/components/Loading'
 
+import { CalendarSection } from './CalendarSection'
 import { CookieRecordErrorFallback } from './CookieRecordErrorFallback'
 import { CookieRecordHeader } from './CookieRecordHeader'
 import { LogSection } from './LogSection'
@@ -38,18 +31,18 @@ export default function CookieRecordPage() {
             <Tab>캘린더</Tab>
           </TabList>
         </Flex>
-        <ErrorBoundary FallbackComponent={CookieRecordErrorFallback}>
-          <Suspense fallback={<Loading />}>
-            <TabPanels>
-              <TabPanel>
+        <TabPanels>
+          <TabPanel>
+            <ErrorBoundary FallbackComponent={CookieRecordErrorFallback}>
+              <Suspense fallback={<Loading />}>
                 <LogSection />
-              </TabPanel>
-              <TabPanel>
-                <Center>캘린더 섹션</Center>
-              </TabPanel>
-            </TabPanels>
-          </Suspense>
-        </ErrorBoundary>
+              </Suspense>
+            </ErrorBoundary>
+          </TabPanel>
+          <TabPanel>
+            <CalendarSection />
+          </TabPanel>
+        </TabPanels>
       </Tabs>
     </Flex>
   )
