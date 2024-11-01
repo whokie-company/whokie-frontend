@@ -8,6 +8,7 @@ import { ActiveBrownBox } from '@/components/ActiveBrownBox'
 import { PageLayout } from '@/components/PageLayout'
 import { useSeletedGroupStore } from '@/stores/selected-group'
 
+import { AddGroupButton } from './AddGroupButton'
 import { GroupErrorFallback } from './GroupErrorFallback'
 import { GroupList } from './GroupList'
 
@@ -24,13 +25,7 @@ export const GroupSection = () => {
         />
       }
     >
-      <Flex
-        flexDirection="column"
-        alignItems="start"
-        overflowY="scroll"
-        maxHeight="32rem"
-        gap={2}
-      >
+      <Flex flexDirection="column" alignItems="start" gap={2}>
         <Flex flexDirection="column" width="full">
           <Text
             fontSize="small"
@@ -67,6 +62,7 @@ export const GroupSection = () => {
             </Suspense>
           </ErrorBoundary>
         </Flex>
+        <AddGroupButton />
       </Flex>
     </PageLayout.SideSection>
   )
