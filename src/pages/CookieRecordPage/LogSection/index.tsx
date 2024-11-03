@@ -9,6 +9,7 @@ import { convertToDailyCookies } from '@/api/utils/answer/convertToDailyCookies'
 import { CookieLogText } from '@/components/CookieLogText'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
 import { useClickOutSideElement } from '@/hooks/useClickOutsideElement'
+import { useSelectedAnswerStore } from '@/stores/selected-answer'
 
 import { HintDrawer } from '../HintDrawer'
 
@@ -16,6 +17,10 @@ export const LogSection = () => {
   const { answerRecords, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useAnswerRecordPaging({})
   const cookieLogs = convertToDailyCookies(answerRecords)
+
+  const setSelectedAnswer = useSelectedAnswerStore(
+    (state) => state.setSelectedAnswer
+  )
 
   const [portalNode, setPortalNode] = useState<HTMLElement | null>(null)
   const { isOpen, onClose, onOpen } = useDisclosure()
@@ -45,7 +50,13 @@ export const LogSection = () => {
                 key={cookie.answerId}
                 logContent={cookie.questionContent}
                 hintCount={cookie.hintCount}
-                onClick={() => onOpen()}
+                onClick={() => {
+                  onOpen()
+                  setSelectedAnswer({
+                    questionContent: cookie.questionContent,
+                    createdAt: curDay.createdAt,
+                  })
+                }}
               />
             ))}
           </Flex>
