@@ -6,15 +6,17 @@ interface CookieLogTextProps {
   groupName?: 'ALL' | string
   logContent: string
   hintCount: 0 | 1 | 2 | 3
+  onClick: () => void
 }
 
 export const CookieLogText = ({
   groupName = 'ALL',
   logContent,
   hintCount,
+  onClick,
 }: CookieLogTextProps) => {
   return (
-    <Flex gap="0.5rem" alignItems="center">
+    <Flex gap="0.5rem" alignItems="center" onClick={onClick}>
       <Tag
         fontSize="x-small"
         minWidth="fit-content"
