@@ -1,7 +1,8 @@
-import { Flex, Tag, Text } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 
 import { AnswerDetail } from './AnswerDetail'
 import { HintList } from './HintList'
+import { MyPoint } from './MyPoint'
 
 interface HintDrawerProps {
   isOpen: boolean
@@ -25,20 +26,7 @@ export const HintDrawer = ({ isOpen }: HintDrawerProps) => {
           paddingY={8}
           paddingX={4}
         >
-          <Flex justifyContent="end">
-            <Tag
-              background="orange.500"
-              rounded="full"
-              fontSize="x-small"
-              color="white"
-              fontWeight="bold"
-            >
-              <Text fontWeight="bold" marginRight="6px">
-                포인트
-              </Text>
-              <Text>100</Text>
-            </Tag>
-          </Flex>
+          <MyPoint />
           <Flex flexDirection="column" alignItems="center">
             <AnswerDetail />
             <HintList />
