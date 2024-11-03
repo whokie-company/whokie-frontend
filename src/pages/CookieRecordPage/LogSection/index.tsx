@@ -1,34 +1,51 @@
-import { Flex, Heading } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
+
+import { Flex, Heading, useDisclosure } from '@chakra-ui/react'
 import { format } from 'date-fns'
 
 import { useAnswerRecordPaging } from '@/api/services/answer/record-paging/useAnswerRecordPaging'
 import { convertToDailyCookies } from '@/api/utils/answer/convertToDailyCookies'
 import { CookieLogText } from '@/components/CookieLogText'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
+import { useClickOutSideElement } from '@/hooks/useClickOutsideElement'
+
+import { HintDrawer } from '../HintDrawer'
 
 export const LogSection = () => {
   const { answerRecords, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useAnswerRecordPaging({})
   const cookieLogs = convertToDailyCookies(answerRecords)
 
+  const [portalNode, setPortalNode] = useState<HTMLElement | null>(null)
+  const { isOpen, onClose, onOpen } = useDisclosure()
+
+  useEffect(() => {
+    setPortalNode(document.getElementById('page-layout'))
+  }, [])
+
+  useClickOutSideElement(document.getElementById('hint-drawer'), onClose)
+
   return (
     <Flex flexDirection="column" alignItems="center">
-      {cookieLogs.map((today) => (
+      {portalNode && createPortal(<HintDrawer isOpen={isOpen} />, portalNode)}
+      {cookieLogs.map((curDay) => (
         <Flex
-          key={format(today.createdAt, 'yyyy.MM.dd')}
+          key={format(curDay.createdAt, 'yyyy.MM.dd')}
           flexDirection="column"
           gap={1}
           paddingBottom={10}
         >
           <Flex justifyContent="center">
-            <Heading size="sm">{format(today.createdAt, 'MM.dd')}</Heading>
+            <Heading size="sm">{format(curDay.createdAt, 'MM.dd')}</Heading>
           </Flex>
           <Flex flexDirection="column" gap={2}>
-            {today.cookies.map((cookie) => (
+            {curDay.cookies.map((cookie) => (
               <CookieLogText
                 key={cookie.answerId}
                 logContent={cookie.questionContent}
                 hintCount={cookie.hintCount}
+                onClick={() => onOpen()}
               />
             ))}
           </Flex>
