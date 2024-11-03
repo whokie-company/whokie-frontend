@@ -1,5 +1,5 @@
 import { authorizationInstance } from '@/api/instance'
-import { getPagingPath } from '@/api/utils/common/getPagingPath'
+import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
 import { Group, Paging, PagingRequestParams } from '@/types'
 
 type GroupResponse = {
@@ -8,7 +8,7 @@ type GroupResponse = {
 
 export const getGroupPaging = async (params: PagingRequestParams) => {
   const { data } = await authorizationInstance.get<GroupResponse>(
-    getPagingPath('/api/group/my', params)
+    appendParamsToUrl('/api/group/my', params)
   )
 
   return {

@@ -1,14 +1,20 @@
 import { authorizationInstance } from '@/api/instance'
-import { getPagingPath } from '@/api/utils/common/getPagingPath'
+import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
 import { AnswerRecord, Paging, PagingRequestParams } from '@/types'
 
 type AnswerRecordPagingResponse = {
   content: AnswerRecord[]
 } & Paging
 
-export const getAnswerRecordPaging = async (params: PagingRequestParams) => {
+type AnswerRecordRequsetParams = {
+  date?: string
+} & PagingRequestParams
+
+export const getAnswerRecordPaging = async (
+  params: AnswerRecordRequsetParams
+) => {
   const response = await authorizationInstance.get<AnswerRecordPagingResponse>(
-    getPagingPath('/api/answer/record', params)
+    appendParamsToUrl('/api/answer/record', params)
   )
 
   const { data } = response
@@ -16,6 +22,6 @@ export const getAnswerRecordPaging = async (params: PagingRequestParams) => {
   return {
     records: data.content,
     nextPageToken:
-      data.page !== data.totalPages ? (data.page + 1).toString() : undefined,
+      data.page !== data.totalPages - 1 ? data.page.toString() : undefined,
   }
 }
