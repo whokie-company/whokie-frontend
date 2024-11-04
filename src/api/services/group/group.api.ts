@@ -1,8 +1,21 @@
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
+import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
-import { authorizationInstance } from '@/api/instance'
+import { authorizationInstance, fetchInstance } from '@/api/instance'
 import { getPagingPath } from '@/api/utils/common/getPagingPath'
 import { Group, PagingRequestParams, PagingResponse } from '@/types'
+
+const getGroupPage = async (groupId: string) => {
+  const response = await fetchInstance.get<Group>(`/api/group/info/${groupId}`)
+
+  return response.data
+}
+
+export const useGroupPage = (groupId: string) => {
+  return useQuery({
+    queryKey: ['groupPage', groupId],
+    queryFn: () => getGroupPage(groupId),
+  })
+}
 
 type GroupResponse = PagingResponse<Omit<Group, 'groupDescription'>[]>
 
