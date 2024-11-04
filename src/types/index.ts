@@ -78,3 +78,9 @@ export type Hint = {
   valid: boolean
   content: string
 }
+
+export type Modal = {
+  isOpen: boolean
+  onOpen: () => void
+  onClose: () => void
+}
