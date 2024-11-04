@@ -3,7 +3,7 @@ name: Front Deployment
 on:
   push:
     branches:
-      - master
+      - Master
 
 jobs:
   build:
