@@ -30,8 +30,7 @@ const Content = ({
   setquestionIndex: React.Dispatch<React.SetStateAction<number>>
 }) => {
   const { all, picked, handleReload } = useProfile()
-  const handleProfileSelect = (profileId: number) => {
-    console.log(`${profileId}`) // 선택된 프로필 ID 확인하기
+  const handleProfileSelect = () => {
     setquestionIndex((prevIndex) => (prevIndex + 1) % all.length)
   }
 
