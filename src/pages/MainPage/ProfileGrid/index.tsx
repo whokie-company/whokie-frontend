@@ -11,10 +11,9 @@ type ProfileGridProps = {
 
 const ProfileGrid = ({ profiles, onProfileSelect }: ProfileGridProps) => {
   const columns = profiles.length === 3 ? 3 : 2
-  const marginBottom = columns === 2 ? 16 : 20
 
   return (
-    <SimpleGrid columns={columns} spacing={16} mb={marginBottom}>
+    <SimpleGrid columns={columns} spacing={16} mb={columns === 2 ? 16 : 20}>
       {profiles.map((profile) => (
         <ProfileButton
           profile={profile}
