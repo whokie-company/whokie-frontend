@@ -2,11 +2,12 @@ import { useEffect } from 'react'
 
 export function useClickOutSideElement(
   element: HTMLElement | null,
-  handler: () => void
+  handler: () => void,
+  condition?: boolean
 ) {
   useEffect(() => {
     const listener = (event: MouseEvent) => {
-      if (element && !element.contains(event.target as Node)) {
+      if (!condition && element && !element.contains(event.target as Node)) {
         handler()
       }
     }
@@ -15,5 +16,5 @@ export function useClickOutSideElement(
     return () => {
       document.removeEventListener('mousedown', listener)
     }
-  }, [element, handler])
+  }, [element, handler, condition])
 }
