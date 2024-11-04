@@ -1,6 +1,6 @@
 import { Flex, Text } from '@chakra-ui/react'
 
-import { useGroupPaging } from '@/api/services/group/useGroupPaging'
+import { useGroupPaging } from '@/api/services/group/group.api'
 import { ActiveBrownBox } from '@/components/ActiveBrownBox'
 import { AvatarLabelWithNavigate } from '@/components/AvatarLabel'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'

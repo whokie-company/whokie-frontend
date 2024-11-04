@@ -1,7 +1,7 @@
 import { Box, Center, Flex, Text } from '@chakra-ui/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
-import { friendsQueries } from '@/api/services/friend/useFriends'
+import { friendsQueries } from '@/api/services/friend/queries'
 import { AvatarLabelWithNavigate } from '@/components/AvatarLabel'
 import { PageLayout } from '@/components/PageLayout'
 

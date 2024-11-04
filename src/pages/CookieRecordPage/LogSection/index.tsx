@@ -4,18 +4,25 @@ import { createPortal } from 'react-dom'
 import { Flex, Heading, useDisclosure } from '@chakra-ui/react'
 import { format } from 'date-fns'
 
-import { useAnswerRecordPaging } from '@/api/services/answer/record-paging/useAnswerRecordPaging'
+import { useAnswerRecordPaging } from '@/api/services/answer/record.api'
 import { convertToDailyCookies } from '@/api/utils/answer/convertToDailyCookies'
 import { CookieLogText } from '@/components/CookieLogText'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
+import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
 import { useClickOutSideElement } from '@/hooks/useClickOutsideElement'
 import { useSelectedAnswerStore } from '@/stores/selected-answer'
 
 import { HintDrawer } from '../HintDrawer'
 
 export const LogSection = () => {
-  const { answerRecords, hasNextPage, isFetchingNextPage, fetchNextPage } =
-    useAnswerRecordPaging({})
+  const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    useAnswerRecordPaging({ date: '2024-11-01' })
+
+  const answerRecords = data?.pages.flatMap((page) => page.records)
+
+  if (!answerRecords.length)
+    throw new Error(DATA_ERROR_MESSAGES.ANSWER_RECORD_NOT_FOUND)
+
   const cookieLogs = convertToDailyCookies(answerRecords)
 
   const setSelectedAnswer = useSelectedAnswerStore(

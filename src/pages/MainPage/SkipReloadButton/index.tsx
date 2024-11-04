@@ -9,7 +9,7 @@ type ButtonsProps = {
 
 const Buttons = ({ onReload, onSkip }: ButtonsProps) => {
   return (
-    <Flex justify="space-between">
+    <Flex justify="space-between" gap={52}>
       <Button
         leftIcon={<BiGroup />}
         bg="brown.50"
