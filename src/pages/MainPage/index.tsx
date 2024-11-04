@@ -2,6 +2,7 @@ import { Suspense, useState } from 'react'
 
 import { Box, Flex } from '@chakra-ui/react'
 
+import { useAnswerQuestion } from '@/api/services/answer/common/useAnswerQuestion'
 import { Loading } from '@/components/Loading'
 
 import ProfileGrid from './ProfileGrid'
@@ -11,12 +12,15 @@ import useProfile from './UseProfilehook'
 
 const MainPage = () => {
   const [questionIndex, setquestionIndex] = useState(0)
+  const [questionId, setquestionId] = useState<number | null>(null)
 
   return (
     <Suspense fallback={<Loading />}>
       <Content
         questionIndex={questionIndex}
         setquestionIndex={setquestionIndex}
+        questionId={questionId}
+        setquestionId={setquestionId}
       />
     </Suspense>
   )
@@ -25,13 +29,22 @@ const MainPage = () => {
 const Content = ({
   questionIndex,
   setquestionIndex,
+  questionId,
+  setquestionId,
 }: {
   questionIndex: number
   setquestionIndex: React.Dispatch<React.SetStateAction<number>>
+  questionId: number | null
+  setquestionId: React.Dispatch<React.SetStateAction<number | null>>
 }) => {
   const { all, picked, handleReload } = useProfile()
-  const handleProfileSelect = () => {
-    setquestionIndex((prevIndex) => (prevIndex + 1) % all.length)
+  const { mutate: answerQuestion } = useAnswerQuestion()
+
+  const handleProfileSelect = (profileId: number) => {
+    if (questionId !== null) {
+      answerQuestion({ questionId, pickedId: profileId })
+      setquestionIndex((prevIndex) => (prevIndex + 1) % all.length)
+    }
   }
 
   const handleSkip = () => {
@@ -40,7 +53,7 @@ const Content = ({
 
   return (
     <Box bg="secondary_background" borderRadius="20px" textAlign="center">
-      <Question questionIndex={questionIndex} />
+      <Question questionIndex={questionIndex} questionload={setquestionId} />
       <Box p={24}>
         <Flex direction="column" align="center">
           <ProfileGrid

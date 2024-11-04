@@ -7,9 +7,10 @@ import { useRandomQuestion } from '@/api/services/question/random/useRandomQuest
 
 type QuestionProps = {
   questionIndex: number
+  questionload: (questionId: number | null) => void
 }
 
-const Question = ({ questionIndex }: QuestionProps) => {
+const Question = ({ questionIndex, questionload }: QuestionProps) => {
   const { data }: { data: RandomQuestionResponse | undefined } =
     useRandomQuestion()
   const [questionText, setquestionText] = useState('')
@@ -19,8 +20,9 @@ const Question = ({ questionIndex }: QuestionProps) => {
     if (data) {
       const { questions } = data
       if (questionIndex < questions.length) {
-        const { content } = questions[questionIndex]
+        const { content, questionId } = questions[questionIndex]
         setquestionText(content)
+        questionload(questionId)
 
         const { length } = content
         if (length <= 15) {
@@ -30,9 +32,11 @@ const Question = ({ questionIndex }: QuestionProps) => {
         } else {
           setMarginTop(8)
         }
+      } else {
+        questionload(null)
       }
     }
-  }, [data, questionIndex])
+  }, [data, questionIndex, questionload])
 
   return (
     <Text

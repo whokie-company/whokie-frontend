@@ -22,11 +22,8 @@ const answerRandomQuestion = async ({
   return response.data
 }
 
-export const useAnswerQuestion = ({
-  questionId,
-  pickedId,
-}: AnswerQuestionParam) => {
+export const useAnswerQuestion = () => {
   return useMutation({
-    mutationFn: () => answerRandomQuestion({ questionId, pickedId }),
+    mutationFn: (params: AnswerQuestionParam) => answerRandomQuestion(params),
   })
 }
