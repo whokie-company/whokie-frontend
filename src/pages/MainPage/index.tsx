@@ -43,6 +43,7 @@ const Content = ({
   const handleProfileSelect = (profileId: number) => {
     if (questionId !== null) {
       answerQuestion({ questionId, pickedId: profileId })
+      handleReload()
       setquestionIndex((prevIndex) => (prevIndex + 1) % all.length)
     }
   }
