@@ -4,6 +4,7 @@ import { Box } from '@chakra-ui/react'
 
 import { useMyPage } from '@/api/services/profile/mypage/useMyPage'
 import { RankingGraph } from '@/components/RankingGraph'
+import { useMyUserIdStore } from '@/stores/my-user-id'
 
 import ErrorPage from '../ErrorPage'
 import Navigate from './Navigate'
@@ -40,7 +41,10 @@ const dummyRankData = [
 
 export default function MyPage() {
   const { userId } = useParams<{ userId: string }>()
+  const myUserId = useMyUserIdStore((state) => state.myUserId)
   const { data: profile, isLoading, error } = useMyPage(userId || '')
+
+  const isMyPage = userId === myUserId?.toString
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <ErrorPage />
@@ -53,7 +57,7 @@ export default function MyPage() {
       <Box p="0 30px">
         <RankingGraph rank={dummyRankData} />
       </Box>
-      <OvenMenu />
+      <OvenMenu userId={userId} isMyPage={isMyPage} />
     </div>
   )
 }
