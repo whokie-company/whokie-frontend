@@ -18,7 +18,7 @@ export default function OvenMenu({ userId, isMyPage }: OvenMenuProps) {
   }
 
   const CardData1 = {
-    variant: 'orange' as const,
+    variant: isMyPage ? ('orange' as const) : ('white' as const),
     orientation: isMyPage ? ('vertical' as const) : ('horizontal' as const),
     label: '프로필 Q&A',
     description: isMyPage
