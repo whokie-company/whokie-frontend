@@ -16,12 +16,20 @@ const MainPage = () => {
 
   return (
     <Suspense fallback={<Loading />}>
-      <Content
-        questionIndex={questionIndex}
-        setquestionIndex={setquestionIndex}
-        questionId={questionId}
-        setquestionId={setquestionId}
-      />
+      <Box
+        height="100%"
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
+        padding="50px 0"
+      >
+        <Content
+          questionIndex={questionIndex}
+          setquestionIndex={setquestionIndex}
+          questionId={questionId}
+          setquestionId={setquestionId}
+        />
+      </Box>
     </Suspense>
   )
 }
@@ -53,9 +61,16 @@ const Content = ({
   }
 
   return (
-    <Box bg="secondary_background" borderRadius="20px" textAlign="center">
+    <Box
+      bg="secondary_background"
+      textAlign="center"
+      height="100%"
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-between"
+    >
       <Question questionIndex={questionIndex} questionload={setquestionId} />
-      <Box p={24}>
+      <Box>
         <Flex direction="column" align="center">
           <ProfileGrid
             profiles={picked.slice(0, 3)}

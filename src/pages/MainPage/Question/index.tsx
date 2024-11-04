@@ -14,7 +14,6 @@ const Question = ({ questionIndex, questionload }: QuestionProps) => {
   const { data }: { data: RandomQuestionResponse | undefined } =
     useRandomQuestion()
   const [questionText, setquestionText] = useState('')
-  const [marginTop, setMarginTop] = useState<number>(0)
 
   useEffect(() => {
     if (data) {
@@ -23,15 +22,6 @@ const Question = ({ questionIndex, questionload }: QuestionProps) => {
         const { content, questionId } = questions[questionIndex]
         setquestionText(content)
         questionload(questionId)
-
-        const { length } = content
-        if (length <= 15) {
-          setMarginTop(24)
-        } else if (length <= 30) {
-          setMarginTop(16)
-        } else {
-          setMarginTop(8)
-        }
       } else {
         questionload(null)
       }
@@ -39,13 +29,7 @@ const Question = ({ questionIndex, questionload }: QuestionProps) => {
   }, [data, questionIndex, questionload])
 
   return (
-    <Text
-      fontWeight="600"
-      fontSize="4xl"
-      color="text"
-      mt={marginTop}
-      paddingX={16}
-    >
+    <Text fontWeight="600" fontSize="4xl" color="text" paddingX={16}>
       {questionText}
     </Text>
   )
