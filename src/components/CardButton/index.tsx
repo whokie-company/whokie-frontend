@@ -3,15 +3,18 @@ import { IconType } from 'react-icons'
 import { Box, Button, HStack, Text, VStack, useTheme } from '@chakra-ui/react'
 import { css } from '@emotion/react'
 
-export type CardButtonProps = {
-  variant: 'orange' | 'white'
-  orientation: 'vertical' | 'horizontal'
-  label: string
-  description: string
-  Icon: IconType
+interface CardButtonProps {
+  buttonElement: {
+    variant: 'orange' | 'white'
+    orientation: 'vertical' | 'horizontal'
+    label: string
+    description: string
+    Icon: IconType
+  }
+  onClick?: () => void // onClick을 선택적 prop으로 추가
 }
 
-const CardButton = ({ buttonElement }: { buttonElement: CardButtonProps }) => {
+const CardButton = ({ buttonElement, onClick }: CardButtonProps) => {
   const { variant, orientation, label, description, Icon } = buttonElement
   const theme = useTheme()
   const borderRadius = orientation === 'vertical' ? '20px' : '8px'
@@ -44,7 +47,7 @@ const CardButton = ({ buttonElement }: { buttonElement: CardButtonProps }) => {
   })
 
   return (
-    <Button css={commonStyles}>
+    <Button onClick={onClick} css={commonStyles}>
       {orientation === 'vertical' ? (
         <VStack
           spacing={2}
