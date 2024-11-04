@@ -13,24 +13,24 @@ export type Group = {
   groupMemberCount: number
 }
 
-export interface ChatItem {
+export type ChatItem = {
   chatId: number
   direction: 'left' | 'right'
   content: string
   createdAt: string
 }
 
-export interface ChatBoxProps {
+export type ChatBoxProps = {
   chatItem: ChatItem
 }
 
-export interface QuestionItem {
+export type QuestionItem = {
   profileQuestionId: number
   profileQuestionContent: string
   createdAt: string
 }
 
-export interface Question {
+export type Question = {
   questionId: number
   content: string
   users: Friend[]
