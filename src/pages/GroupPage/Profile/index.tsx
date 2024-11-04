@@ -24,7 +24,7 @@ interface ProfileProps {
 export default function Profile({ role }: ProfileProps) {
   return (
     <header>
-      <Box position="relative" marginBottom="30px">
+      <Box position="relative" marginBottom="60px">
         <HStack
           alignItems="center"
           spacing="15px"

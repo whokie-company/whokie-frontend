@@ -1,4 +1,4 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 
 import { RankingGraph } from '@/components/RankingGraph'
 
@@ -41,12 +41,6 @@ export default function GroupPage() {
       <Navigate />
       <Profile role={userRole} />
       <Box p="0 30px">
-        <Text fontSize="md" fontWeight="bold" mb="2">
-          랭킹
-        </Text>
-        <Text fontSize="xs" color="text_description">
-          쿠키를 가장 많이 주고 받은 멤버를 확인해보세요
-        </Text>
         <RankingGraph rank={dummyRankData} />
       </Box>
       <Management role={userRole} />
