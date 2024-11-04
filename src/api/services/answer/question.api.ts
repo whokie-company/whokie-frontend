@@ -7,22 +7,23 @@ type AnswerQuestionParam = {
   pickedId: number
 }
 
-type AnswerResponse = {
+type AnswerQuestionResponse = {
   message: string
 }
 
 const answerRandomQuestion = async ({
   questionId,
   pickedId,
-}: AnswerQuestionParam): Promise<AnswerResponse> => {
+}: AnswerQuestionParam): Promise<AnswerQuestionResponse> => {
   const response = await authorizationInstance.post('/api/answer/common', {
     questionId,
     pickedId,
   })
+
   return response.data
 }
 
-export const useAnswerQuestion = () => {
+export const useAnswerRandomQuestion = () => {
   return useMutation({
     mutationFn: (params: AnswerQuestionParam) => answerRandomQuestion(params),
   })

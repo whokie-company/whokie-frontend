@@ -6,11 +6,17 @@ type KakaoLoginParam = {
   code: string
 }
 
+type KakaoLoginResponse = {
+  userId: number
+}
+
 const kakaoLogin = async ({ code }: KakaoLoginParam) => {
-  const response = await fetchInstance.get(`/api/user/callback?code=${code}`)
+  const response = await fetchInstance.get<KakaoLoginResponse>(
+    `/api/user/callback?code=${code}`
+  )
   const accessToken = response.headers.authorization
 
-  return { accessToken }
+  return { accessToken, userId: response.data.userId }
 }
 
 export const useKakaoLogin = ({ code }: KakaoLoginParam) => {

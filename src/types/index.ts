@@ -44,7 +44,14 @@ export type AnswerRecord = {
   createdAt: Date
 }
 
-export type Paging = {
+export type PagingRequestParams = {
+  size?: number
+  page?: string
+  sort?: string[]
+}
+
+export type PagingResponse<T> = {
+  content: T
   totalElements: number
   totalPages: number
   size: number
