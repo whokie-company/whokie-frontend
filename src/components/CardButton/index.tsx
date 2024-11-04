@@ -3,7 +3,7 @@ import { IconType } from 'react-icons'
 import { Box, Button, HStack, Text, VStack, useTheme } from '@chakra-ui/react'
 import { css } from '@emotion/react'
 
-interface CardButtonProps {
+type CardButtonProps = {
   buttonElement: {
     variant: 'orange' | 'white'
     orientation: 'vertical' | 'horizontal'
@@ -11,7 +11,7 @@ interface CardButtonProps {
     description: string
     Icon: IconType
   }
-  onClick?: () => void // onClick을 선택적 prop으로 추가
+  onClick?: () => void
 }
 
 const CardButton = ({ buttonElement, onClick }: CardButtonProps) => {
