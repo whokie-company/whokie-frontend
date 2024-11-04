@@ -1,18 +1,11 @@
 import { Flex, Tag, Text } from '@chakra-ui/react'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
-import { usePoint } from '@/api/services/user/point.api'
+import { pointQuries } from '@/api/services/user/point.api'
 
 export const MyPoint = () => {
-  const { data: point, status, error } = usePoint()
+  const { data: point } = useSuspenseQuery(pointQuries.point())
 
-  if (status === 'pending') return <PointTag />
-
-  if (error) throw error
-
-  return <PointTag point={point.amount} />
-}
-
-const PointTag = ({ point }: { point?: number }) => {
   return (
     <Flex justifyContent="end">
       <Tag
@@ -26,7 +19,7 @@ const PointTag = ({ point }: { point?: number }) => {
         <Text fontWeight="bold" marginRight="6px">
           포인트
         </Text>
-        {point && <Text>{point}</Text>}
+        <Text>{point}</Text>
       </Tag>
     </Flex>
   )

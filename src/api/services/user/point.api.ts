@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { queryOptions } from '@tanstack/react-query'
 
 import { authorizationInstance } from '@/api/instance'
 
@@ -10,12 +10,14 @@ const getPoint = async () => {
   const response =
     await authorizationInstance.get<PointResponse>('/api/user/point')
 
-  return response.data
+  return response.data.amount
 }
 
-export const usePoint = () => {
-  return useQuery({
-    queryKey: ['point'],
-    queryFn: () => getPoint(),
-  })
+export const pointQuries = {
+  all: () => ['point'],
+  point: () =>
+    queryOptions({
+      queryKey: [...pointQuries.all()],
+      queryFn: () => getPoint(),
+    }),
 }

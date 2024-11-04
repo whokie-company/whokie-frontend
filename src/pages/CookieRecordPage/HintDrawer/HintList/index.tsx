@@ -1,25 +1,21 @@
 import { BiLockAlt, BiLockOpenAlt } from 'react-icons/bi'
 
 import { Box, Flex, Text } from '@chakra-ui/react'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
-import { useHints } from '@/api/services/answer/hint.api'
+import { hintQuries } from '@/api/services/answer/hint.api'
 
 interface HintListProps {
   answerId: number
+  openBuyHintModal: () => void
 }
 
-export const HintList = ({ answerId }: HintListProps) => {
-  const { data, status, error } = useHints({ answerId })
-
-  if (status === 'pending') {
-    return <HintListSkeleton />
-  }
-
-  if (error) throw error
+export const HintList = ({ answerId, openBuyHintModal }: HintListProps) => {
+  const { data: hints } = useSuspenseQuery(hintQuries.hints(answerId))
 
   return (
     <Flex flexDirection="column" gap={1.5}>
-      {data.hints.map((hint) => {
+      {hints.map((hint) => {
         return (
           <Flex
             key={hint.hintNum}
@@ -28,6 +24,7 @@ export const HintList = ({ answerId }: HintListProps) => {
             transition="all 0.3s ease-in-out"
             _hover={{ cursor: 'pointer', color: 'text_secondary' }}
             _active={{ color: 'text_description' }}
+            onClick={openBuyHintModal}
           >
             {hint.valid ? (
               <Box color="primary">
@@ -42,26 +39,6 @@ export const HintList = ({ answerId }: HintListProps) => {
               {hintDescriptionText[hint.hintNum]}
               {hint.valid ? <b>{hint.content}</b> : '...'}
             </Text>
-          </Flex>
-        )
-      })}
-    </Flex>
-  )
-}
-
-const HintListSkeleton = () => {
-  return (
-    <Flex flexDirection="column" gap={1.5}>
-      {Array.from({ length: 3 }, (_, index) => {
-        return (
-          <Flex
-            key={index}
-            alignItems="center"
-            gap={2}
-            color="text_description"
-          >
-            <BiLockAlt size={20} />
-            <Text>{hintDescriptionText[index + 1]}</Text>
           </Flex>
         )
       })}

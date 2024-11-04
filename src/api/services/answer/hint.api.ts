@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { queryOptions } from '@tanstack/react-query'
 
 import { authorizationInstance } from '@/api/instance'
 import { Hint } from '@/types'
@@ -16,13 +16,24 @@ const getHint = async ({ answerId }: HintRequestParams) => {
     `/api/answer/hint/${answerId}`
   )
 
-  return response.data
+  return response.data.hints
 }
 
-export const useHints = (answerId: HintRequestParams) => {
-  return useQuery({
-    queryKey: ['hints', answerId],
-    queryFn: () => getHint(answerId),
-    enabled: !!answerId,
+type BuyHintRequestBody = {
+  answerId: number
+}
+
+export const buyHint = async ({ answerId }: BuyHintRequestBody) => {
+  await authorizationInstance.post('/api/answer/hint', {
+    answerId,
   })
+}
+
+export const hintQuries = {
+  all: () => ['hints'],
+  hints: (answerId: number) =>
+    queryOptions({
+      queryKey: [...hintQuries.all(), answerId],
+      queryFn: () => getHint({ answerId }),
+    }),
 }
