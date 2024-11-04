@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 
 import { queryClient } from '@/api/instance'
 import { buyHint, hintQuries } from '@/api/services/answer/hint.api'
+import { pointQuries } from '@/api/services/user/point.api'
 import {
   ConfirmModal,
   ConfirmModalButton,
@@ -20,6 +21,7 @@ export const BuyHintModal = ({ modal, answerId }: BuyHintModalProps) => {
     mutationFn: () => buyHint({ answerId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: hintQuries.all() })
+      queryClient.invalidateQueries({ queryKey: pointQuries.all() })
       modal.onClose()
     },
   })
