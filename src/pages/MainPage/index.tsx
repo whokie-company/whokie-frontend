@@ -1,8 +1,9 @@
 import { Suspense, useCallback, useEffect, useState } from 'react'
 
 import { Box, Flex } from '@chakra-ui/react'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
-import { useKakaoFriends } from '@/api/services/friend/useKakaoFriends'
+import { friendsQueries } from '@/api/services/friend/queries'
 import { Loading } from '@/components/Loading'
 import { Friend } from '@/types'
 
@@ -30,7 +31,7 @@ const Content = ({
   questionIndex: number
   setquestionIndex: React.Dispatch<React.SetStateAction<number>>
 }) => {
-  const { data: all = [] } = useKakaoFriends()
+  const { data: all = [] } = useSuspenseQuery(friendsQueries.myFriends())
   const [remain, setRemain] = useState<Friend[]>([])
   const [picked, setPicked] = useState<Friend[]>([])
 
