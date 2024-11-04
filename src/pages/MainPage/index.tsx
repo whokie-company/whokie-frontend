@@ -21,7 +21,7 @@ const MainPage = () => {
         display="flex"
         flexDirection="column"
         justifyContent="space-between"
-        padding="50px 0"
+        padding="70px 0"
       >
         <Content
           questionIndex={questionIndex}
