@@ -55,6 +55,7 @@ export const LogSection = () => {
                   setSelectedAnswer({
                     questionContent: cookie.questionContent,
                     createdAt: curDay.createdAt,
+                    answerId: cookie.answerId,
                   })
                 }}
               />

@@ -2,7 +2,10 @@ import { create } from 'zustand'
 
 import { AnswerRecord } from '@/types'
 
-type SelectedAnswer = Pick<AnswerRecord, 'questionContent' | 'createdAt'>
+export type SelectedAnswer = Pick<
+  AnswerRecord,
+  'questionContent' | 'createdAt' | 'answerId'
+>
 
 interface SelectedAnswerProps {
   selectedAnswer?: SelectedAnswer

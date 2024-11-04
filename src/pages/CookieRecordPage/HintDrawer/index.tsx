@@ -1,5 +1,7 @@
 import { Flex } from '@chakra-ui/react'
 
+import { useSelectedAnswerStore } from '@/stores/selected-answer'
+
 import { AnswerDetail } from './AnswerDetail'
 import { HintList } from './HintList'
 import { MyPoint } from './MyPoint'
@@ -9,6 +11,8 @@ interface HintDrawerProps {
 }
 
 export const HintDrawer = ({ isOpen }: HintDrawerProps) => {
+  const selectedAnswer = useSelectedAnswerStore((state) => state.selectedAnswer)
+
   return (
     <div id="hint-drawer">
       {isOpen && (
@@ -27,10 +31,12 @@ export const HintDrawer = ({ isOpen }: HintDrawerProps) => {
           paddingX={4}
         >
           <MyPoint />
-          <Flex flexDirection="column" alignItems="center">
-            <AnswerDetail />
-            <HintList />
-          </Flex>
+          {selectedAnswer && (
+            <Flex flexDirection="column" alignItems="center">
+              <AnswerDetail answer={selectedAnswer} />
+              <HintList answerId={selectedAnswer.answerId} />
+            </Flex>
+          )}
         </Flex>
       )}
     </div>
