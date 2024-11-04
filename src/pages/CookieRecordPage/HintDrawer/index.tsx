@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react'
+import { Flex, Slide } from '@chakra-ui/react'
 
 import { useSelectedAnswerStore } from '@/stores/selected-answer'
 
@@ -14,15 +14,19 @@ export const HintDrawer = ({ isOpen }: HintDrawerProps) => {
   const selectedAnswer = useSelectedAnswerStore((state) => state.selectedAnswer)
 
   return (
-    <div id="hint-drawer">
-      {isOpen && (
+    <Slide
+      in={isOpen}
+      direction="right"
+      style={{ zIndex: 10, position: 'absolute' }}
+      transition={{ exit: { duration: 0.8 } }}
+    >
+      <div id="hint-drawer">
         <Flex
           height="full"
           width={80}
           position="absolute"
           top={0}
           right={0}
-          zIndex={10}
           boxShadow="4px 0px 12px rgba(0, 0, 0, 0.5)"
           borderLeftRadius="24px"
           background="white"
@@ -38,7 +42,7 @@ export const HintDrawer = ({ isOpen }: HintDrawerProps) => {
             </Flex>
           )}
         </Flex>
-      )}
-    </div>
+      </div>
+    </Slide>
   )
 }

@@ -21,7 +21,14 @@ export const HintList = ({ answerId }: HintListProps) => {
     <Flex flexDirection="column" gap={1.5}>
       {data.hints.map((hint) => {
         return (
-          <Flex alignItems="center" gap={2} key={hint.hintNum}>
+          <Flex
+            key={hint.hintNum}
+            alignItems="center"
+            gap={2}
+            transition="all 0.3s ease-in-out"
+            _hover={{ cursor: 'pointer', color: 'text_secondary' }}
+            _active={{ color: 'text_description' }}
+          >
             {hint.valid ? (
               <Box color="primary">
                 <BiLockOpenAlt size={20} />

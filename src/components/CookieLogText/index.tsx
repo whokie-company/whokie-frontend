@@ -16,7 +16,12 @@ export const CookieLogText = ({
   onClick,
 }: CookieLogTextProps) => {
   return (
-    <Flex gap="0.5rem" alignItems="center" onClick={onClick}>
+    <Flex
+      gap="0.5rem"
+      alignItems="center"
+      onClick={onClick}
+      _hover={{ cursor: 'pointer' }}
+    >
       <Tag
         fontSize="x-small"
         minWidth="fit-content"
