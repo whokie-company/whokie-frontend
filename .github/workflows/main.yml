@@ -1,0 +1,49 @@
+name: Front Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: react build & deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Github Action
+        uses: actions/checkout@v3
+      - name: Check Node v
+        run: node -v
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: |
+            echo "::set-output name=dir::$(npm config get cache)"
+      - uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: install npm dependencies
+        run: npm install
+      - name: react build
+        run: npm run build
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AKIAQIJRRWVMEHBCW6VJ }}
+          aws-secret-access-key: ${{ secrets.swQY0oZHz5JoOou0o5eDikM9CB4f7J3TujhV1Gxl }}
+          aws-region: ap-southeast-2
+      - name: Upload to S3
+        env:
+          BUCKET_NAME: ${{ secrets.whokie }}
+        run: |
+          aws s3 sync \
+            ./build s3://$whokie
+      - name: CloudFront Invalidation
+        env:
+          CLOUD_FRONT_ID: ${{ secrets.E34R6P8LF5T74E }}
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id $CLOUD_FRONT_ID --paths /*
