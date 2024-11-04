@@ -3,7 +3,8 @@ import { useMutation } from '@tanstack/react-query'
 import { authorizationInstance } from '@/api/instance'
 
 type AnswerQuestionParam = {
-  friendId: number
+  questionId: number
+  pickedId: number
 }
 
 type AnswerResponse = {
@@ -11,16 +12,21 @@ type AnswerResponse = {
 }
 
 const answerRandomQuestion = async ({
-  friendId,
+  questionId,
+  pickedId,
 }: AnswerQuestionParam): Promise<AnswerResponse> => {
   const response = await authorizationInstance.post('/api/answer/common', {
-    friendId,
+    questionId,
+    pickedId,
   })
   return response.data
 }
 
-export const useAnswerQuestion = ({ friendId }: AnswerQuestionParam) => {
+export const useAnswerQuestion = ({
+  questionId,
+  pickedId,
+}: AnswerQuestionParam) => {
   return useMutation({
-    mutationFn: () => answerRandomQuestion({ friendId }),
+    mutationFn: () => answerRandomQuestion({ questionId, pickedId }),
   })
 }
