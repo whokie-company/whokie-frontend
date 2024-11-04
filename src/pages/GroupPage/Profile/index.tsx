@@ -24,7 +24,7 @@ interface ProfileProps {
 export default function Profile({ role }: ProfileProps) {
   return (
     <header>
-      <Box height="144px" position="relative" marginBottom="-15px">
+      <Box position="relative" marginBottom="30px">
         <HStack
           alignItems="center"
           spacing="15px"
@@ -34,7 +34,8 @@ export default function Profile({ role }: ProfileProps) {
           <Box position="relative">
             <Avatar
               src={GroupProfileDummyData.profileImage}
-              size="xl"
+              width="80px"
+              height="80px"
               sx={{
                 border: '0.8px solid',
                 borderColor: 'black.300',
