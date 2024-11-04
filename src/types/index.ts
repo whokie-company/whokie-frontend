@@ -50,7 +50,8 @@ export type PagingRequestParams = {
   sort?: string[]
 }
 
-export type Paging = {
+export type PagingResponse<T> = {
+  content: T
   totalElements: number
   totalPages: number
   size: number

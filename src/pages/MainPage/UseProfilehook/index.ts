@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { useKakaoFriends } from '@/api/services/friend/useKakaoFriends'
+import { useSuspenseQuery } from '@tanstack/react-query'
+
+import { friendsQueries } from '@/api/services/friend/queries'
 import { Friend } from '@/types'
 
 const useProfile = () => {
-  const { data: all = [] } = useKakaoFriends()
+  const { data: all } = useSuspenseQuery(friendsQueries.myFriends())
   const [remain, setRemain] = useState<Friend[]>([])
   const [picked, setPicked] = useState<Friend[]>([])
 
@@ -18,13 +20,11 @@ const useProfile = () => {
       const randomFive = pickRandomProfiles(remain, 5)
       setPicked(randomFive)
 
-      // 남은 선택지들을 remain에 넣기
       const updatedRemain = remain.filter(
         (profile) => !randomFive.includes(profile)
       )
       setRemain(updatedRemain)
     } else {
-      // picked와 remain을 swap
       const combined = [...remain, ...picked]
       const randomFive = pickRandomProfiles(combined, 5)
       setPicked(randomFive)

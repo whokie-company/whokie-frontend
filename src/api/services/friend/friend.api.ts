@@ -13,24 +13,14 @@ export const getFriends = async () => {
   return response.data
 }
 
-type FriendId = {
-  id: number
-}
-
 type AddFriendRequestBody = {
-  friends: FriendId[]
+  friends: { id: number }[]
 }
 
-export const addFriends = async (friends: AddFriendRequestBody) => {
-  if (!friends.friends.length) {
+export const addFriends = async ({ friends }: AddFriendRequestBody) => {
+  if (!friends.length) {
     throw new Error(DATA_ERROR_MESSAGES.FRIEND_CANNOT_BE_EMPTY)
   }
 
-  await authorizationInstance.post('/api/friend', friends)
-}
-
-export const fetchKakaoFriends = async () => {
-  const response = await authorizationInstance.get('/api/friend')
-
-  return response.data.friends
+  await authorizationInstance.post('/api/friend', { friends })
 }

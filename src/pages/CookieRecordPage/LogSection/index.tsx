@@ -1,14 +1,21 @@
 import { Flex, Heading } from '@chakra-ui/react'
 import { format } from 'date-fns'
 
-import { useAnswerRecordPaging } from '@/api/services/answer/record-paging/useAnswerRecordPaging'
+import { useAnswerRecordPaging } from '@/api/services/answer/record.api'
 import { convertToDailyCookies } from '@/api/utils/answer/convertToDailyCookies'
 import { CookieLogText } from '@/components/CookieLogText'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
+import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
 
 export const LogSection = () => {
-  const { answerRecords, hasNextPage, isFetchingNextPage, fetchNextPage } =
+  const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useAnswerRecordPaging({})
+
+  const answerRecords = data?.pages.flatMap((page) => page.records)
+
+  if (!answerRecords.length)
+    throw new Error(DATA_ERROR_MESSAGES.ANSWER_RECORD_NOT_FOUND)
+
   const cookieLogs = convertToDailyCookies(answerRecords)
 
   return (

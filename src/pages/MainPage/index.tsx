@@ -2,7 +2,7 @@ import { Suspense, useState } from 'react'
 
 import { Box, Flex } from '@chakra-ui/react'
 
-import { useAnswerQuestion } from '@/api/services/answer/common/useAnswerQuestion'
+import { useAnswerRandomQuestion } from '@/api/services/answer/question.api'
 import { Loading } from '@/components/Loading'
 
 import ProfileGrid from './ProfileGrid'
@@ -46,7 +46,7 @@ const Content = ({
   setquestionId: React.Dispatch<React.SetStateAction<number | null>>
 }) => {
   const { all, picked, handleReload } = useProfile()
-  const { mutate: answerQuestion } = useAnswerQuestion()
+  const { mutate: answerQuestion } = useAnswerRandomQuestion()
 
   const handleProfileSelect = (profileId: number) => {
     if (questionId !== null) {
