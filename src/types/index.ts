@@ -65,3 +65,9 @@ export type MyPageItem = {
   backgroundImageUrl: string
   name: string
 }
+
+export type GroupPageItem = {
+  groupName: string
+  groupDescription: string
+  groupImageUrl: string
+}
