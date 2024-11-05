@@ -10,18 +10,14 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
-const GroupProfileDummyData = {
-  profileImage:
-    'http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg',
-  name: '카테캠 2기',
-  description: '카카오테크 캠퍼스 2기의 그룹페이지 입니다',
-}
+import { Group } from '@/types'
 
-interface ProfileProps {
+type GroupProps = {
+  gprofile: Group
   role: 'leader' | 'member'
 }
 
-export default function Profile({ role }: ProfileProps) {
+export default function Profile({ role, gprofile }: GroupProps) {
   return (
     <header>
       <Box position="relative" marginBottom="60px">
@@ -33,9 +29,9 @@ export default function Profile({ role }: ProfileProps) {
         >
           <Box position="relative">
             <Avatar
-              src={GroupProfileDummyData.profileImage}
-              width="80px"
-              height="80px"
+              src={gprofile?.groupdImageUrl}
+              width="70px"
+              height="70px"
               sx={{
                 border: '0.8px solid',
                 borderColor: 'black.300',
@@ -45,7 +41,7 @@ export default function Profile({ role }: ProfileProps) {
 
           <VStack align="flex-start" spacing={0}>
             <HStack spacing={2} alignItems="center">
-              <Text fontSize="xl">{GroupProfileDummyData.name}</Text>
+              <Text fontSize="xl">{gprofile?.groupName}</Text>
               <Text
                 fontSize="xs"
                 padding="3px 6px"
@@ -61,7 +57,7 @@ export default function Profile({ role }: ProfileProps) {
 
             <HStack spacing={2} alignItems="center">
               <Text color="text_secondary" fontSize="md">
-                {GroupProfileDummyData.description}
+                {gprofile?.groupDescription}
               </Text>
               {role === 'leader' && (
                 <IconButton

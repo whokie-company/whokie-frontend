@@ -1,7 +1,13 @@
+import { Suspense } from 'react'
+import { useParams } from 'react-router-dom'
+
 import { Box } from '@chakra-ui/react'
 
+import { useGroupPage } from '@/api/services/group/group.api'
+import { Loading } from '@/components/Loading'
 import { RankingGraph } from '@/components/RankingGraph'
 
+import ErrorPage from '../ErrorPage'
 import Management from './Management'
 import Navigate from './Navigate'
 import Profile from './Profile'
@@ -36,14 +42,22 @@ const dummyRankData = [
 const userRole = 'leader' // "leader" or "member"
 
 export default function GroupPage() {
+  const { groupId } = useParams<{ groupId: string }>()
+  const { data: groupData, error } = useGroupPage(groupId || '')
+
+  if (error) return <ErrorPage />
+  if (!groupData) return <ErrorPage />
+
   return (
     <div>
-      <Navigate />
-      <Profile role={userRole} />
-      <Box p="0 30px">
-        <RankingGraph rank={dummyRankData} />
-      </Box>
-      <Management role={userRole} />
+      <Suspense fallback={<Loading />}>
+        <Navigate />
+        <Profile role={userRole} gprofile={groupData} />
+        <Box p="0 30px">
+          <RankingGraph rank={dummyRankData} />
+        </Box>
+        <Management role={userRole} />
+      </Suspense>
     </div>
   )
 }
