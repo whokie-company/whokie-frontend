@@ -6,13 +6,13 @@ import { MyPageItem } from '@/types'
 
 type ProfileProps = {
   profile: MyPageItem
-  pointAmount: number
+  pointAmount?: number | null
   isMyPage: boolean
 }
 
 export default function Profile({
   profile,
-  pointAmount,
+  pointAmount = null,
   isMyPage,
 }: ProfileProps) {
   const [isHovered, setIsHovered] = useState(false)
@@ -61,35 +61,37 @@ export default function Profile({
           <Text fontSize="xl" fontWeight="400">
             {profile.name}
           </Text>
-          <Button
-            color="primary_background"
-            bg="#ea780c"
-            display="flex"
-            flexDirection="row"
-            fontSize="xs"
-            alignItems="center"
-            padding="4px 7px"
-            borderRadius="20px"
-            minHeight="5px"
-            height="auto"
-            _hover={{ bg: 'orange.600', boxShadow: 'md' }}
-          >
-            <Text
-              width="13px"
-              height="13px"
-              textAlign="center"
-              lineHeight="1.05"
+          {isMyPage && (
+            <Button
+              color="primary_background"
+              bg="#ea780c"
+              display="flex"
+              flexDirection="row"
+              fontSize="xs"
+              alignItems="center"
+              padding="4px 7px"
               borderRadius="20px"
-              border="1px solid white"
-              marginRight="3px"
+              minHeight="5px"
+              height="auto"
+              _hover={{ bg: 'orange.600', boxShadow: 'md' }}
             >
-              P
-            </Text>
-            <Text fontWeight="bold" marginRight="6px">
-              포인트
-            </Text>
-            <Text>{pointAmount}</Text>
-          </Button>
+              <Text
+                width="13px"
+                height="13px"
+                textAlign="center"
+                lineHeight="1.05"
+                borderRadius="20px"
+                border="1px solid white"
+                marginRight="3px"
+              >
+                P
+              </Text>
+              <Text fontWeight="bold" marginRight="6px">
+                포인트
+              </Text>
+              <Text>{pointAmount}</Text>
+            </Button>
+          )}
         </Box>
         <Box
           display="flex"

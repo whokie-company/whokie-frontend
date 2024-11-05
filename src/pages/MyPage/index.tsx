@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 
 import { Box } from '@chakra-ui/react'
 
-import { useMyPage } from '@/api/services/profile/my-page.api'
+import { useGetMyPoint, useMyPage } from '@/api/services/profile/my-page.api'
 import { Loading } from '@/components/Loading'
 import { RankingGraph } from '@/components/RankingGraph'
 import { useMyUserIdStore } from '@/stores/my-user-id'
@@ -43,18 +43,35 @@ const dummyRankData = [
 export default function MyPage() {
   const { userId } = useParams<{ userId: string }>()
   const myUserId = useMyUserIdStore((state) => state.myUserId)
-  const { data: profile, isLoading, error } = useMyPage(userId || '')
+  const {
+    data: profile,
+    isLoading: isLoadingProfile,
+    isError: profileError,
+  } = useMyPage(userId || '')
 
   const isMyPage = Number(userId) === myUserId
+  const {
+    data: point,
+    isLoading: isLoadingPoints,
+    error: pointsError,
+  } = useGetMyPoint()
 
-  if (isLoading) return <Loading />
-  if (error) return <ErrorPage />
+  if (isLoadingProfile || (isMyPage && isLoadingPoints)) return <Loading />
+  if (profileError || (isMyPage && pointsError)) return <ErrorPage />
   if (!profile) return <ErrorPage />
 
   return (
     <div>
       <Navigate />
-      <Profile profile={profile} pointAmount={10000} isMyPage={isMyPage} />
+      {isMyPage && point ? (
+        <Profile
+          profile={profile}
+          pointAmount={point.amount}
+          isMyPage={isMyPage}
+        />
+      ) : (
+        <Profile profile={profile} isMyPage={isMyPage} />
+      )}
       <Box p="0 30px">
         <RankingGraph rank={dummyRankData} />
       </Box>
