@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { BiDonateHeart, BiQuestionMark } from 'react-icons/bi'
+import { Link } from 'react-router-dom'
 
 import { Center, Flex, HStack, Text } from '@chakra-ui/react'
 
@@ -37,17 +38,24 @@ export const GroupSection = () => {
           >
             모든 친구에게
           </Text>
-          <ActiveBrownBox
-            isActive={!groupId}
-            onClick={() => setSeletedGroup(undefined)}
-          >
-            <HStack>
-              <Center background="primary" width={7} height={7} rounded="full">
-                <BiQuestionMark size={20} color="white" />
-              </Center>
-              <Text>ALL</Text>
-            </HStack>
-          </ActiveBrownBox>
+          <Link to="/">
+            <ActiveBrownBox
+              isActive={!groupId}
+              onClick={() => setSeletedGroup(undefined)}
+            >
+              <HStack>
+                <Center
+                  background="primary"
+                  width={7}
+                  height={7}
+                  rounded="full"
+                >
+                  <BiQuestionMark size={20} color="white" />
+                </Center>
+                <Text>ALL</Text>
+              </HStack>
+            </ActiveBrownBox>
+          </Link>
         </Flex>
         <Flex flexDirection="column" width="full">
           <Text
