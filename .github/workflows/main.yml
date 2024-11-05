@@ -28,6 +28,9 @@ jobs:
       - name: install npm dependencies
         run: npm install
       - name: react build
+        env:
+          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
+          VITE_LOGIN_URL: ${{ secretes.VITE_LOGIN_URL }}
         run: npm run build
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
