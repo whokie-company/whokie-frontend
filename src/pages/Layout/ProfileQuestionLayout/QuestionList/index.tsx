@@ -33,6 +33,9 @@ export const QuestionList = () => {
       setSelectedQuestion(questions[0].profileQuestionId)
       setQuestionContent(questions[0].profileQuestionContent)
       isFirstRender.current = false
+    } else if (isFirstRender.current && questions?.length === 0) {
+      setSelectedQuestion(undefined)
+      setQuestionContent(undefined)
     }
   }, [questions, questionId, setSelectedQuestion, setQuestionContent])
 
