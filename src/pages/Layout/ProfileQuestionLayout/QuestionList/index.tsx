@@ -5,6 +5,7 @@ import { Box, Flex } from '@chakra-ui/react'
 
 import { useGetProfileQuestion } from '@/api/services/profile/profileQuestion.api'
 import { ActiveBrownBox } from '@/components/ActiveBrownBox'
+import { Loading } from '@/components/Loading'
 import ErrorPage from '@/pages/ErrorPage'
 import { useSelectedQuestionStore } from '@/stores/selected-question'
 
@@ -39,7 +40,7 @@ export const QuestionList = () => {
     }
   }, [questions, questionId, setSelectedQuestion, setQuestionContent])
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <Loading />
   if (error) return <ErrorPage />
   if (!Array.isArray(questions) || questions.length === 0)
     return (
