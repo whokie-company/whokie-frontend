@@ -10,7 +10,7 @@ type KakaoLoginResponse = {
   userId: number
 }
 
-export const kakaoLogin = async ({ code }: KakaoLoginParam) => {
+const kakaoLogin = async ({ code }: KakaoLoginParam) => {
   const response = await fetchInstance.get<KakaoLoginResponse>(
     `/api/user/callback?code=${code}`
   )

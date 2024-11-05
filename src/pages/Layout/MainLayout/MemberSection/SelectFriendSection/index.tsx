@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { Button, Center, Flex, Text } from '@chakra-ui/react'
 
-import { useFriendsAndMyFriends } from '@/api/services/friend/useFriends'
+import { useFriendsAndMyFriends } from '@/api/services/friend/queries'
 import { PageLayout } from '@/components/PageLayout'
 import { useFriendStore } from '@/stores/friends'
 

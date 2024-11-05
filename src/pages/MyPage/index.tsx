@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 
 import { Box } from '@chakra-ui/react'
 
-import { useMyPage } from '@/api/services/profile/mypage/useMyPage'
+import { useMyPage } from '@/api/services/profile/my-page.api'
 import { RankingGraph } from '@/components/RankingGraph'
 import { useMyUserIdStore } from '@/stores/my-user-id'
 

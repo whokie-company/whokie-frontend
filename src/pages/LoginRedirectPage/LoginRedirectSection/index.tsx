@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useKakaoLogin } from '@/api/services/login'
+import { useKakaoLogin } from '@/api/services/user/login.api'
 import { Loading } from '@/components/Loading'
 import { useAuthTokenStore } from '@/stores/auth-token'
 import { useMyUserIdStore } from '@/stores/my-user-id'
