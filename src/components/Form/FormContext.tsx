@@ -1,7 +1,5 @@
-import { createContext } from 'react'
-import { useContext } from 'react'
-import { FieldPath, FieldValues } from 'react-hook-form'
-import { useFormContext } from 'react-hook-form'
+import { createContext, useContext } from 'react'
+import { FieldPath, FieldValues, useFormContext } from 'react-hook-form'
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
@@ -30,7 +28,7 @@ export const useFormField = () => {
   const fieldState = getFieldState(fieldContext.name, formState)
 
   if (!fieldContext) {
-    throw new Error('useFormField should be used within <FormField>')
+    throw new Error('useFormField은 <FormField> 내부에서 사용해야합니다.')
   }
 
   const { id } = itemContext
@@ -39,7 +37,7 @@ export const useFormField = () => {
     id,
     name: fieldContext.name,
     formItemId: `${id}-form-item`,
-    formMessageId: `${id}-form-item-message`,
+    formDescriptionId: `${id}-form-item-description`,
     ...fieldState,
   }
 }

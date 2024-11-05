@@ -1,4 +1,4 @@
-import { HTMLAttributes, forwardRef, useId, useMemo } from 'react'
+import { forwardRef, useId, useMemo } from 'react'
 import {
   Controller,
   ControllerProps,
@@ -6,21 +6,22 @@ import {
   FieldValues,
 } from 'react-hook-form'
 
+import { Box, BoxProps } from '@chakra-ui/react'
+
 import { FormFieldContext, FormItemContext } from './FormContext'
 
-export const FormItemProvider = forwardRef<
-  HTMLDivElement,
-  HTMLAttributes<HTMLDivElement>
->(({ ...props }, ref) => {
-  const id = useId()
-  const value = useMemo(() => ({ id }), [id])
+export const FormItemProvider = forwardRef<HTMLDivElement, BoxProps>(
+  ({ ...props }, ref) => {
+    const id = useId()
+    const value = useMemo(() => ({ id }), [id])
 
-  return (
-    <FormItemContext.Provider value={value}>
-      <div ref={ref} {...props} />
-    </FormItemContext.Provider>
-  )
-})
+    return (
+      <FormItemContext.Provider value={value}>
+        <Box ref={ref} {...props} />
+      </FormItemContext.Provider>
+    )
+  }
+)
 FormItemProvider.displayName = 'FormItem'
 
 export const FormFieldProvider = <

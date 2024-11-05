@@ -1,5 +1,7 @@
-import { HTMLAttributes, forwardRef } from 'react'
+import { forwardRef } from 'react'
 import { FormProvider } from 'react-hook-form'
+
+import { Box, BoxProps, Text, TextProps } from '@chakra-ui/react'
 
 import { useFormField } from './FormContext'
 import { FormFieldProvider, FormItemProvider } from './FormProvider'
@@ -9,21 +11,30 @@ const FormField = FormFieldProvider
 
 const FormItem = FormItemProvider
 
-const FormControl = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
+const FormControl = forwardRef<HTMLDivElement, BoxProps>(
   ({ ...props }, ref) => {
-    const { error, formItemId, formMessageId } = useFormField()
+    const { error, formItemId } = useFormField()
+
+    return <Box ref={ref} id={formItemId} aria-invalid={!!error} {...props} />
+  }
+)
+FormControl.displayName = 'FormControl'
+
+const FormDescription = forwardRef<HTMLParagraphElement, TextProps>(
+  ({ ...props }, ref) => {
+    const { formDescriptionId } = useFormField()
 
     return (
-      <div
+      <Text
         ref={ref}
-        id={formItemId}
-        aria-describedby={`${formMessageId}`}
-        aria-invalid={!!error}
+        id={formDescriptionId}
+        fontSize="small"
+        color="text_description"
         {...props}
       />
     )
   }
 )
-FormControl.displayName = 'FormControl'
+FormDescription.displayName = 'FormDescription'
 
-export { Form, FormField, FormItem, FormControl }
+export { Form, FormField, FormItem, FormControl, FormDescription }
