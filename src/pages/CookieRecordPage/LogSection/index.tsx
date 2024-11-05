@@ -18,7 +18,7 @@ import { CookieLogList } from './CookieLogList'
 
 export const LogSection = () => {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
-    useAnswerRecordPaging({ date: '2024-11-01' })
+    useAnswerRecordPaging({})
   const answerRecords = data?.pages.flatMap((page) => page.records)
 
   if (!answerRecords.length) {

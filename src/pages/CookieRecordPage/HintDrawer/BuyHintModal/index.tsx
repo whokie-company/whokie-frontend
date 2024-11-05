@@ -22,6 +22,7 @@ export const BuyHintModal = ({ modal, answerId }: BuyHintModalProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: hintQuries.all() })
       queryClient.invalidateQueries({ queryKey: pointQuries.all() })
+      queryClient.invalidateQueries({ queryKey: ['answer', 'record'] })
       modal.onClose()
     },
   })

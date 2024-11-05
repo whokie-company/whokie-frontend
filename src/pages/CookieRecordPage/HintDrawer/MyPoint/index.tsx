@@ -1,10 +1,14 @@
 import { Flex, Tag, Text } from '@chakra-ui/react'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import { pointQuries } from '@/api/services/user/point.api'
 
 export const MyPoint = () => {
-  const { data: point } = useSuspenseQuery(pointQuries.point())
+  const { data: point, status, error } = useQuery(pointQuries.point())
+
+  if (status === 'pending') return null
+
+  if (error) throw error
 
   return (
     <Flex justifyContent="end">

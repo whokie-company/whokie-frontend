@@ -1,7 +1,7 @@
 import { BiLockAlt, BiLockOpenAlt } from 'react-icons/bi'
 
 import { Box, Flex, Text } from '@chakra-ui/react'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import { hintQuries } from '@/api/services/answer/hint.api'
 
@@ -11,7 +11,11 @@ interface HintListProps {
 }
 
 export const HintList = ({ answerId, openBuyHintModal }: HintListProps) => {
-  const { data: hints } = useSuspenseQuery(hintQuries.hints(answerId))
+  const { data: hints, status, error } = useQuery(hintQuries.hints(answerId))
+
+  if (status === 'pending') return null
+
+  if (error) throw error
 
   return (
     <Flex flexDirection="column" gap={1.5}>
