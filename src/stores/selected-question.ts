@@ -7,13 +7,15 @@ interface SelectedQuestionProps {
   setQuestionContent: (questionContent: string | undefined) => void
 }
 
-export const useSeletedQuestionStore = create<SelectedQuestionProps>((set) => ({
-  questionId: undefined,
-  questionContent: undefined,
-  setQuestionId: (questionId) => {
-    set({ questionId })
-  },
-  setQuestionContent: (questionContent) => {
-    set({ questionContent })
-  },
-}))
+export const useSelectedQuestionStore = create<SelectedQuestionProps>(
+  (set) => ({
+    questionId: undefined,
+    questionContent: undefined,
+    setQuestionId: (questionId) => {
+      set({ questionId })
+    },
+    setQuestionContent: (questionContent) => {
+      set({ questionContent })
+    },
+  })
+)

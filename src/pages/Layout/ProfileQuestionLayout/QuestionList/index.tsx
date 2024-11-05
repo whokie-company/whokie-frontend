@@ -1,26 +1,49 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { useLocation } from 'react-router-dom'
 
-import { Flex } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 
+import { useGetProfileQuestion } from '@/api/services/profile/profileQuestion.api'
 import { ActiveBrownBox } from '@/components/ActiveBrownBox'
-import { useSeletedQuestionStore } from '@/stores/selected-question'
-import { QuestionItem } from '@/types'
+import ErrorPage from '@/pages/ErrorPage'
+import { useSelectedQuestionStore } from '@/stores/selected-question'
 
-interface QuestionListProps {
-  questions: QuestionItem[]
-}
-
-export const QuestionList = ({ questions }: QuestionListProps) => {
-  const questionId = useSeletedQuestionStore((state) => state.questionId)
-  const setSeletedQuestion = useSeletedQuestionStore(
+export const QuestionList = () => {
+  const questionId = useSelectedQuestionStore((state) => state.questionId)
+  const setSelectedQuestion = useSelectedQuestionStore(
     (state) => state.setQuestionId
   )
+  const setQuestionContent = useSelectedQuestionStore(
+    (state) => state.setQuestionContent
+  )
 
+  const location = useLocation()
+  const userId: string = location.state?.userId.toString()
+
+  const {
+    data: questions,
+    isLoading,
+    error,
+  } = useGetProfileQuestion(userId || '')
+
+  const isFirstRender = useRef(true)
   useEffect(() => {
-    if (questions.length > 0) {
-      setSeletedQuestion(questions[0].profileQuestionId)
+    // 첫 렌더링 시 초기 store 지정
+    if (isFirstRender.current && questions && questions.length > 0) {
+      setSelectedQuestion(questions[0].profileQuestionId)
+      setQuestionContent(questions[0].profileQuestionContent)
+      isFirstRender.current = false
     }
-  }, [setSeletedQuestion, questions])
+  }, [questions, questionId, setSelectedQuestion, setQuestionContent])
+
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <ErrorPage />
+  if (!Array.isArray(questions) || questions.length === 0)
+    return (
+      <Box textAlign="center" paddingTop={3}>
+        생성된 질문이 없습니다!
+      </Box>
+    )
 
   return (
     <Flex
@@ -35,7 +58,10 @@ export const QuestionList = ({ questions }: QuestionListProps) => {
           <ActiveBrownBox
             key={question.profileQuestionId}
             isActive={questionId === question.profileQuestionId}
-            onClick={() => setSeletedQuestion(question.profileQuestionId)}
+            onClick={() => {
+              setSelectedQuestion(question.profileQuestionId)
+              setQuestionContent(question.profileQuestionContent)
+            }}
           >
             {question.profileQuestionContent}
           </ActiveBrownBox>
