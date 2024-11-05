@@ -54,7 +54,7 @@ export default function MyPage() {
   return (
     <div>
       <Navigate />
-      <Profile profile={profile} pointAmount={10000} />
+      <Profile profile={profile} pointAmount={10000} isMyPage={isMyPage} />
       <Box p="0 30px">
         <RankingGraph rank={dummyRankData} />
       </Box>

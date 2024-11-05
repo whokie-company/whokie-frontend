@@ -7,9 +7,14 @@ import { MyPageItem } from '@/types'
 type ProfileProps = {
   profile: MyPageItem
   pointAmount: number
+  isMyPage: boolean
 }
 
-export default function Profile({ profile, pointAmount }: ProfileProps) {
+export default function Profile({
+  profile,
+  pointAmount,
+  isMyPage,
+}: ProfileProps) {
   const [isHovered, setIsHovered] = useState(false)
 
   return (
@@ -24,7 +29,7 @@ export default function Profile({ profile, pointAmount }: ProfileProps) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {isHovered && (
+        {isMyPage && isHovered && (
           <Button
             aria-label="Edit"
             borderRadius={3}
