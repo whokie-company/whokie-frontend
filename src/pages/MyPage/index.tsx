@@ -44,7 +44,7 @@ export default function MyPage() {
   const myUserId = useMyUserIdStore((state) => state.myUserId)
   const { data: profile, isLoading, error } = useMyPage(userId || '')
 
-  const isMyPage = userId === myUserId?.toString
+  const isMyPage = Number(userId) === myUserId
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <ErrorPage />
