@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { fetchInstance } from '@/api/instance'
+import { loginInstance } from '@/api/instance'
 
 type KakaoLoginParam = {
   code: string
@@ -11,7 +11,7 @@ type KakaoLoginResponse = {
 }
 
 const kakaoLogin = async ({ code }: KakaoLoginParam) => {
-  const response = await fetchInstance.get<KakaoLoginResponse>(
+  const response = await loginInstance.get<KakaoLoginResponse>(
     `/api/user/callback?code=${code}`
   )
   const accessToken = response.headers.authorization

@@ -21,6 +21,13 @@ const initInstance = (config: AxiosRequestConfig) => {
   return instance
 }
 
+export const loginInstance = axios.create({
+  baseURL: import.meta.env.VITE_LOGIN_URL,
+  headers: {
+    Accept: 'application/json',
+  },
+})
+
 export const fetchInstance = initInstance({})
 
 export const authorizationInstance = initInstance({})
