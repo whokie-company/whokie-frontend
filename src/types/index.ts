@@ -70,5 +70,6 @@ export type MyPageItem = {
   totalVisited: number
   description: string
   backgroundImageUrl: string
+  imageUrl: string
   name: string
 }

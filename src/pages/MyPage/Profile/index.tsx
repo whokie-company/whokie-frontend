@@ -1,6 +1,6 @@
 import { BiEditAlt } from 'react-icons/bi'
 
-import { Box, Button, Icon, IconButton, Text } from '@chakra-ui/react'
+import { Avatar, Box, Button, Icon, IconButton, Text } from '@chakra-ui/react'
 
 import { MyPageItem } from '@/types'
 
@@ -20,17 +20,13 @@ export default function Profile({ profile, pointAmount }: ProfileProps) {
         position="relative"
         marginBottom="40px"
       >
-        {/* <Avatar // absolute
-          src={profile.profileImage}
+        <Avatar // absolute
+          src={profile.imageUrl}
           size="lg"
           position="absolute"
           bottom="-30px"
           left="30px"
-          sx={{
-            border: '0.8px solid',
-            borderColor: 'black.700',
-          }}
-        /> */}
+        />
         <IconButton
           aria-label="Edit"
           icon={<Icon as={BiEditAlt} boxSize="10px" />}
