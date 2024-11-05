@@ -35,3 +35,18 @@ export const useGroupPaging = ({
     getNextPageParam: (lastPage) => lastPage.nextPageToken,
   })
 }
+
+export type CreateGroupRequestBody = {
+  groupName: string
+  groupDescription: string
+}
+
+export const createGroup = async ({
+  groupName,
+  groupDescription,
+}: CreateGroupRequestBody) => {
+  await authorizationInstance.post('/api/group', {
+    groupName,
+    groupDescription,
+  })
+}
