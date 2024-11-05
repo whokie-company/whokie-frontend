@@ -9,7 +9,7 @@ import { PageLayout } from '@/components/PageLayout'
 import { useAuthTokenStore } from '@/stores/auth-token'
 import { useSeletedGroupStore } from '@/stores/selected-group'
 
-import { AddGroupButton } from './AddGroupButton'
+import { CreateGroupButton } from './CreateGroupButton'
 import { GroupErrorFallback } from './GroupErrorFallback'
 import { GroupList } from './GroupList'
 
@@ -66,7 +66,7 @@ export const GroupSection = () => {
             </ErrorBoundary>
           )}
         </Flex>
-        <AddGroupButton />
+        <CreateGroupButton />
       </Flex>
     </PageLayout.SideSection>
   )
