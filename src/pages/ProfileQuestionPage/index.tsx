@@ -1,5 +1,5 @@
 import { BiX } from 'react-icons/bi'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { Box, Button, Flex } from '@chakra-ui/react'
 
@@ -11,6 +11,7 @@ import Question from './Question'
 import WriteReply from './WriteReply'
 
 export default function ProfileQuestionPage() {
+  const navigate = useNavigate()
   const location = useLocation()
   const userId = location.state?.userId
   const myUserId = useMyUserIdStore((state) => state.myUserId)
@@ -32,16 +33,15 @@ export default function ProfileQuestionPage() {
         borderTopRightRadius="20px"
       >
         <Flex justifyContent="end" padding="10px">
-          <Link to="/mypage">
-            <Button
-              bg="none"
-              _hover={{ background: 'none' }}
-              fontSize="large"
-              padding="0"
-            >
-              <BiX />
-            </Button>
-          </Link>
+          <Button
+            bg="none"
+            _hover={{ background: 'none' }}
+            fontSize="large"
+            padding="0"
+            onClick={() => navigate(-1)}
+          >
+            <BiX />
+          </Button>
         </Flex>
         <Question />
       </Box>
