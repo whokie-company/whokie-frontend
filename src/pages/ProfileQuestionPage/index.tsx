@@ -15,7 +15,7 @@ export default function ProfileQuestionPage() {
   const userId = location.state?.userId
   const myUserId = useMyUserIdStore((state) => state.myUserId)
 
-  const isMyPage = userId === myUserId?.toString
+  const isMyPage = Number(userId) === myUserId
 
   return (
     <Flex
@@ -43,7 +43,7 @@ export default function ProfileQuestionPage() {
             </Button>
           </Link>
         </Flex>
-        <Question dummyData={dummyData1} />
+        <Question />
       </Box>
 
       {/* 이 영역만 스크롤 */}
@@ -52,14 +52,6 @@ export default function ProfileQuestionPage() {
       {!isMyPage && <WriteReply />}
     </Flex>
   )
-}
-
-// API로 데이터 값 받아올 때 direction 지정해서 받아올 것
-const dummyData1: ChatItem = {
-  chatId: 1,
-  direction: 'left' as const,
-  createdAt: '2024-10-19',
-  content: '내 MBTI 뭐게',
 }
 
 const dummyDataList: ChatItem[] = [
