@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Box } from '@chakra-ui/react'
 
 import { useMyPage } from '@/api/services/profile/my-page.api'
+import { Loading } from '@/components/Loading'
 import { RankingGraph } from '@/components/RankingGraph'
 import { useMyUserIdStore } from '@/stores/my-user-id'
 
@@ -46,7 +47,7 @@ export default function MyPage() {
 
   const isMyPage = Number(userId) === myUserId
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <Loading />
   if (error) return <ErrorPage />
   if (!profile) return <ErrorPage />
 
