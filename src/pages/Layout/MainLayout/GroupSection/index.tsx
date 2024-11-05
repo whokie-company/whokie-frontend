@@ -6,6 +6,7 @@ import { Center, Flex, HStack, Text } from '@chakra-ui/react'
 
 import { ActiveBrownBox } from '@/components/ActiveBrownBox'
 import { PageLayout } from '@/components/PageLayout'
+import { useAuthTokenStore } from '@/stores/auth-token'
 import { useSeletedGroupStore } from '@/stores/selected-group'
 
 import { AddGroupButton } from './AddGroupButton'
@@ -15,6 +16,7 @@ import { GroupList } from './GroupList'
 export const GroupSection = () => {
   const groupId = useSeletedGroupStore((state) => state.groupId)
   const setSeletedGroup = useSeletedGroupStore((state) => state.setGroupId)
+  const isLoggedIn = useAuthTokenStore((state) => state.isLoggedIn())
 
   return (
     <PageLayout.SideSection
@@ -56,11 +58,13 @@ export const GroupSection = () => {
           >
             그룹 친구에게
           </Text>
-          <ErrorBoundary FallbackComponent={GroupErrorFallback}>
-            <Suspense fallback={<Text textAlign="center">loading...</Text>}>
-              <GroupList />
-            </Suspense>
-          </ErrorBoundary>
+          {isLoggedIn && (
+            <ErrorBoundary FallbackComponent={GroupErrorFallback}>
+              <Suspense fallback={<Text textAlign="center">loading...</Text>}>
+                <GroupList />
+              </Suspense>
+            </ErrorBoundary>
+          )}
         </Flex>
         <AddGroupButton />
       </Flex>
