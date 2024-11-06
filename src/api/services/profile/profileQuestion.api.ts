@@ -38,6 +38,19 @@ export const postProfileQuestion = async ({
   return response.data.message
 }
 
+// 프로필 질문 삭제하기
+export type DeleteProfileQuestionRequest = {
+  deleteQuestionId: number
+}
+
+export const deleteProfileQuestion = async ({
+  deleteQuestionId,
+}: DeleteProfileQuestionRequest) => {
+  await authorizationInstance.delete(
+    `/api/profile/question/${deleteQuestionId}`
+  )
+}
+
 // 프로필 질문 대답 리스트 불러오기
 type ProfileAnswerResponse = {
   content: ProfileAnswerItem[]
