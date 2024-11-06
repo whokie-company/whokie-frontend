@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 
 import { Box } from '@chakra-ui/react'
 
-import { useGroupPage } from '@/api/services/group/group.api'
+import { useGroupInfo } from '@/api/services/group/group.api'
 import { Loading } from '@/components/Loading'
 import { RankingGraph } from '@/components/RankingGraph'
 
@@ -43,7 +43,7 @@ const userRole = 'leader' // "leader" or "member"
 
 export default function GroupPage() {
   const { groupId } = useParams<{ groupId: string }>()
-  const { data: groupData, error } = useGroupPage(groupId || '')
+  const { data: groupData, error } = useGroupInfo(groupId || '')
 
   if (error) return <ErrorPage />
   if (!groupData) return <ErrorPage />
