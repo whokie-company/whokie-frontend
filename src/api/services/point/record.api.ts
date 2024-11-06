@@ -2,15 +2,21 @@ import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
 import { authorizationInstance } from '@/api/instance'
 import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
-import { PagingRequestParams, PagingResponse, Point } from '@/types'
+import {
+  PagingRequestParams,
+  PagingResponse,
+  Point,
+  PointOptions,
+} from '@/types'
 
 type PointRecordRequestParams = {
-  option: 'ALL' | 'CHARGED' | 'USED'
+  option: PointOptions
 } & PagingRequestParams
 
 type PointRecordResponse = PagingResponse<Point[]>
 
 const getPointRecordPaging = async (params: PointRecordRequestParams) => {
+  console.log(params.option)
   const response = await authorizationInstance.get<PointRecordResponse>(
     appendParamsToUrl('/api/point/record', params)
   )
@@ -36,7 +42,7 @@ export const usePointRecordPaging = ({
   option = 'ALL',
 }: PointRecordParams) => {
   return useSuspenseInfiniteQuery({
-    queryKey: ['point', 'record', initPageToken],
+    queryKey: ['point', 'record', initPageToken, option],
     queryFn: ({ pageParam = initPageToken }) =>
       getPointRecordPaging({ page: pageParam, size, sort, option }),
     initialPageParam: initPageToken,

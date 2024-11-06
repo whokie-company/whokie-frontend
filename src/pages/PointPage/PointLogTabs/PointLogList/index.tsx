@@ -1,14 +1,22 @@
 import { Card, Flex, Text } from '@chakra-ui/react'
 import { format } from 'date-fns'
 
-import { Point } from '@/types'
+import { Point, PointOptions } from '@/types'
 
 interface PointLogListProps {
-  option?: 'ALL'
+  option: PointOptions
   points: Point[]
 }
 
 export const PointLogList = ({ option, points }: PointLogListProps) => {
+  if (!points.length) {
+    return (
+      <Card padding={4}>
+        <Text fontSize="small">포인트 기록이 없습니다.</Text>
+      </Card>
+    )
+  }
+
   return (
     <Card padding={4}>
       <Flex flexDirection="column" gap={2}>

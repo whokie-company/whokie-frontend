@@ -85,9 +85,11 @@ export type Modal = {
   onClose: () => void
 }
 
+export type PointOptions = 'ALL' | 'CHARGED' | 'USED'
+
 export type Point = {
   id: number
   point: number
-  option: 'CHARGED' | 'USED'
+  option: PointOptions
   createdAt: string
 }

@@ -1,13 +1,23 @@
+import { useState } from 'react'
+
 import { Flex, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 
-import { Point } from '@/types'
+import { usePointRecordPaging } from '@/api/services/point/record.api'
+import { PointOptions } from '@/types'
 
 import { PointLogList } from './PointLogList'
 
 export const PointLogTabs = () => {
+  const [tabIndex, setTableIndex] = useState(0)
+  const option = options[tabIndex]
+
+  const { data } = usePointRecordPaging({ option })
+  const points = data?.pages.flatMap((page) => page.records)
+
   return (
     <Flex flex={1} height="full" background="brown.50">
       <Tabs
+        onChange={(index) => setTableIndex(index)}
         variant="soft-rounded"
         width="full"
         colorScheme="secondary"
@@ -20,13 +30,13 @@ export const PointLogTabs = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <PointLogList option="ALL" points={pointData} />
+            <PointLogList option={option} points={points} />
           </TabPanel>
           <TabPanel>
-            <PointLogList points={pointData} />
+            <PointLogList option={option} points={points} />
           </TabPanel>
           <TabPanel>
-            <PointLogList points={pointData} />
+            <PointLogList option={option} points={points} />
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -34,24 +44,4 @@ export const PointLogTabs = () => {
   )
 }
 
-const pointData: Point[] = [
-  {
-    id: 2,
-    point: 5,
-    option: 'CHARGED',
-    createdAt: '2024-11-01',
-  },
-  {
-    id: 3,
-    point: 5,
-    option: 'CHARGED',
-    createdAt: '2024-11-01',
-  },
-
-  {
-    id: 8,
-    point: 5,
-    option: 'USED',
-    createdAt: '2024-11-04',
-  },
-]
+const options: PointOptions[] = ['ALL', 'CHARGED', 'USED']
