@@ -50,7 +50,9 @@ export default function ProfileQuestionPage() {
       {/* 이 영역만 스크롤 */}
       <Answer userId={userId} />
 
-      {!isMyPage && questionId && <WriteReply />}
+      {!isMyPage && questionId && (
+        <WriteReply userId={userId} questionId={questionId} />
+      )}
     </Flex>
   )
 }
