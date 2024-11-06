@@ -6,8 +6,13 @@ import { ChatBox } from '@/components/ChatBox'
 import { useSelectedQuestionStore } from '@/stores/selected-question'
 import { ChatItem } from '@/types'
 
+import formatDate from '../Answer/formatDate'
+
 export default function Question() {
   const questionId = useSelectedQuestionStore((state) => state.questionId)
+  const questionCreatedAt = useSelectedQuestionStore(
+    (state) => state.questionCreatedAt
+  )
   const questionContent = useSelectedQuestionStore(
     (state) => state.questionContent
   )
@@ -19,13 +24,13 @@ export default function Question() {
       setQuestion({
         chatId: questionId,
         direction: 'left',
-        createdAt: '2024-10-19',
+        createdAt: formatDate(questionCreatedAt as string),
         content: questionContent,
       })
     } else {
       setQuestion(null)
     }
-  }, [questionId, questionContent])
+  }, [questionId, questionContent, questionCreatedAt])
 
   return (
     <Box padding="3px 0">{question && <ChatBox chatItem={question} />}</Box>

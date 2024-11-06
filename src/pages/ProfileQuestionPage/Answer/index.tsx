@@ -1,23 +1,26 @@
-// components/Answer.tsx
 import { Box } from '@chakra-ui/react'
 
 import { useGetProfileAnswer } from '@/api/services/profile/profileQuestion.api'
 import { ChatBox } from '@/components/ChatBox'
 import { Loading } from '@/components/Loading'
 import ErrorPage from '@/pages/ErrorPage'
+import { useSelectedQuestionStore } from '@/stores/selected-question'
 import { ChatItem } from '@/types'
 
+import formatDate from './formatDate'
+
 interface AnswerProps {
-  userId: string
-  questionId: string
+  userId: number
 }
 
-const Answer: React.FC<AnswerProps> = ({ userId, questionId }: AnswerProps) => {
+const Answer: React.FC<AnswerProps> = ({ userId }: AnswerProps) => {
+  const questionId = useSelectedQuestionStore((state) => state.questionId)
+
   const {
     data: answers,
     isLoading,
     isError,
-  } = useGetProfileAnswer(userId, questionId)
+  } = useGetProfileAnswer(userId, questionId as number)
 
   if (isLoading) return <Loading />
   if (isError) return <ErrorPage />
@@ -27,7 +30,7 @@ const Answer: React.FC<AnswerProps> = ({ userId, questionId }: AnswerProps) => {
     chatId: Number(answer.profileAnswerId),
     direction: 'right' as const,
     content: answer.content,
-    createdAt: answer.createdAt,
+    createdAt: formatDate(answer.createdAt),
   }))
 
   return (
