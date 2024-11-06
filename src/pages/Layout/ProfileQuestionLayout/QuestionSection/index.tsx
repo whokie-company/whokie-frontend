@@ -25,7 +25,7 @@ export const QuestionSection = () => {
       }
     >
       <Box fontSize="small">
-        <QuestionList />
+        <QuestionList isMyPage={isMyPage} />
       </Box>
       {isMyPage && <CreateQuestionButton userId={userId} />}
     </PageLayout.SideSection>

@@ -9,7 +9,11 @@ import { Loading } from '@/components/Loading'
 import ErrorPage from '@/pages/ErrorPage'
 import { useSelectedQuestionStore } from '@/stores/selected-question'
 
-export const QuestionList = () => {
+type QuestionListProps = {
+  isMyPage: boolean
+}
+
+export const QuestionList = ({ isMyPage }: QuestionListProps) => {
   const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(
     null
   )
@@ -111,7 +115,9 @@ export const QuestionList = () => {
         {questions?.map((question) => (
           <Box
             key={question.profileQuestionId}
-            onContextMenu={(e) => handleContextMenu(e, question)}
+            onContextMenu={
+              isMyPage ? (e) => handleContextMenu(e, question) : undefined
+            }
           >
             <ActiveBrownBox
               key={question.profileQuestionId}
