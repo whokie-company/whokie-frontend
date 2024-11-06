@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Button, Flex } from '@chakra-ui/react'
 
 import { useMyUserIdStore } from '@/stores/my-user-id'
+import { useSelectedQuestionStore } from '@/stores/selected-question'
 
 import Answer from './Answer'
 import Question from './Question'
@@ -14,6 +15,7 @@ export default function ProfileQuestionPage() {
   const location = useLocation()
   const userId: number = location.state?.userId
   const myUserId = useMyUserIdStore((state) => state.myUserId)
+  const questionId = useSelectedQuestionStore((state) => state.questionId)
 
   const isMyPage = Number(userId) === myUserId
 
@@ -48,7 +50,7 @@ export default function ProfileQuestionPage() {
       {/* 이 영역만 스크롤 */}
       <Answer userId={userId} />
 
-      {!isMyPage && <WriteReply />}
+      {!isMyPage && questionId && <WriteReply />}
     </Flex>
   )
 }
