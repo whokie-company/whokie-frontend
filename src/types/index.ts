@@ -6,7 +6,7 @@ export type Friend = {
 }
 
 export type Group = {
-  groupdId: number
+  groupId: number
   groupName: string
   groupdImageUrl: string
   groupDescription: string
