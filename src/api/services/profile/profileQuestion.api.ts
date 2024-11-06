@@ -23,6 +23,21 @@ export const useGetProfileQuestion = (userId: string) => {
   })
 }
 
+// 프로필 질문 추가하기
+export type PostProfileQuestionRequest = {
+  content: string
+}
+
+export const postProfileQuestion = async ({
+  content,
+}: PostProfileQuestionRequest) => {
+  const response = await authorizationInstance.post('/api/profile/question', {
+    content,
+  })
+
+  return response.data.message
+}
+
 // 프로필 질문 대답 리스트 불러오기
 type ProfileAnswerResponse = {
   content: ProfileAnswerItem[]
