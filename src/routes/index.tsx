@@ -36,7 +36,7 @@ const router = createBrowserRouter([
             element: <CookieRecordPage />,
           },
           {
-            path: '/grouppage/:groupId',
+            path: '/group/:groupId',
             element: <GroupPage />,
           },
           {
