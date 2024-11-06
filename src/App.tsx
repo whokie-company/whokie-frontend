@@ -16,6 +16,7 @@ function App() {
 
   useEffect(() => {
     if (message) {
+      toast.closeAll()
       toast({
         position: 'top',
         duration: 3000,
