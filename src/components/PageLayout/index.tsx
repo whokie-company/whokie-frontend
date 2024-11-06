@@ -32,6 +32,8 @@ const PageLayout = ({
           marginTop={6}
           gap={0}
           boxShadow="6px 6px 20px rgba(0, 0, 0, 0.25)"
+          id="page-layout"
+          position="relative"
         >
           <SideNavigation />
           {LeftSection}

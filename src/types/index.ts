@@ -72,3 +72,15 @@ export type MyPageItem = {
   backgroundImageUrl: string
   name: string
 }
+
+export type Hint = {
+  hintNum: number
+  valid: boolean
+  content: string
+}
+
+export type Modal = {
+  isOpen: boolean
+  onOpen: () => void
+  onClose: () => void
+}
