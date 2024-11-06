@@ -16,7 +16,6 @@ type PointRecordRequestParams = {
 type PointRecordResponse = PagingResponse<Point[]>
 
 const getPointRecordPaging = async (params: PointRecordRequestParams) => {
-  console.log(params.option)
   const response = await authorizationInstance.get<PointRecordResponse>(
     appendParamsToUrl('/api/point/record', params)
   )
