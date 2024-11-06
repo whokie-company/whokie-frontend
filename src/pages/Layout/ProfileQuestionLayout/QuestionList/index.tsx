@@ -17,6 +17,9 @@ export const QuestionList = () => {
   const setQuestionContent = useSelectedQuestionStore(
     (state) => state.setQuestionContent
   )
+  const setQuestionCreatedAt = useSelectedQuestionStore(
+    (state) => state.setQuestionCreatedAt
+  )
 
   const location = useLocation()
   const userId: string = location.state?.userId.toString()
@@ -33,12 +36,21 @@ export const QuestionList = () => {
     if (isFirstRender.current && questions && questions.length > 0) {
       setSelectedQuestion(questions[0].profileQuestionId)
       setQuestionContent(questions[0].profileQuestionContent)
+      setQuestionCreatedAt(questions[0].createdAt)
+
       isFirstRender.current = false
     } else if (isFirstRender.current && questions?.length === 0) {
       setSelectedQuestion(undefined)
       setQuestionContent(undefined)
+      setQuestionCreatedAt(undefined)
     }
-  }, [questions, questionId, setSelectedQuestion, setQuestionContent])
+  }, [
+    questions,
+    questionId,
+    setSelectedQuestion,
+    setQuestionContent,
+    setQuestionCreatedAt,
+  ])
 
   if (isLoading) return <Loading />
   if (error) return <ErrorPage />
