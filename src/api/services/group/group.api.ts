@@ -63,3 +63,22 @@ export const createGroup = async ({
     groupDescription,
   })
 }
+
+export const modifyGroup = async (
+  groupId: number,
+  groupName: string,
+  description: string
+) => {
+  const requestData = {
+    groupId,
+    groupName,
+    description,
+  }
+
+  const response = await authorizationInstance.patch(
+    '/api/group/modify',
+    requestData
+  )
+
+  return response.data
+}

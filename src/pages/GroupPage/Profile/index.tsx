@@ -1,4 +1,5 @@
-import { BiEditAlt } from 'react-icons/bi'
+import { useState } from 'react'
+import { BiCheck, BiEditAlt } from 'react-icons/bi'
 
 import {
   Avatar,
@@ -6,10 +7,12 @@ import {
   HStack,
   Icon,
   IconButton,
+  Input,
   Text,
   VStack,
 } from '@chakra-ui/react'
 
+import { modifyGroup } from '@/api/services/group/group.api'
 import { Group } from '@/types'
 
 type GroupProps = {
@@ -18,6 +21,21 @@ type GroupProps = {
 }
 
 export default function Profile({ role, gprofile }: GroupProps) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [groupName, setGroupName] = useState(gprofile.groupName)
+  const [groupDescription, setGroupDescription] = useState(
+    gprofile.groupDescription
+  )
+
+  const handleEditClick = () => {
+    setIsEditing(true)
+  }
+
+  const handleSaveClick = async () => {
+    await modifyGroup(gprofile.groupId, groupName, groupDescription)
+    setIsEditing(false)
+  }
+
   return (
     <header>
       <Box position="relative" marginBottom="60px">
@@ -41,7 +59,23 @@ export default function Profile({ role, gprofile }: GroupProps) {
 
           <VStack align="flex-start" spacing={0}>
             <HStack spacing={2} alignItems="center">
-              <Text fontSize="xl">{gprofile?.groupName}</Text>
+              {isEditing ? (
+                <Input
+                  value={groupName}
+                  onChange={(e) => setGroupName(e.target.value)}
+                  fontSize="xl"
+                  width="180px"
+                  textColor="black.500"
+                  border="none"
+                  _focus={{ color: 'black.800' }}
+                  padding="0"
+                  height="auto"
+                  lineHeight="normal"
+                  verticalAlign="middle"
+                />
+              ) : (
+                <Text fontSize="xl">{groupName}</Text>
+              )}
               <Text
                 fontSize="xs"
                 padding="3px 6px"
@@ -56,13 +90,36 @@ export default function Profile({ role, gprofile }: GroupProps) {
             </HStack>
 
             <HStack spacing={2} alignItems="center">
-              <Text color="text_secondary" fontSize="md">
-                {gprofile?.groupDescription}
-              </Text>
+              {isEditing ? (
+                <Input
+                  value={groupDescription}
+                  onChange={(e) => setGroupDescription(e.target.value)}
+                  color="text_secondary"
+                  fontSize="md"
+                  width="320px"
+                  textColor="black.500"
+                  border="none"
+                  _focus={{ color: 'black.800' }}
+                  padding="0"
+                  height="auto"
+                  lineHeight="normal"
+                  verticalAlign="middle"
+                />
+              ) : (
+                <Text color="text_secondary" fontSize="md">
+                  {groupDescription}
+                </Text>
+              )}
               {role === 'leader' && (
                 <IconButton
                   aria-label="Edit"
-                  icon={<Icon as={BiEditAlt} boxSize="10px" />}
+                  icon={
+                    isEditing ? (
+                      <Icon as={BiCheck} boxSize="12px" />
+                    ) : (
+                      <Icon as={BiEditAlt} boxSize="10px" />
+                    )
+                  }
                   borderRadius="20px"
                   minWidth="20px"
                   width="20px"
@@ -70,6 +127,7 @@ export default function Profile({ role, gprofile }: GroupProps) {
                   padding="0"
                   border="1px solid"
                   borderColor="black.400"
+                  onClick={isEditing ? handleSaveClick : handleEditClick}
                 />
               )}
             </HStack>
