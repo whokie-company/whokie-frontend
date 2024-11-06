@@ -1,20 +1,23 @@
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { BiDonateHeart, BiQuestionMark } from 'react-icons/bi'
+import { Link } from 'react-router-dom'
 
 import { Center, Flex, HStack, Text } from '@chakra-ui/react'
 
 import { ActiveBrownBox } from '@/components/ActiveBrownBox'
 import { PageLayout } from '@/components/PageLayout'
+import { useAuthTokenStore } from '@/stores/auth-token'
 import { useSeletedGroupStore } from '@/stores/selected-group'
 
-import { AddGroupButton } from './AddGroupButton'
+import { CreateGroupButton } from './CreateGroupButton'
 import { GroupErrorFallback } from './GroupErrorFallback'
 import { GroupList } from './GroupList'
 
 export const GroupSection = () => {
   const groupId = useSeletedGroupStore((state) => state.groupId)
   const setSeletedGroup = useSeletedGroupStore((state) => state.setGroupId)
+  const isLoggedIn = useAuthTokenStore((state) => state.isLoggedIn())
 
   return (
     <PageLayout.SideSection
@@ -35,17 +38,24 @@ export const GroupSection = () => {
           >
             모든 친구에게
           </Text>
-          <ActiveBrownBox
-            isActive={!groupId}
-            onClick={() => setSeletedGroup(undefined)}
-          >
-            <HStack>
-              <Center background="primary" width={7} height={7} rounded="full">
-                <BiQuestionMark size={20} color="white" />
-              </Center>
-              <Text>ALL</Text>
-            </HStack>
-          </ActiveBrownBox>
+          <Link to="/">
+            <ActiveBrownBox
+              isActive={!groupId}
+              onClick={() => setSeletedGroup(undefined)}
+            >
+              <HStack>
+                <Center
+                  background="primary"
+                  width={7}
+                  height={7}
+                  rounded="full"
+                >
+                  <BiQuestionMark size={20} color="white" />
+                </Center>
+                <Text>ALL</Text>
+              </HStack>
+            </ActiveBrownBox>
+          </Link>
         </Flex>
         <Flex flexDirection="column" width="full">
           <Text
@@ -56,13 +66,15 @@ export const GroupSection = () => {
           >
             그룹 친구에게
           </Text>
-          <ErrorBoundary FallbackComponent={GroupErrorFallback}>
-            <Suspense fallback={<Text textAlign="center">loading...</Text>}>
-              <GroupList />
-            </Suspense>
-          </ErrorBoundary>
+          {isLoggedIn && (
+            <ErrorBoundary FallbackComponent={GroupErrorFallback}>
+              <Suspense fallback={<Text textAlign="center">loading...</Text>}>
+                <GroupList />
+              </Suspense>
+            </ErrorBoundary>
+          )}
         </Flex>
-        <AddGroupButton />
+        <CreateGroupButton />
       </Flex>
     </PageLayout.SideSection>
   )

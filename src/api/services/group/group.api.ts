@@ -1,7 +1,7 @@
 import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
 import { authorizationInstance, fetchInstance } from '@/api/instance'
-import { getPagingPath } from '@/api/utils/common/getPagingPath'
+import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
 import { Group, PagingRequestParams, PagingResponse } from '@/types'
 
 const getGroupPage = async (groupId: string) => {
@@ -21,7 +21,7 @@ type GroupResponse = PagingResponse<Omit<Group, 'groupDescription'>[]>
 
 const getGroupPaging = async (params: PagingRequestParams) => {
   const { data } = await authorizationInstance.get<GroupResponse>(
-    getPagingPath('/api/group/my', params)
+    appendParamsToUrl('/api/group/my', params)
   )
 
   return {
@@ -46,5 +46,20 @@ export const useGroupPaging = ({
       getGroupPaging({ page: pageParam, size, sort }),
     initialPageParam: initPageToken,
     getNextPageParam: (lastPage) => lastPage.nextPageToken,
+  })
+}
+
+export type CreateGroupRequestBody = {
+  groupName: string
+  groupDescription: string
+}
+
+export const createGroup = async ({
+  groupName,
+  groupDescription,
+}: CreateGroupRequestBody) => {
+  await authorizationInstance.post('/api/group', {
+    groupName,
+    groupDescription,
   })
 }
