@@ -84,3 +84,11 @@ export type Modal = {
   onOpen: () => void
   onClose: () => void
 }
+
+export type Member = {
+  groupMemberId: number
+  userId: number
+  role: 'LEADER' | 'MEMBER'
+  userName: string
+  joinedAt: string
+}
