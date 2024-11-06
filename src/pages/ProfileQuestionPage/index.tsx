@@ -23,7 +23,7 @@ export default function ProfileQuestionPage() {
       position="relative"
       height="100%"
       flexDirection="column"
-      justifyContent="start"
+      justifyContent="flex-start"
     >
       <Box
         bg="brown.200"
