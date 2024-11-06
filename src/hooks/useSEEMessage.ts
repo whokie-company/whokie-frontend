@@ -23,10 +23,6 @@ export function useSEEMessage() {
       setMessage(event.data)
     }
 
-    eventSource.onerror = () => {
-      eventSource.close()
-    }
-
     return () => {
       authorizationInstance.post('/api/alarm/disconnect', {})
       eventSource.close()
