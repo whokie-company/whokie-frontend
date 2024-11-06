@@ -72,3 +72,10 @@ export type MyPageItem = {
   backgroundImageUrl: string
   name: string
 }
+
+export type Point = {
+  id: number
+  point: number
+  option: 'CHARGED' | 'USED'
+  createdAt: string
+}

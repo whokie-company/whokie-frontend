@@ -9,6 +9,7 @@ import LoginPage from '@/pages/LoginPage'
 import LoginRedirectPage from '@/pages/LoginRedirectPage'
 import MainPage from '@/pages/MainPage'
 import MyPage from '@/pages/MyPage'
+import PointPage from '@/pages/PointPage'
 import ProfileQuestionPage from '@/pages/ProfileQuestionPage'
 
 import { ProtectedRoute } from './ProtectedRoute'
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
             path: '/mypage/:userId',
             element: <MyPage />,
           },
+
           {
             path: '/cookie-record',
             element: <CookieRecordPage />,
@@ -54,6 +56,16 @@ const router = createBrowserRouter([
     path: '/',
     element: <ProfileQuestionLayout />,
     children: [{ path: '/profile-question', element: <ProfileQuestionPage /> }],
+  },
+  {
+    path: '/',
+    element: <MainLayout />,
+    children: [
+      {
+        path: '/point',
+        element: <PointPage />,
+      },
+    ],
   },
   {
     path: '*',
