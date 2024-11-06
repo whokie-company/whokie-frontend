@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { fetchInstance } from '@/api/instance'
+import { authorizationInstance, fetchInstance } from '@/api/instance'
 import { ProfileAnswerItem, QuestionItem } from '@/types'
 
 type ProfileQuestionResponse = {
@@ -53,4 +53,28 @@ export const useGetProfileAnswer = (
     enabled: questionId !== undefined,
     staleTime: 0,
   })
+}
+
+// 대답 보내기
+export type PostProfileAnswerRequest = {
+  content: string
+  profileQuestionId: number
+}
+type PostProfileAnswerResponse = {
+  message: string
+}
+
+export const postProfileAnswer = async ({
+  content,
+  profileQuestionId,
+}: PostProfileAnswerRequest) => {
+  const response = await authorizationInstance.post<PostProfileAnswerResponse>(
+    '/api/profile/answer',
+    {
+      content,
+      profileQuestionId,
+    }
+  )
+
+  return response.data.message
 }
