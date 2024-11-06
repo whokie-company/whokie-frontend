@@ -36,6 +36,13 @@ export type Question = {
   users: Friend[]
 }
 
+export type ProfileAnswerItem = {
+  profileAnswerId: string
+  content: string
+  profileQuestionContent: string
+  createdAt: string
+}
+
 export type AnswerRecord = {
   answerId: number
   questionId: number
