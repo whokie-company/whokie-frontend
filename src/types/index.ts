@@ -6,7 +6,7 @@ export type Friend = {
 }
 
 export type Group = {
-  groupdId: number
+  groupId: number
   groupName: string
   groupdImageUrl: string
   groupDescription: string
@@ -71,6 +71,18 @@ export type MyPageItem = {
   description: string
   backgroundImageUrl: string
   name: string
+}
+
+export type Hint = {
+  hintNum: number
+  valid: boolean
+  content: string
+}
+
+export type Modal = {
+  isOpen: boolean
+  onOpen: () => void
+  onClose: () => void
 }
 
 export type Point = {

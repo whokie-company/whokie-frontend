@@ -60,5 +60,6 @@ module.exports = {
       'error',
       { variables: false, functions: false, classes: false },
     ],
+    'react/jsx-props-no-spreading': 'off',
   },
 }

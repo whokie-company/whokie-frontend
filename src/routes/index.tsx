@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import CookieRecordPage from '@/pages/CookieRecordPage'
+import CreateGroupPage from '@/pages/CreateGroupPage'
 import ErrorPage from '@/pages/ErrorPage'
 import GroupPage from '@/pages/GroupPage'
 import { MainLayout } from '@/pages/Layout/MainLayout'
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
           {
             path: '/grouppage',
             element: <GroupPage />,
+          },
+          {
+            path: '/group/create',
+            element: <CreateGroupPage />,
           },
         ],
       },

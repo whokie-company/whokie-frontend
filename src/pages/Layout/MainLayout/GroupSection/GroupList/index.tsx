@@ -1,4 +1,4 @@
-import { Flex, Text } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 
 import { useGroupPaging } from '@/api/services/group/group.api'
 import { ActiveBrownBox } from '@/components/ActiveBrownBox'
@@ -20,14 +20,11 @@ export const GroupList = () => {
 
   return (
     <Flex flexDirection="column" width="full">
-      <Text fontSize="small" color="text_description" paddingY={1} paddingX={2}>
-        그룹 친구에게
-      </Text>
       {groups.map((group) => (
         <ActiveBrownBox
-          key={group.groupdId}
-          isActive={groupId === group.groupdId}
-          onClick={() => setSeletedGroup(group.groupdId)}
+          key={group.groupId}
+          isActive={!!groupId && groupId === group.groupId}
+          onClick={() => setSeletedGroup(group.groupId)}
         >
           <AvatarLabelWithNavigate
             isNavigate
