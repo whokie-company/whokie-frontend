@@ -27,7 +27,7 @@ export const useGetProfileQuestion = (userId: string) => {
 type ProfileAnswerResponse = {
   content: ProfileAnswerItem[]
 }
-const getProfileAnswer = async (userId: string, questionId: string | null) => {
+const getProfileAnswer = async (userId: number, questionId: number) => {
   const response = await fetchInstance.get<ProfileAnswerResponse>(
     `/api/profile/answer`,
     {
@@ -39,11 +39,18 @@ const getProfileAnswer = async (userId: string, questionId: string | null) => {
 }
 
 export const useGetProfileAnswer = (
-  userId: string,
-  questionId: string | null
+  userId: number,
+  questionId: number | undefined
 ) => {
   return useQuery({
     queryKey: ['profileAnswer', userId, questionId],
-    queryFn: () => getProfileAnswer(userId, questionId),
+    queryFn: () => {
+      if (questionId === undefined) {
+        return []
+      }
+      return getProfileAnswer(userId, questionId)
+    },
+    enabled: questionId !== undefined,
+    staleTime: 0,
   })
 }
