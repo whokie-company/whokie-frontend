@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+
 import { Box } from '@chakra-ui/react'
 
 import { useGetProfileAnswer } from '@/api/services/profile/profileQuestion.api'
@@ -22,6 +24,13 @@ const Answer: React.FC<AnswerProps> = ({ userId }: AnswerProps) => {
     isError,
   } = useGetProfileAnswer(userId, questionId as number)
 
+  const boxRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (boxRef.current) {
+      boxRef.current.scrollTop = boxRef.current.scrollHeight
+    }
+  }, [answers])
+
   if (isLoading) return <Loading />
   if (isError) return <ErrorPage />
   if (!answers) return ''
@@ -34,7 +43,7 @@ const Answer: React.FC<AnswerProps> = ({ userId }: AnswerProps) => {
   }))
 
   return (
-    <Box overflowY="auto">
+    <Box overflowY="auto" ref={boxRef}>
       {chatItem.map((item) => (
         <ChatBox key={item.chatId} chatItem={item} />
       ))}
