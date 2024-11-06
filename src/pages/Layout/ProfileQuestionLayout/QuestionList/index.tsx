@@ -1,11 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
+import { BiError, BiTrash } from 'react-icons/bi'
 import { useLocation } from 'react-router-dom'
 
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, Text, useDisclosure } from '@chakra-ui/react'
+import { useMutation } from '@tanstack/react-query'
 
-import { useGetProfileQuestion } from '@/api/services/profile/profileQuestion.api'
+import { queryClient } from '@/api/instance'
+import {
+  DeleteProfileQuestionRequest,
+  deleteProfileQuestion,
+  useGetProfileQuestion,
+} from '@/api/services/profile/profileQuestion.api'
 import { ActiveBrownBox } from '@/components/ActiveBrownBox'
 import { Loading } from '@/components/Loading'
+import { AlertModal } from '@/components/Modal/AlertModal'
+import { ConfirmModal } from '@/components/Modal/ConfirmModal'
 import ErrorPage from '@/pages/ErrorPage'
 import { useSelectedQuestionStore } from '@/stores/selected-question'
 
@@ -22,6 +31,8 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
     y: number
   } | null>(null)
   const contextMenuRef = useRef<HTMLDivElement | null>(null)
+  const deleteAlert = useDisclosure()
+  const errorAlert = useDisclosure()
 
   const questionId = useSelectedQuestionStore((state) => state.questionId)
   const setSelectedQuestion = useSelectedQuestionStore(
@@ -79,6 +90,27 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
     setQuestionCreatedAt,
   ])
 
+  const { mutate: deleteQuestion } = useMutation<
+    void,
+    Error,
+    DeleteProfileQuestionRequest
+  >({
+    mutationFn: ({ deleteQuestionId }: DeleteProfileQuestionRequest) =>
+      deleteProfileQuestion({ deleteQuestionId }),
+    onSuccess: () => {
+      deleteAlert.onClose()
+      queryClient.refetchQueries({
+        queryKey: ['profileQuestion', userId],
+      })
+      queryClient.invalidateQueries({ queryKey: ['deleteProfileQuestion'] })
+      setSelectedQuestionId(null)
+    },
+    onError: () => {
+      deleteAlert.onClose()
+      errorAlert.onOpen()
+    },
+  })
+
   if (isLoading) return <Loading />
   if (error) return <ErrorPage />
   if (!Array.isArray(questions) || questions.length === 0)
@@ -92,15 +124,20 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
     e: React.MouseEvent,
     question: { profileQuestionId: number }
   ) => {
-    e.preventDefault() // 우클릭 메뉴 기본 동작 막기
+    e.preventDefault()
     setSelectedQuestionId(question.profileQuestionId)
     setContextMenuPosition({ x: e.clientX, y: e.clientY })
-    // onOpen()
   }
 
   const handleDeleteClick = () => {
-    // deleteModal.onOpen() // 삭제 확인 모달 열기
-    setContextMenuPosition(null) // 컨텍스트 메뉴 닫기
+    deleteAlert.onOpen()
+    setContextMenuPosition(null)
+  }
+
+  const handleDelete = () => {
+    if (selectedQuestionId !== undefined && selectedQuestionId !== null) {
+      deleteQuestion({ deleteQuestionId: selectedQuestionId }) // API 호출
+    }
   }
 
   return (
@@ -157,6 +194,31 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
           </Text>
         </Box>
       )}
+      <ConfirmModal
+        isOpen={deleteAlert.isOpen}
+        onClose={deleteAlert.onClose}
+        icon={<BiTrash />}
+        title="프로필 질문을 삭제하시겠어요?"
+        description="삭제한 질문은 복구할 수 없습니다"
+        confirmButton={
+          <Button
+            colorScheme="primary"
+            fontSize="small"
+            height="fit-content"
+            paddingY="0.6rem"
+            onClick={handleDelete}
+          >
+            삭제하기
+          </Button>
+        }
+      />
+      <AlertModal
+        isOpen={errorAlert.isOpen}
+        onClose={errorAlert.onClose}
+        icon={<BiError />}
+        title="삭제에 실패하였습니다"
+        description=""
+      />
     </Flex>
   )
 }
