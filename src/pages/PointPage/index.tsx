@@ -1,13 +1,14 @@
 import { Suspense } from 'react'
+import { Outlet } from 'react-router-dom'
 
 import { Flex } from '@chakra-ui/react'
 
 import { Loading } from '@/components/Loading'
 import { PageHeader } from '@/components/PageHeader'
 
-import { ChargePointCard } from './ChargePointCard'
 import { MyPointCard } from './MyPointCard'
 import { PointLogTabs } from './PointLogTabs'
+import { PurchasePointCard } from './PurchasePointCard'
 
 export default function PointPage() {
   return (
@@ -22,11 +23,12 @@ export default function PointPage() {
         <Suspense fallback={<Loading />}>
           <Flex flexDirection="column" margin={4} gap={4}>
             <MyPointCard />
-            <ChargePointCard />
+            <PurchasePointCard />
           </Flex>
           <PointLogTabs />
         </Suspense>
       </Flex>
+      <Outlet />
     </Flex>
   )
 }

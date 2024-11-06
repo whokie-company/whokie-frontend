@@ -11,6 +11,8 @@ import LoginRedirectPage from '@/pages/LoginRedirectPage'
 import MainPage from '@/pages/MainPage'
 import MyPage from '@/pages/MyPage'
 import PointPage from '@/pages/PointPage'
+import PointCancelModal from '@/pages/PointPage/PointCancelModal'
+import PointFailureModal from '@/pages/PointPage/PointFailureModal'
 import ProfileQuestionPage from '@/pages/ProfileQuestionPage'
 
 import { ProtectedRoute } from './ProtectedRoute'
@@ -69,6 +71,16 @@ const router = createBrowserRouter([
       {
         path: '/point',
         element: <PointPage />,
+        children: [
+          {
+            path: '/point/failure',
+            element: <PointFailureModal />,
+          },
+          {
+            path: '/point/cancel',
+            element: <PointCancelModal />,
+          },
+        ],
       },
     ],
   },
