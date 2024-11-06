@@ -1,39 +1,64 @@
-import { Flex, Heading } from '@chakra-ui/react'
-import { format } from 'date-fns'
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 
-import { useAnswerRecordPaging } from '@/api/services/answer/record-paging/useAnswerRecordPaging'
+import { Flex, useDisclosure } from '@chakra-ui/react'
+
+import { useAnswerRecordPaging } from '@/api/services/answer/record.api'
 import { convertToDailyCookies } from '@/api/utils/answer/convertToDailyCookies'
-import { CookieLogText } from '@/components/CookieLogText'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
+import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
+import { useClickOutSideElement } from '@/hooks/useClickOutsideElement'
+import {
+  SelectedAnswer,
+  useSelectedAnswerStore,
+} from '@/stores/selected-answer'
+
+import { HintDrawer } from '../HintDrawer'
+import { CookieLogList } from './CookieLogList'
 
 export const LogSection = () => {
-  const { answerRecords, hasNextPage, isFetchingNextPage, fetchNextPage } =
+  const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useAnswerRecordPaging({})
+  const answerRecords = data?.pages.flatMap((page) => page.records)
+
+  if (!answerRecords.length) {
+    throw new Error(DATA_ERROR_MESSAGES.ANSWER_RECORD_NOT_FOUND)
+  }
+
   const cookieLogs = convertToDailyCookies(answerRecords)
+  const setSelectedAnswer = useSelectedAnswerStore(
+    (state) => state.setSelectedAnswer
+  )
+  const [portalNode, setPortalNode] = useState<HTMLElement | null>(null)
+  const drawer = useDisclosure()
+  const modal = useDisclosure()
+
+  useEffect(() => {
+    setPortalNode(document.getElementById('page-layout'))
+  }, [])
+
+  useClickOutSideElement(
+    document.getElementById('hint-drawer'),
+    drawer.onClose,
+    modal.isOpen
+  )
+
+  const onClickCookieLog = (selectedAnswer: SelectedAnswer) => {
+    drawer.onOpen()
+    setSelectedAnswer(selectedAnswer)
+  }
 
   return (
     <Flex flexDirection="column" alignItems="center">
-      {cookieLogs.map((today) => (
-        <Flex
-          key={format(today.createdAt, 'yyyy.MM.dd')}
-          flexDirection="column"
-          gap={1}
-          paddingBottom={10}
-        >
-          <Flex justifyContent="center">
-            <Heading size="sm">{format(today.createdAt, 'MM.dd')}</Heading>
-          </Flex>
-          <Flex flexDirection="column" gap={2}>
-            {today.cookies.map((cookie) => (
-              <CookieLogText
-                key={cookie.answerId}
-                logContent={cookie.questionContent}
-                hintCount={cookie.hintCount}
-              />
-            ))}
-          </Flex>
-        </Flex>
-      ))}
+      {portalNode &&
+        createPortal(
+          <HintDrawer isOpen={drawer.isOpen} modal={modal} />,
+          portalNode
+        )}
+      <CookieLogList
+        cookieLogs={cookieLogs}
+        onClickCookieLog={onClickCookieLog}
+      />
       {hasNextPage && (
         <IntersectionObserverLoader
           callback={() => {

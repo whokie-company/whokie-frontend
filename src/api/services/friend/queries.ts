@@ -1,6 +1,6 @@
 import { queryOptions, useSuspenseQueries } from '@tanstack/react-query'
 
-import { getFriends } from './index'
+import { getFriends } from './friend.api'
 
 export const friendsQueries = {
   all: () => ['friends'],
