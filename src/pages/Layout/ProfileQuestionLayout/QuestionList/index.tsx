@@ -10,7 +10,7 @@ import {
   DeleteProfileQuestionRequest,
   deleteProfileQuestion,
   useGetProfileQuestion,
-} from '@/api/services/profile/profileQuestion.api'
+} from '@/api/services/profile/profile-question.api'
 import { ActiveBrownBox } from '@/components/ActiveBrownBox'
 import { Loading } from '@/components/Loading'
 import { AlertModal } from '@/components/Modal/AlertModal'

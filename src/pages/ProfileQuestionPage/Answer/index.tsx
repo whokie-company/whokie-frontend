@@ -9,7 +9,7 @@ import {
   DeleteProfileAnswerRequest,
   deleteProfileAnswer,
   useGetProfileAnswer,
-} from '@/api/services/profile/profileQuestion.api'
+} from '@/api/services/profile/profile-question.api'
 import { ChatBox } from '@/components/ChatBox'
 import { Loading } from '@/components/Loading'
 import { AlertModal } from '@/components/Modal/AlertModal'
