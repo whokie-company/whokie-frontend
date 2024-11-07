@@ -6,34 +6,43 @@ export type Friend = {
 }
 
 export type Group = {
-  groupdId: number
+  groupId: number
   groupName: string
   groupdImageUrl: string
   groupDescription: string
   groupMemberCount: number
 }
 
-export interface ChatItem {
+export type ChatItem = {
   chatId: number
   direction: 'left' | 'right'
   content: string
   createdAt: string
+  deleteBtn: boolean
+  onDelete?: () => void
 }
 
-export interface ChatBoxProps {
+export type ChatBoxProps = {
   chatItem: ChatItem
 }
 
-export interface QuestionItem {
+export type QuestionItem = {
   profileQuestionId: number
   profileQuestionContent: string
   createdAt: string
 }
 
-export interface Question {
+export type Question = {
   questionId: number
   content: string
   users: Friend[]
+}
+
+export type ProfileAnswerItem = {
+  profileAnswerId: string
+  content: string
+  profileQuestionContent: string
+  createdAt: string
 }
 
 export type AnswerRecord = {
@@ -44,7 +53,14 @@ export type AnswerRecord = {
   createdAt: Date
 }
 
-export type Paging = {
+export type PagingRequestParams = {
+  size?: number
+  page?: string
+  sort?: string[]
+}
+
+export type PagingResponse<T> = {
+  content: T
   totalElements: number
   totalPages: number
   size: number
@@ -63,5 +79,35 @@ export type MyPageItem = {
   totalVisited: number
   description: string
   backgroundImageUrl: string
+  imageUrl: string
   name: string
+}
+
+export type Hint = {
+  hintNum: number
+  valid: boolean
+  content: string
+}
+
+export type Modal = {
+  isOpen: boolean
+  onOpen: () => void
+  onClose: () => void
+}
+
+export type Member = {
+  groupMemberId: number
+  userId: number
+  role: 'LEADER' | 'MEMBER'
+  userName: string
+  joinedAt: string
+}
+  
+export type PointOptions = 'ALL' | 'CHARGED' | 'USED'
+
+export type Point = {
+  id: number
+  point: number
+  option: PointOptions
+  createdAt: string
 }

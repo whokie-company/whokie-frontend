@@ -1,74 +1,54 @@
-import { BiQuestionMark } from 'react-icons/bi'
+import { Flex } from '@chakra-ui/react'
 
-import { Center, Flex, HStack, Text } from '@chakra-ui/react'
-
+import { useGroupPaging } from '@/api/services/group/group.api'
 import { ActiveBrownBox } from '@/components/ActiveBrownBox'
 import { AvatarLabelWithNavigate } from '@/components/AvatarLabel'
-import { useSeletedGroupStore } from '@/stores/selected-group'
-import { Group } from '@/types'
+import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
+import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
+import { useMemberTypeStore } from '@/stores/member-type'
+import { useSelectedGroupStore } from '@/stores/selected-group'
 
-interface GroupListProps {
-  groups: Group[]
-}
+export const GroupList = () => {
+  const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    useGroupPaging({})
 
-export const GroupList = ({ groups }: GroupListProps) => {
-  const groupId = useSeletedGroupStore((state) => state.groupId)
-  const setSeletedGroup = useSeletedGroupStore((state) => state.setGroupId)
+  const groupId = useSelectedGroupStore((state) => state.groupId)
+  const setSeletedGroup = useSelectedGroupStore((state) => state.setGroupId)
+  const setMemberType = useMemberTypeStore((state) => state.setMemberType)
+
+  const groups = data?.pages.flatMap((page) => page.groups)
+
+  if (!groups?.length) throw new Error(DATA_ERROR_MESSAGES.GROUP_NOT_FOUND)
 
   return (
-    <Flex
-      flexDirection="column"
-      alignItems="start"
-      overflowY="scroll"
-      maxHeight="32rem"
-      gap={2}
-    >
-      <Flex flexDirection="column" width="full">
-        <Text
-          fontSize="small"
-          color="text_description"
-          paddingY={1}
-          paddingX={2}
-        >
-          모든 친구에게
-        </Text>
+    <Flex flexDirection="column" width="full">
+      {groups.map((group) => (
         <ActiveBrownBox
-          isActive={!groupId}
-          onClick={() => setSeletedGroup(undefined)}
+          key={group.groupId}
+          isActive={!!groupId && groupId === group.groupId}
+          onClick={() => {
+            setSeletedGroup(group.groupId)
+            setMemberType('GROUP')
+          }}
         >
-          <HStack>
-            <Center background="primary" width={7} height={7} rounded="full">
-              <BiQuestionMark size={20} color="white" />
-            </Center>
-            <Text>ALL</Text>
-          </HStack>
+          <AvatarLabelWithNavigate
+            isNavigate
+            avatarSrc={group.groupdImageUrl}
+            label={group.groupName}
+            tooltipLabel={`${group.groupName} 페이지`}
+            linkTo="/"
+          />
         </ActiveBrownBox>
-      </Flex>
-      <Flex flexDirection="column" width="full">
-        <Text
-          fontSize="small"
-          color="text_description"
-          paddingY={1}
-          paddingX={2}
-        >
-          그룹 친구에게
-        </Text>
-        {groups.map((group) => (
-          <ActiveBrownBox
-            key={group.groupdId}
-            isActive={groupId === group.groupdId}
-            onClick={() => setSeletedGroup(group.groupdId)}
-          >
-            <AvatarLabelWithNavigate
-              isNavigate
-              avatarSrc={group.groupdImageUrl}
-              label={group.groupName}
-              tooltipLabel={`${group.groupName} 페이지`}
-              linkTo="/"
-            />
-          </ActiveBrownBox>
-        ))}
-      </Flex>
+      ))}
+      {hasNextPage && (
+        <IntersectionObserverLoader
+          callback={() => {
+            if (!isFetchingNextPage) {
+              fetchNextPage()
+            }
+          }}
+        />
+      )}
     </Flex>
   )
 }
