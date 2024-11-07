@@ -1,46 +1,61 @@
-import { Suspense, useCallback, useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { ErrorBoundary } from 'react-error-boundary'
-import { useSearchParams } from 'react-router-dom'
 
-import { Flex, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import {
+  Flex,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  useDisclosure,
+} from '@chakra-ui/react'
 
 import { Loading } from '@/components/Loading'
+import { useClickOutSideElement } from '@/hooks/useClickOutsideElement'
 
 import { CalendarSection } from './CalendarSection'
 import { CookieRecordErrorFallback } from './CookieRecordErrorFallback'
 import { CookieRecordHeader } from './CookieRecordHeader'
+import { HintDrawer } from './HintDrawer'
 import { LogSection } from './LogSection'
-
-const types = ['log', 'calendar'] as const
-type SeacrhParamTypes = (typeof types)[number]
+import {
+  cookieLogTypes,
+  useCookieLogSearchParams,
+} from './hooks/useCookieLogSearchParams'
 
 export default function CookieRecordPage() {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const { setSearchParamType, getCurrentType } = useCookieLogSearchParams()
   const [tabIndex, setTabIndex] = useState(0)
 
-  const setSearchParamType = useCallback(
-    (type: SeacrhParamTypes) => {
-      searchParams.set('type', type)
-      setSearchParams(searchParams)
-    },
-    [searchParams, setSearchParams]
+  useEffect(() => {
+    const currentType = getCurrentType()
+    setTabIndex(cookieLogTypes.indexOf(currentType))
+  }, [getCurrentType])
+
+  const [portalNode, setPortalNode] = useState<HTMLElement | null>(null)
+  const hintDrawer = useDisclosure()
+  const hintModal = useDisclosure()
+
+  useClickOutSideElement(
+    document.getElementById('hint-drawer'),
+    hintDrawer.onClose,
+    hintModal.isOpen
   )
 
   useEffect(() => {
-    const currentType = searchParams.get('type')
-
-    if (currentType && isParamTypes(currentType)) {
-      setTabIndex(types.indexOf(currentType))
-      return
-    }
-
-    setTabIndex(0)
-    setSearchParamType('log')
-  }, [searchParams, setSearchParamType])
+    setPortalNode(document.getElementById('page-layout'))
+  }, [])
 
   return (
     <Flex flexDirection="column">
       <CookieRecordHeader />
+      {portalNode &&
+        createPortal(
+          <HintDrawer isOpen={hintDrawer.isOpen} modal={hintModal} />,
+          portalNode
+        )}
       <Tabs
         variant="soft-rounded"
         colorScheme="secondary"
@@ -64,7 +79,7 @@ export default function CookieRecordPage() {
           <TabPanel>
             <ErrorBoundary FallbackComponent={CookieRecordErrorFallback}>
               <Suspense fallback={<Loading />}>
-                <LogSection />
+                <LogSection hintDrawer={hintDrawer} />
               </Suspense>
             </ErrorBoundary>
           </TabPanel>
@@ -75,8 +90,4 @@ export default function CookieRecordPage() {
       </Tabs>
     </Flex>
   )
-}
-
-function isParamTypes(param: string): param is SeacrhParamTypes {
-  return true
 }
