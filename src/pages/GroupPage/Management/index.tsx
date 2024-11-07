@@ -75,7 +75,7 @@ export default function Management({ role, groupId }: ManagementProps) {
           </Box>
           <Flex gap={4}>
             <CardButton buttonElement={CardData[0]} />
-            <Link to={`/group/members/${groupId}`}>
+            <Link to={`/group/${groupId}/members`}>
               <CardButton buttonElement={CardData[1]} />
             </Link>
           </Flex>

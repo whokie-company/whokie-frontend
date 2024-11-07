@@ -84,7 +84,7 @@ const router = createBrowserRouter([
     path: '/',
     element: <GroupMemberLayout />,
     children: [
-      { path: '/group/members/:groupId', element: <GroupMembersPage /> },
+      { path: '/group/:groupId/members', element: <GroupMembersPage /> },
     ],
   },
   {
