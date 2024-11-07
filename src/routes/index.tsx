@@ -56,14 +56,11 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/api/*',
-    element: <div />
-  },
-  {
     path: '/',
     element: <ProfileQuestionLayout />,
     children: [{ path: '/profile-question', element: <ProfileQuestionPage /> }],
   },
+  { path: '/api/*' },
   {
     path: '*',
     element: <ErrorPage />,
