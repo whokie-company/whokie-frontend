@@ -1,4 +1,4 @@
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
+import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
 import { authorizationInstance } from '@/api/instance'
 import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
@@ -48,5 +48,34 @@ export const createGroup = async ({
   await authorizationInstance.post('/api/group', {
     groupName,
     groupDescription,
+  })
+}
+
+type GroupInviteCodeRequestParams = {
+  groupId: number
+}
+
+type GroupInviteCodeResponse = {
+  inviteCode: string
+}
+
+const getGroupInviteCode = async ({
+  groupId,
+}: GroupInviteCodeRequestParams) => {
+  const response = await authorizationInstance.get<GroupInviteCodeResponse>(
+    `/api/group/${groupId}/invite`
+  )
+
+  return response.data.inviteCode
+}
+
+export const useGroupInviteCode = ({
+  groupId,
+}: GroupInviteCodeRequestParams) => {
+  return useQuery({
+    queryKey: ['group', 'invite', groupId],
+    queryFn: () => getGroupInviteCode({ groupId }),
+    refetchOnWindowFocus: false,
+    enabled: false,
   })
 }

@@ -4,7 +4,7 @@ import { Box, Flex, Text } from '@chakra-ui/react'
 
 import { CardButton } from '@/components/CardButton'
 
-import { InviteMemberModal } from './InviteMember'
+import { InviteMemberModal } from './InviteMemberModal'
 
 interface ManagementProps {
   role: 'leader' | 'member'
@@ -14,7 +14,7 @@ export default function Management({ role }: ManagementProps) {
   return (
     <Box p="30px">
       <Flex gap={4} marginTop="10px" marginBottom="16px">
-        <InviteMemberModal inviteCode="testgg" />
+        <InviteMemberModal />
         <CardButton
           variant="white"
           orientation="horizontal"
