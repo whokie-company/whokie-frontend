@@ -1,10 +1,13 @@
 import { useState } from 'react'
-import { BiError } from 'react-icons/bi'
+import { BiCheck, BiCheckCircle, BiEditAlt, BiError } from 'react-icons/bi'
 
 import {
   Avatar,
   Box,
   Button,
+  Flex,
+  Icon,
+  IconButton,
   Input,
   Text,
   useDisclosure,
@@ -13,7 +16,10 @@ import {
 import { useMutation } from '@tanstack/react-query'
 
 import { queryClient } from '@/api/instance'
-import { uploadProfileBg } from '@/api/services/profile/my-page.api'
+import {
+  patchProfileDescription,
+  uploadProfileBg,
+} from '@/api/services/profile/my-page.api'
 import { AlertModal } from '@/components/Modal/AlertModal'
 import { MyPageItem } from '@/types'
 
@@ -34,6 +40,12 @@ export default function Profile({
   const [isHovered, setIsHovered] = useState(false)
   const [file, setFile] = useState<File | null>(null)
   const errorAlert = useDisclosure()
+  const successAlert = useDisclosure()
+  const [isEditing, setIsEditing] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string>('')
+  const [profileDescription, setProfileDescription] = useState<string>(
+    profile.description
+  )
 
   const { mutate: uploadImage } = useMutation({
     mutationFn: (data: { image: File }) => uploadProfileBg(data),
@@ -41,9 +53,25 @@ export default function Profile({
       queryClient.refetchQueries({
         queryKey: ['myPage', userId],
       })
-      queryClient.invalidateQueries({ queryKey: ['uploadProfileBg'] })
+      queryClient.invalidateQueries({ queryKey: ['uploadImage'] })
     },
     onError: () => {
+      setErrorMessage('사진 등록에 실패하였습니다')
+      errorAlert.onOpen()
+    },
+  })
+
+  const { mutate: modifyDescription } = useMutation({
+    mutationFn: (data: { description: string }) =>
+      patchProfileDescription(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['modifyDescription'] })
+      setIsEditing(false)
+      successAlert.onOpen()
+    },
+    onError: () => {
+      setErrorMessage('한 줄 소개 수정에 실패하였습니다')
+      setIsEditing(false)
       errorAlert.onOpen()
     },
   })
@@ -67,6 +95,16 @@ export default function Profile({
       }
       setFile(selectedFile)
       uploadImage({ image: selectedFile })
+    }
+  }
+
+  const handleEditClick = () => {
+    setIsEditing(true)
+  }
+
+  const handleSaveClick = async () => {
+    if (profileDescription) {
+      await modifyDescription({ description: profileDescription })
     }
   }
 
@@ -161,9 +199,50 @@ export default function Profile({
           justifyContent="space-between"
           alignItems="end"
         >
-          <Text color="text_secondary" fontSize="md">
-            {profile.description}
-          </Text>
+          <Flex>
+            {isEditing ? (
+              <Input
+                value={profileDescription}
+                onChange={(e) => setProfileDescription(e.target.value)}
+                color="text_secondary"
+                fontSize="md"
+                width="320px"
+                textColor="black.500"
+                border="none"
+                _focus={{ color: 'black.800' }}
+                padding="0"
+                height="auto"
+                lineHeight="normal"
+                verticalAlign="middle"
+                borderBottom="1px solid gray"
+              />
+            ) : (
+              <Text color="text_secondary" fontSize="md">
+                {profile.description}
+              </Text>
+            )}
+            {isMyPage && (
+              <IconButton
+                aria-label="Edit"
+                icon={
+                  isEditing ? (
+                    <Icon as={BiCheck} boxSize="12px" />
+                  ) : (
+                    <Icon as={BiEditAlt} boxSize="10px" />
+                  )
+                }
+                borderRadius="20px"
+                minWidth="20px"
+                width="20px"
+                height="20px"
+                padding="0"
+                marginLeft={3}
+                border="1px solid"
+                borderColor="black.400"
+                onClick={isEditing ? handleSaveClick : handleEditClick}
+              />
+            )}
+          </Flex>
           <Text
             as="span"
             fontSize="xs"
@@ -186,7 +265,17 @@ export default function Profile({
         isOpen={errorAlert.isOpen}
         onClose={errorAlert.onClose}
         icon={<BiError />}
-        title="사진 등록에 실패하였습니다"
+        title={errorMessage}
+        description=""
+      />
+      <AlertModal
+        isOpen={successAlert.isOpen}
+        onClose={() => {
+          successAlert.onClose()
+          window.location.reload()
+        }}
+        icon={<BiCheckCircle />}
+        title="한 줄 소개를 수정하였습니다"
         description=""
       />
     </header>
