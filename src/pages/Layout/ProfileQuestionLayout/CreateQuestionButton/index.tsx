@@ -15,7 +15,7 @@ import { queryClient } from '@/api/instance'
 import {
   PostProfileQuestionRequest,
   postProfileQuestion,
-} from '@/api/services/profile/profileQuestion.api'
+} from '@/api/services/profile/profile-question.api'
 import { AlertModal } from '@/components/Modal/AlertModal'
 import { FormModal } from '@/components/Modal/FormModal'
 
