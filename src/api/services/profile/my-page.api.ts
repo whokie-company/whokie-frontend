@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { authorizationInstance, fetchInstance } from '@/api/instance'
-import { MyPageItem } from '@/types'
+import { MyPageItem, Ranks } from '@/types'
 
 // 마이페이지 정보 가져오기
 const getMyPage = async (userId: string) => {
@@ -46,5 +46,19 @@ export const uploadProfileBg = async ({ image }: UploadProfileBgRequest) => {
 
   await authorizationInstance.patch('/api/profile/bg/upload', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
+  })
+}
+
+// 마이페이지 랭킹 정보 가져오기
+const getMyRanking = async (userId: string) => {
+  const response = await fetchInstance.get<Ranks>(`/api/ranking/${userId}`)
+
+  return response.data.ranks
+}
+
+export const useMyRanking = (userId: string) => {
+  return useQuery({
+    queryKey: ['myRanking', userId],
+    queryFn: () => getMyRanking(userId),
   })
 }
