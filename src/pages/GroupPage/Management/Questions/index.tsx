@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Box, Button, Radio, RadioGroup, Stack, Text } from '@chakra-ui/react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import {
   approveGroupQuestion,
   getGroupQuestions,
 } from '@/api/services/group/group.api'
+import { Loading } from '@/components/Loading'
 
 interface Question {
   questionId: number
@@ -25,10 +26,20 @@ interface GroupQuestionsResponse {
 
 export default function QuestionManagement() {
   const { groupId } = useParams<{ groupId: string }>()
-  const [questions, setQuestions] = useState<Question[]>([])
   const [status, setStatus] = useState<'READY' | 'APPROVED' | 'REJECTED'>(
     'READY'
   )
+
+  const {
+    data: groupQuestionsResponse = { content: [] },
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery<GroupQuestionsResponse>({
+    queryKey: ['groupQuestions', groupId, status],
+    queryFn: () => getGroupQuestions(String(groupId), status, 0, 10),
+    enabled: !!groupId,
+  })
 
   const { mutate } = useMutation({
     mutationFn: (data: { questionId: number; approve: boolean }) => {
@@ -36,29 +47,89 @@ export default function QuestionManagement() {
       return approveGroupQuestion(String(groupId), questionId, approve)
     },
     onSuccess: () => {
-      console.log('API 호출 성공이다!!!!!!!!!')
+      refetch()
     },
   })
 
-  useEffect(() => {
-    const fetchQuestions = () => {
-      if (groupId) {
-        getGroupQuestions(String(groupId), status, 0, 10).then(
-          (result: GroupQuestionsResponse) => {
-            if (result && result.content && Array.isArray(result.content)) {
-              setQuestions(result.content)
-            } else {
-              setQuestions([])
-            }
-          }
-        )
-      }
-    }
-    fetchQuestions()
-  }, [groupId, status])
-
   const handleStatusChange = (questionId: number, approve: boolean) => {
     mutate({ questionId, approve })
+  }
+
+  const statusButtons = (
+    <Box mb="20px">
+      <Stack direction="row" spacing="15px">
+        <Button
+          onClick={() => setStatus('READY')}
+          colorScheme={status === 'READY' ? 'gray' : 'gray'}
+          variant={status === 'READY' ? 'solid' : 'outline'}
+          borderRadius="full"
+        >
+          승인 대기
+        </Button>
+        <Button
+          onClick={() => setStatus('APPROVED')}
+          colorScheme={status === 'APPROVED' ? 'green' : 'gray'}
+          variant={status === 'APPROVED' ? 'solid' : 'outline'}
+          borderRadius="full"
+        >
+          승인됨
+        </Button>
+        <Button
+          onClick={() => setStatus('REJECTED')}
+          colorScheme={status === 'REJECTED' ? 'red' : 'gray'}
+          variant={status === 'REJECTED' ? 'solid' : 'outline'}
+          borderRadius="full"
+        >
+          거절됨
+        </Button>
+      </Stack>
+    </Box>
+  )
+
+  let content
+  if (isLoading) {
+    content = <Loading />
+  } else if (isError) {
+    content = <Text>질문을 불러오는 데 실패했습니다.</Text>
+  } else if (groupQuestionsResponse.content.length > 0) {
+    content = (
+      <Stack spacing="15px">
+        {groupQuestionsResponse.content.map((question: Question) => (
+          <Box
+            key={question.questionId}
+            p="10px"
+            bg="white"
+            borderRadius="8px"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Text fontSize="16px" flex="1">
+              {question.questionContent}
+            </Text>
+
+            <RadioGroup
+              onChange={(value) => {
+                const approve = value === 'APPROVED'
+                handleStatusChange(question.questionId, approve)
+              }}
+              value={question.status}
+            >
+              <Stack direction="row">
+                <Radio value="APPROVED" colorScheme="green">
+                  {}
+                </Radio>
+                <Radio value="REJECTED" colorScheme="red">
+                  {}
+                </Radio>
+              </Stack>
+            </RadioGroup>
+          </Box>
+        ))}
+      </Stack>
+    )
+  } else {
+    content = <Text>질문이 없습니다.</Text>
   }
 
   return (
@@ -71,75 +142,9 @@ export default function QuestionManagement() {
       <Text fontSize="lg" fontWeight="bold" mb="20px">
         질문 관리
       </Text>
-
-      <Box mb="20px">
-        <Stack direction="row" spacing="15px">
-          <Button
-            onClick={() => setStatus('READY')}
-            colorScheme={status === 'READY' ? 'gray' : 'gray'}
-            variant={status === 'READY' ? 'solid' : 'outline'}
-            borderRadius="full"
-          >
-            승인 대기
-          </Button>
-          <Button
-            onClick={() => setStatus('APPROVED')}
-            colorScheme={status === 'APPROVED' ? 'green' : 'gray'}
-            variant={status === 'APPROVED' ? 'solid' : 'outline'}
-            borderRadius="full"
-          >
-            승인됨
-          </Button>
-          <Button
-            onClick={() => setStatus('REJECTED')}
-            colorScheme={status === 'REJECTED' ? 'red' : 'gray'}
-            variant={status === 'REJECTED' ? 'solid' : 'outline'}
-            borderRadius="full"
-          >
-            거절됨
-          </Button>
-        </Stack>
-      </Box>
-
+      {statusButtons}
       <Box maxHeight="400px" overflowY="scroll">
-        <Stack spacing="15px">
-          {questions.length > 0 ? (
-            questions.map((question) => (
-              <Box
-                key={question.questionId}
-                p="10px"
-                bg="white"
-                borderRadius="8px"
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Text fontSize="16px" flex="1">
-                  {question.questionContent}
-                </Text>
-
-                <RadioGroup
-                  onChange={(value) => {
-                    const approve = value === 'APPROVED'
-                    handleStatusChange(question.questionId, approve)
-                  }}
-                  value={question.status}
-                >
-                  <Stack direction="row">
-                    <Radio value="APPROVED" colorScheme="green">
-                      {}
-                    </Radio>
-                    <Radio value="REJECTED" colorScheme="red">
-                      {}
-                    </Radio>
-                  </Stack>
-                </RadioGroup>
-              </Box>
-            ))
-          ) : (
-            <Text>질문이 없습니다.</Text>
-          )}
-        </Stack>
+        {content}
       </Box>
     </Box>
   )
