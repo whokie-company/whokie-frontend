@@ -41,6 +41,7 @@ export default function QuestionManagement() {
     queryKey: ['groupQuestions', groupId, status],
     queryFn: () => getGroupQuestions(String(groupId), status, 0, 10),
     enabled: !!groupId,
+    staleTime: 0,
   })
 
   const { mutate } = useMutation({
