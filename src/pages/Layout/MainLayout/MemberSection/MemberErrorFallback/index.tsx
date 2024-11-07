@@ -1,12 +1,20 @@
 import { FallbackProps } from 'react-error-boundary'
 import { BiErrorCircle } from 'react-icons/bi'
 
-import { Box, Button, Center, Flex, useDisclosure } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react'
 
 import { AlertModal } from '@/components/Modal/AlertModal'
 import { PageLayout } from '@/components/PageLayout'
 import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
 
+import { GroupMemberHeader } from '../GroupMemberSection'
 import { SelectFreindHeader } from '../SelectFriendSection/SelectFriendHeader'
 
 export const MemberErrorFallback = ({
@@ -14,6 +22,21 @@ export const MemberErrorFallback = ({
   resetErrorBoundary,
 }: FallbackProps) => {
   const { onClose } = useDisclosure()
+
+  if (error.message === DATA_ERROR_MESSAGES.MEMBER_NOT_FOUND) {
+    return (
+      <PageLayout.SideSection SectionHeader={<GroupMemberHeader />}>
+        <Text
+          fontSize="small"
+          whiteSpace="pre-wrap"
+          textAlign="center"
+          paddingTop={2}
+        >
+          {error.message}
+        </Text>
+      </PageLayout.SideSection>
+    )
+  }
 
   if (error.message === DATA_ERROR_MESSAGES.FRIEND_CANNOT_BE_EMPTY) {
     return (

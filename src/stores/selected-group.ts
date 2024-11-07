@@ -5,7 +5,7 @@ interface SelectedGroupProps {
   setGroupId: (groupId?: number) => void
 }
 
-export const useSeletedGroupStore = create<SelectedGroupProps>((set) => ({
+export const useSelectedGroupStore = create<SelectedGroupProps>((set) => ({
   groupId: undefined,
   setGroupId: (groupId) => {
     set({ groupId })

@@ -6,9 +6,11 @@ import { Center } from '@chakra-ui/react'
 import { PageLayout } from '@/components/PageLayout'
 import { useAuthTokenStore } from '@/stores/auth-token'
 import { useMemberTypeStore } from '@/stores/member-type'
+import { useSelectedGroupStore } from '@/stores/selected-group'
 
 import { FriendSection, FriendSectionSkeleton } from './FriendSection'
 import { FriendHeaderSkeleton } from './FriendSection/FriendHeader'
+import { GroupMemberSection, GroupMemberSkeleton } from './GroupMemberSection'
 import { MemberErrorFallback } from './MemberErrorFallback'
 import {
   SelectFreindSectionSkeleton,
@@ -18,6 +20,7 @@ import {
 export const MemberSection = () => {
   const memberType = useMemberTypeStore((state) => state.memberType)
   const isLoggedIn = useAuthTokenStore((state) => state.isLoggedIn())
+  const groupId = useSelectedGroupStore((state) => state.groupId)
 
   if (!isLoggedIn)
     return (
@@ -33,6 +36,16 @@ export const MemberSection = () => {
       <ErrorBoundary FallbackComponent={MemberErrorFallback}>
         <Suspense fallback={<SelectFreindSectionSkeleton />}>
           <SelectFriendSection />
+        </Suspense>
+      </ErrorBoundary>
+    )
+  }
+
+  if (memberType === 'GROUP' && groupId) {
+    return (
+      <ErrorBoundary FallbackComponent={MemberErrorFallback}>
+        <Suspense fallback={<GroupMemberSkeleton />}>
+          <GroupMemberSection groupId={groupId} />
         </Suspense>
       </ErrorBoundary>
     )
