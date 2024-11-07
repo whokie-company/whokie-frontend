@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom'
+
 import {
   Avatar,
   Box,
@@ -8,8 +10,10 @@ import {
   Image,
   Text,
 } from '@chakra-ui/react'
+import { useMutation } from '@tanstack/react-query'
 
 import { useGroupInfo } from '@/api/services/group/group.api'
+import { joinGroupMember } from '@/api/services/group/member.api'
 import Cookies from '@/assets/cookies.svg'
 import ErrorPage from '@/pages/ErrorPage'
 
@@ -19,7 +23,18 @@ interface InviteCardProps {
 }
 
 export const InviteCard = ({ groupId, inviteCode }: InviteCardProps) => {
+  const navigate = useNavigate()
+
   const { data: group, status, error } = useGroupInfo(groupId)
+  const { mutate } = useMutation({
+    mutationFn: () => joinGroupMember(inviteCode),
+    onSuccess: () => {
+      navigate(`/group/${groupId}`)
+    },
+    onError: (inviteError) => {
+      throw inviteError
+    },
+  })
 
   if (status === 'pending') return <InviteCardSkeleton />
 
@@ -42,10 +57,16 @@ export const InviteCard = ({ groupId, inviteCode }: InviteCardProps) => {
             variant="outline"
             width="8rem"
             height="2.5rem"
+            onClick={() => navigate('/')}
           >
             거절
           </Button>
-          <Button colorScheme="primary" width="8rem" height="2.5rem">
+          <Button
+            colorScheme="primary"
+            width="8rem"
+            height="2.5rem"
+            onClick={() => mutate()}
+          >
             수락
           </Button>
         </Flex>
@@ -71,10 +92,11 @@ export const InviteCardSkeleton = () => {
             variant="outline"
             width="8rem"
             height="2.5rem"
+            disabled
           >
             거절
           </Button>
-          <Button colorScheme="primary" width="8rem" height="2.5rem">
+          <Button colorScheme="primary" width="8rem" height="2.5rem" disabled>
             수락
           </Button>
         </Flex>

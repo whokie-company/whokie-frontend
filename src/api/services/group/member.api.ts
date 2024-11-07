@@ -27,3 +27,7 @@ export const membersQuries = {
       queryFn: () => getGroupMembers({ groupId }),
     }),
 }
+
+export const joinGroupMember = async (inviteCode: string) => {
+  await authorizationInstance.post('/api/group/join', { inviteCode })
+}
