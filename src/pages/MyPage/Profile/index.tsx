@@ -1,21 +1,74 @@
 import { useState } from 'react'
+import { BiError } from 'react-icons/bi'
 
-import { Avatar, Box, Button, Text } from '@chakra-ui/react'
+import {
+  Avatar,
+  Box,
+  Button,
+  Input,
+  Text,
+  useDisclosure,
+  useToast,
+} from '@chakra-ui/react'
+import { useMutation } from '@tanstack/react-query'
 
+import { queryClient } from '@/api/instance'
+import { uploadProfileBg } from '@/api/services/profile/my-page.api'
+import { AlertModal } from '@/components/Modal/AlertModal'
 import { MyPageItem } from '@/types'
 
 type ProfileProps = {
   profile: MyPageItem
   pointAmount?: number | null
   isMyPage: boolean
+  userId: number
 }
 
 export default function Profile({
   profile,
   pointAmount = null,
   isMyPage,
+  userId,
 }: ProfileProps) {
+  const toast = useToast()
   const [isHovered, setIsHovered] = useState(false)
+  const [file, setFile] = useState<File | null>(null)
+  const errorAlert = useDisclosure()
+
+  const { mutate: uploadImage } = useMutation({
+    mutationFn: (data: { image: File }) => uploadProfileBg(data),
+    onSuccess: () => {
+      queryClient.refetchQueries({
+        queryKey: ['myPage', userId],
+      })
+      queryClient.invalidateQueries({ queryKey: ['uploadProfileBg'] })
+    },
+    onError: () => {
+      errorAlert.onOpen()
+    },
+  })
+
+  const openFilePicker = () => {
+    document.getElementById('fileInput')?.click()
+  }
+
+  const onChangeFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0]
+    if (selectedFile) {
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png']
+      if (!validTypes.includes(selectedFile.type)) {
+        toast({
+          title: 'Only JPEG, JPG, or PNG files are allowed.',
+          status: 'warning',
+          duration: 3000,
+          isClosable: true,
+        })
+        return
+      }
+      setFile(selectedFile)
+      uploadImage({ image: selectedFile })
+    }
+  }
 
   return (
     <header>
@@ -44,10 +97,18 @@ export default function Profile({
             border="0.4px solid"
             borderColor="black.700"
             bg="white"
+            onClick={openFilePicker}
           >
             Change Cover
           </Button>
         )}
+        <Input
+          type="file"
+          id="fileInput"
+          style={{ display: 'none' }}
+          accept="image/*"
+          onChange={onChangeFile}
+        />
         <Avatar
           src={profile.imageUrl}
           size="lg"
@@ -121,6 +182,13 @@ export default function Profile({
           </Text>
         </Box>
       </Box>
+      <AlertModal
+        isOpen={errorAlert.isOpen}
+        onClose={errorAlert.onClose}
+        icon={<BiError />}
+        title="사진 등록에 실패하였습니다"
+        description=""
+      />
     </header>
   )
 }

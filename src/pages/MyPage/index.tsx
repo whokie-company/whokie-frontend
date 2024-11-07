@@ -68,9 +68,14 @@ export default function MyPage() {
           profile={profile}
           pointAmount={point.amount}
           isMyPage={isMyPage}
+          userId={Number(userId)}
         />
       ) : (
-        <Profile profile={profile} isMyPage={isMyPage} />
+        <Profile
+          profile={profile}
+          isMyPage={isMyPage}
+          userId={Number(userId)}
+        />
       )}
       <Box p="0 30px">
         <RankingGraph rank={dummyRankData} />
