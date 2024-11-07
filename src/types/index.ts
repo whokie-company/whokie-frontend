@@ -85,6 +85,14 @@ export type Modal = {
   onClose: () => void
 }
 
+export type Member = {
+  groupMemberId: number
+  userId: number
+  role: 'LEADER' | 'MEMBER'
+  userName: string
+  joinedAt: string
+}
+  
 export type PointOptions = 'ALL' | 'CHARGED' | 'USED'
 
 export type Point = {
