@@ -23,7 +23,7 @@ export const InviteMemberModal = ({ groupId }: InviteMemberModalProps) => {
       const inviteURL = appendParamsToUrl(
         `${import.meta.env.VITE_DOMAIN}/invite/${groupId}`,
         {
-          inviteCode,
+          'invite-code': inviteCode,
         }
       )
       setValue(inviteURL)
