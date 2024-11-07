@@ -18,7 +18,7 @@ import { ConfirmModal } from '@/components/Modal/ConfirmModal'
 import ErrorPage from '@/pages/ErrorPage'
 import { useSelectedQuestionStore } from '@/stores/selected-question'
 
-type QuestionListProps = {
+interface QuestionListProps {
   isMyPage: boolean
 }
 
