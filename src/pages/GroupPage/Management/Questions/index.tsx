@@ -1,11 +1,47 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 import { Box, Button, Stack, Text } from '@chakra-ui/react'
 
+import { getGroupQuestions } from '@/api/services/group/group.api'
+
+interface Question {
+  questionId: number
+  questionContent: string
+  status: 'READY' | 'APPROVED' | 'REJECTED'
+}
+
+interface GroupQuestionsResponse {
+  content: Question[]
+  page: number
+  size: number
+  totalElements: number
+  totalPages: number
+}
+
 export default function QuestionManagement() {
+  const { groupId } = useParams<{ groupId: string }>()
+  const [questions, setQuestions] = useState<Question[]>([])
   const [status, setStatus] = useState<'READY' | 'APPROVED' | 'REJECTED'>(
     'READY'
   )
+
+  useEffect(() => {
+    const fetchQuestions = () => {
+      if (groupId) {
+        getGroupQuestions(String(groupId), status, 0, 10).then(
+          (result: GroupQuestionsResponse) => {
+            if (result && result.content && Array.isArray(result.content)) {
+              setQuestions(result.content)
+            } else {
+              setQuestions([])
+            }
+          }
+        )
+      }
+    }
+    fetchQuestions()
+  }, [groupId, status])
 
   return (
     <Box
@@ -49,18 +85,25 @@ export default function QuestionManagement() {
 
       <Box maxHeight="400px" overflowY="scroll">
         <Stack spacing="15px">
-          <Box
-            p="10px"
-            bg="white"
-            borderRadius="8px"
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Text fontSize="16px" flex="1">
-              질문 내용 텍스트
-            </Text>
-          </Box>
+          {questions.length > 0 ? (
+            questions.map((question) => (
+              <Box
+                key={question.questionId}
+                p="10px"
+                bg="white"
+                borderRadius="8px"
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Text fontSize="16px" flex="1">
+                  {question.questionContent}
+                </Text>
+              </Box>
+            ))
+          ) : (
+            <Text>질문이 없습니다.</Text>
+          )}
         </Stack>
       </Box>
     </Box>
