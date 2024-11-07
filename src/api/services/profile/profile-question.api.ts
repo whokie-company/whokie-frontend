@@ -7,7 +7,6 @@ type ProfileQuestionResponse = {
   content: QuestionItem[]
 }
 
-// 프로필 질문 리스트 불러오기
 const getProfileQuestion = async (userId: string) => {
   const response = await fetchInstance.get<ProfileQuestionResponse>(
     `/api/profile/question/${userId}`
@@ -23,7 +22,6 @@ export const useGetProfileQuestion = (userId: string) => {
   })
 }
 
-// 프로필 질문 추가하기
 export type PostProfileQuestionRequest = {
   content: string
 }
@@ -38,7 +36,6 @@ export const postProfileQuestion = async ({
   return response.data.message
 }
 
-// 프로필 질문 삭제하기
 export type DeleteProfileQuestionRequest = {
   deleteQuestionId: number
 }
@@ -51,7 +48,6 @@ export const deleteProfileQuestion = async ({
   )
 }
 
-// 프로필 질문 대답 리스트 불러오기
 type ProfileAnswerResponse = {
   content: ProfileAnswerItem[]
 }
@@ -83,7 +79,6 @@ export const useGetProfileAnswer = (
   })
 }
 
-// 프로필 질문 대답 보내기
 export type PostProfileAnswerRequest = {
   content: string
   profileQuestionId: number
@@ -107,7 +102,6 @@ export const postProfileAnswer = async ({
   return response.data.message
 }
 
-// 프로필 질문 대답 삭제하기
 export type DeleteProfileAnswerRequest = {
   deleteAnswerId: number
 }
