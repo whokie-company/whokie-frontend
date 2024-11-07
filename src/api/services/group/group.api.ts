@@ -97,3 +97,19 @@ export const getGroupQuestions = async (
   )
   return response.data
 }
+
+export const approveGroupQuestion = async (
+  groupId: string,
+  questionId: number,
+  approve: boolean
+) => {
+  const response = await authorizationInstance.patch(
+    `/api/group/question/status`,
+    {
+      groupId,
+      questionId,
+      status: approve ? 'true' : 'false',
+    }
+  )
+  return response.data
+}
