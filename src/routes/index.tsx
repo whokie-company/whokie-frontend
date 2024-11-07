@@ -4,6 +4,7 @@ import CookieRecordPage from '@/pages/CookieRecordPage'
 import CreateGroupPage from '@/pages/CreateGroupPage'
 import ErrorPage from '@/pages/ErrorPage'
 import GroupPage from '@/pages/GroupPage'
+import QuestionManagement from '@/pages/GroupPage/Management/Questions'
 import GroupQuestionPage from '@/pages/GroupQuestionPage'
 import { MainLayout } from '@/pages/Layout/MainLayout'
 import { ProfileQuestionLayout } from '@/pages/Layout/ProfileQuestionLayout'
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
           {
             path: '/grouppage/:groupId',
             element: <GroupPage />,
+          },
+          {
+            path: '/group/:groupId/QM',
+            element: <QuestionManagement />,
           },
           {
             path: '/group/create',
