@@ -1,35 +1,35 @@
 import { BiCog, BiGroup, BiLink, BiPlus } from 'react-icons/bi'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { Box, Flex, Text } from '@chakra-ui/react'
 
-import CardButton, { CardButtonProps } from '@/components/CardButton'
+import CardButton from '@/components/CardButton'
 
-const CardData: CardButtonProps[] = [
+const CardData = [
   {
-    variant: 'orange',
-    orientation: 'vertical',
+    variant: 'orange' as const,
+    orientation: 'vertical' as const,
     label: '질문 관리',
     description: '그룹 질문을 관리해보세요',
     Icon: BiCog,
   },
   {
-    variant: 'white',
-    orientation: 'vertical',
+    variant: 'white' as const,
+    orientation: 'vertical' as const,
     label: '멤버 관리',
     description: '그룹 멤버를 관리해보세요',
     Icon: BiGroup,
   },
   {
-    variant: 'white',
-    orientation: 'horizontal',
+    variant: 'white' as const,
+    orientation: 'horizontal' as const,
     label: '초대하기',
     description: '새로운 멤버를 초대해보세요',
     Icon: BiLink,
   },
   {
-    variant: 'white',
-    orientation: 'horizontal',
+    variant: 'white' as const,
+    orientation: 'horizontal' as const,
     label: '질문 추가',
     description: '그룹 질문을 건의해보세요',
     Icon: BiPlus,
@@ -42,11 +42,27 @@ interface ManagementProps {
 }
 
 export default function Management({ role, groupId }: ManagementProps) {
+  const navigate = useNavigate()
+
+  const goToQuestionManagement = () => {
+    navigate(`/group/${groupId}/QM`)
+  }
+
   return (
     <Box p="30px">
       <Flex gap={4} marginTop="10px" marginBottom="16px">
-        <CardButton buttonElement={CardData[2]} />
-        <CardButton buttonElement={CardData[3]} />
+        <CardButton
+          buttonElement={CardData[2]}
+          onClick={() => {
+            /* 초대하기 클릭 시 동작 */
+          }}
+        />
+        <CardButton
+          buttonElement={CardData[3]}
+          onClick={() => {
+            /* 질문 추가 클릭 시 동작 */
+          }}
+        />
       </Flex>
 
       {role === 'leader' && (
@@ -74,7 +90,10 @@ export default function Management({ role, groupId }: ManagementProps) {
             </Text>
           </Box>
           <Flex gap={4}>
-            <CardButton buttonElement={CardData[0]} />
+            <CardButton
+              buttonElement={CardData[0]}
+              onClick={goToQuestionManagement}
+            />{' '}
             <Link to={`/group/${groupId}/members`}>
               <CardButton buttonElement={CardData[1]} />
             </Link>
