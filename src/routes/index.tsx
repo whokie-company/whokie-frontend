@@ -47,6 +47,20 @@ const router = createBrowserRouter([
             path: '/group/create',
             element: <CreateGroupPage />,
           },
+          {
+            path: '/point',
+            element: <PointPage />,
+            children: [
+              {
+                path: '/point/failure',
+                element: <PointFailureModal />,
+              },
+              {
+                path: '/point/cancel',
+                element: <PointCancelModal />,
+              },
+            ],
+          },
         ],
       },
       {
@@ -63,26 +77,6 @@ const router = createBrowserRouter([
     path: '/',
     element: <ProfileQuestionLayout />,
     children: [{ path: '/profile-question', element: <ProfileQuestionPage /> }],
-  },
-  {
-    path: '/',
-    element: <MainLayout />,
-    children: [
-      {
-        path: '/point',
-        element: <PointPage />,
-        children: [
-          {
-            path: '/point/failure',
-            element: <PointFailureModal />,
-          },
-          {
-            path: '/point/cancel',
-            element: <PointCancelModal />,
-          },
-        ],
-      },
-    ],
   },
   {
     path: '*',
