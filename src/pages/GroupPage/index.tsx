@@ -56,7 +56,7 @@ export default function GroupPage() {
         <Box p="0 30px">
           <RankingGraph rank={dummyRankData} />
         </Box>
-        <Management role={userRole} />
+        {groupId && <Management role={userRole} groupId={groupId} />}
       </Suspense>
     </div>
   )
