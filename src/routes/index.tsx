@@ -56,8 +56,8 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/api',
-    element: <div/>
+    path: '/api/*',
+    element: <div />
   },
   {
     path: '/',
