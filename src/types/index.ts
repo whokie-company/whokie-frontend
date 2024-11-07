@@ -18,6 +18,8 @@ export type ChatItem = {
   direction: 'left' | 'right'
   content: string
   createdAt: string
+  deleteBtn: boolean
+  onDelete?: () => void
 }
 
 export type ChatBoxProps = {
