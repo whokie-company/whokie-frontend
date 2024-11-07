@@ -9,7 +9,7 @@ import { queryClient } from '@/api/instance'
 import {
   PostProfileAnswerRequest,
   postProfileAnswer,
-} from '@/api/services/profile/profileQuestion.api'
+} from '@/api/services/profile/profile-question.api'
 import { AlertModal } from '@/components/Modal/AlertModal'
 
 interface WriteReplyProps {
