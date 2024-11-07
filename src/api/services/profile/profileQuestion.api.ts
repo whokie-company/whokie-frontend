@@ -83,7 +83,7 @@ export const useGetProfileAnswer = (
   })
 }
 
-// 대답 보내기
+// 프로필 질문 대답 보내기
 export type PostProfileAnswerRequest = {
   content: string
   profileQuestionId: number
@@ -105,4 +105,15 @@ export const postProfileAnswer = async ({
   )
 
   return response.data.message
+}
+
+// 프로필 질문 대답 삭제하기
+export type DeleteProfileAnswerRequest = {
+  deleteAnswerId: number
+}
+
+export const deleteProfileAnswer = async ({
+  deleteAnswerId,
+}: DeleteProfileAnswerRequest) => {
+  await authorizationInstance.delete(`/api/profile/answer/${deleteAnswerId}`)
 }
