@@ -48,7 +48,7 @@ export default function ProfileQuestionPage() {
       </Box>
 
       {/* 이 영역만 스크롤 */}
-      <Answer userId={userId} />
+      <Answer userId={userId} isMyPage={isMyPage} />
 
       {!isMyPage && questionId && (
         <WriteReply userId={userId} questionId={questionId} />
