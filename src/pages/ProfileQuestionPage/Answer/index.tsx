@@ -86,12 +86,6 @@ const Answer: React.FC<AnswerProps> = ({ userId, isMyPage }: AnswerProps) => {
     deleteAlert.onOpen()
   }
 
-  // const handleDeleteClick = () => {
-  //   if (selectedQuestionId !== undefined && selectedQuestionId !== null) {
-  //     deleteQuestion({ deleteQuestionId: selectedQuestionId }) // API 호출
-  //   }
-  // }
-
   return (
     <Box overflowY="auto" ref={boxRef}>
       {chatItem.map((item) => (
