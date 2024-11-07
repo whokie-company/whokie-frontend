@@ -1,4 +1,5 @@
 import { BiCog, BiGroup, BiLink, BiPlus } from 'react-icons/bi'
+import { Link } from 'react-router-dom'
 
 import { Box, Flex, Text } from '@chakra-ui/react'
 
@@ -37,9 +38,10 @@ const CardData: CardButtonProps[] = [
 
 interface ManagementProps {
   role: 'leader' | 'member'
+  groupId: string
 }
 
-export default function Management({ role }: ManagementProps) {
+export default function Management({ role, groupId }: ManagementProps) {
   return (
     <Box p="30px">
       <Flex gap={4} marginTop="10px" marginBottom="16px">
@@ -73,7 +75,9 @@ export default function Management({ role }: ManagementProps) {
           </Box>
           <Flex gap={4}>
             <CardButton buttonElement={CardData[0]} />
-            <CardButton buttonElement={CardData[1]} />
+            <Link to={`/group/members/${groupId}`}>
+              <CardButton buttonElement={CardData[1]} />
+            </Link>
           </Flex>
         </Box>
       )}
