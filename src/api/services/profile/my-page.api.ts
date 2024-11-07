@@ -62,3 +62,16 @@ export const useMyRanking = (userId: string) => {
     queryFn: () => getMyRanking(userId),
   })
 }
+
+// 마이페이지 description 수정하기
+export type PatchProfileDescriptionRequest = {
+  description: string
+}
+
+export const patchProfileDescription = async ({
+  description,
+}: PatchProfileDescriptionRequest) => {
+  await authorizationInstance.patch('/api/profile/modify', {
+    description,
+  })
+}
