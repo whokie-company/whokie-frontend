@@ -101,6 +101,7 @@ export type Member = {
   role: 'LEADER' | 'MEMBER'
   userName: string
   joinedAt: string
+  memberImageUrl?: string
 }
 
 export type PointOptions = 'ALL' | 'CHARGED' | 'USED'
