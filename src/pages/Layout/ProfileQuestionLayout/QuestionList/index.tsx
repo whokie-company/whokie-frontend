@@ -129,7 +129,7 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
     setContextMenuPosition({ x: e.clientX, y: e.clientY })
   }
 
-  const handleDeleteClick = () => {
+  const onClickDeleteBtn = () => {
     deleteAlert.onOpen()
     setContextMenuPosition(null)
   }
@@ -192,7 +192,7 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
         >
           <Text
             cursor="pointer"
-            onClick={handleDeleteClick}
+            onClick={onClickDeleteBtn}
             color="text_secondary"
           >
             삭제하기
