@@ -3,25 +3,19 @@ import { GiRank1, GiRank2, GiRank3 } from 'react-icons/gi'
 
 import { Box, Center, HStack, Image, Text, VStack } from '@chakra-ui/react'
 
-interface RankItem {
-  imageSrc?: string
-  title: string
-  subtitle: string
-  amount: number
-  ranking: 1 | 2 | 3
-}
+import { RankItem } from '@/types'
 
 interface RankingGraphProps extends React.HTMLAttributes<HTMLDivElement> {
   rank: RankItem[]
 }
 
 export const RankingGraph = ({ rank }: RankingGraphProps) => {
-  const maxAmount = rank.find((item) => item.ranking === 1)?.amount || 1
+  const maxAmount = rank.find((item) => item.rank === 1)?.count || 1
 
   // ranking 값을 기준으로 2등, 1등, 3등 순서로 정렬
   const order = [2, 1, 3]
   const sortedRank = order
-    .map((ranking) => rank.find((item) => item.ranking === ranking)!)
+    .map((ranking) => rank.find((item) => item.rank === ranking)!)
     .filter((item) => item)
 
   const rankIcons: { 1: IconType; 2: IconType; 3: IconType } = {
@@ -41,11 +35,11 @@ export const RankingGraph = ({ rank }: RankingGraphProps) => {
       {/* 왼쪽 그래프 */}
       <HStack align="flex-end" spacing={6} height="100%">
         {sortedRank.map((item) => {
-          const percentage = (item.amount / maxAmount) * 100
+          const percentage = (item.count / maxAmount) * 100
 
           return (
             <VStack
-              key={item.ranking}
+              key={item.rankingId}
               align="center"
               height="100%"
               justifyContent="flex-end"
@@ -74,7 +68,7 @@ export const RankingGraph = ({ rank }: RankingGraphProps) => {
                     />
                   )}
                   <Box
-                    as={rankIcons[item.ranking]}
+                    as={rankIcons[item.rank as 1 | 2 | 3]}
                     width="30px"
                     height="30px"
                     position="absolute"
@@ -92,7 +86,7 @@ export const RankingGraph = ({ rank }: RankingGraphProps) => {
       {/* 오른쪽 랭킹 리스트 */}
       <VStack spacing={3} align="stretch">
         {rank.map((item) => (
-          <HStack key={item.ranking} align="center">
+          <HStack key={item.rank} align="center">
             {item.imageSrc && (
               <Image
                 src={item.imageSrc}
@@ -106,7 +100,7 @@ export const RankingGraph = ({ rank }: RankingGraphProps) => {
               {' '}
               {/* 이미지 높이에 맞춰 텍스트 위아래 정렬 */}
               <Text fontWeight="400" isTruncated width="100%">
-                {item.title}
+                {item.groupName}
               </Text>
               <Text
                 fontSize="sm"
@@ -114,7 +108,7 @@ export const RankingGraph = ({ rank }: RankingGraphProps) => {
                 isTruncated
                 width="100%"
               >
-                {item.subtitle}
+                {item.question}
               </Text>
             </VStack>
           </HStack>
