@@ -36,7 +36,7 @@ export const useAnswerRecordPaging = ({
   date,
 }: AnswerRecordPagingProps) => {
   return useSuspenseInfiniteQuery({
-    queryKey: ['answer', 'record', initPageToken],
+    queryKey: ['answer', 'record', initPageToken, date],
     queryFn: ({ pageParam = initPageToken }) =>
       getAnswerRecordPaging({ page: pageParam, size, sort, date }),
     initialPageParam: initPageToken,

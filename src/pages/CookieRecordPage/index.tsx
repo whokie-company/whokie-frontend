@@ -84,7 +84,11 @@ export default function CookieRecordPage() {
             </ErrorBoundary>
           </TabPanel>
           <TabPanel>
-            <CalendarSection />
+            <ErrorBoundary FallbackComponent={CookieRecordErrorFallback}>
+              <Suspense fallback={<Loading />}>
+                <CalendarSection hintDrawer={hintDrawer} />
+              </Suspense>
+            </ErrorBoundary>
           </TabPanel>
         </TabPanels>
       </Tabs>
