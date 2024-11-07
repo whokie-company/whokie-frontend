@@ -111,3 +111,16 @@ export type Point = {
   option: PointOptions
   createdAt: string
 }
+
+export type RankItem = {
+  imageSrc?: string
+  rankingId: number
+  question: string
+  rank: number
+  count: number
+  groupName: string
+}
+
+export type Ranks = {
+  ranks: RankItem[]
+}
