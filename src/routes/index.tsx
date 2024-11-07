@@ -60,7 +60,6 @@ const router = createBrowserRouter([
     element: <ProfileQuestionLayout />,
     children: [{ path: '/profile-question', element: <ProfileQuestionPage /> }],
   },
-  { path: '/api/*' },
   {
     path: '*',
     element: <ErrorPage />,
