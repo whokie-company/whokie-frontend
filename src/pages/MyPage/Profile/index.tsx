@@ -54,9 +54,10 @@ export default function Profile({
         queryKey: ['myPage', userId],
       })
       queryClient.invalidateQueries({ queryKey: ['uploadImage'] })
+      window.location.reload()
     },
     onError: () => {
-      setErrorMessage('사진 등록에 실패하였습니다')
+      setErrorMessage('이미지 파일은 20MB를 초과할 수 없습니다')
       errorAlert.onOpen()
     },
   })
