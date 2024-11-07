@@ -129,6 +129,7 @@ export default function Profile({
             padding="5px 8px"
             position="absolute"
             right="23px"
+            top="10px"
             fontSize="small"
             fontWeight="400"
             color="GrayText"
