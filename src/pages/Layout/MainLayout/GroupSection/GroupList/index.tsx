@@ -10,7 +10,7 @@ import { useSelectedGroupStore } from '@/stores/selected-group'
 
 export const GroupList = () => {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
-    useGroupPaging({})
+    useGroupPaging({ size: 8 })
 
   const groupId = useSelectedGroupStore((state) => state.groupId)
   const setSeletedGroup = useSelectedGroupStore((state) => state.setGroupId)
@@ -21,7 +21,7 @@ export const GroupList = () => {
   if (!groups?.length) throw new Error(DATA_ERROR_MESSAGES.GROUP_NOT_FOUND)
 
   return (
-    <Flex flexDirection="column" width="full">
+    <Flex flexDirection="column" width="full" overflow="scroll">
       {groups.map((group) => (
         <ActiveBrownBox
           key={group.groupId}
