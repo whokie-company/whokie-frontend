@@ -35,3 +35,16 @@ export const useGetMyPoint = () => {
     queryFn: () => getMyPoint(),
   })
 }
+
+// 프로필 배경 수정
+type UploadProfileBgRequest = {
+  image: File
+}
+export const uploadProfileBg = async ({ image }: UploadProfileBgRequest) => {
+  const formData = new FormData()
+  formData.append('image', image)
+
+  await authorizationInstance.patch('/api/profile/bg/upload', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+}
