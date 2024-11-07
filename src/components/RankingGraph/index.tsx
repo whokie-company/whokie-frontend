@@ -1,7 +1,15 @@
 import { IconType } from 'react-icons'
 import { GiRank1, GiRank2, GiRank3 } from 'react-icons/gi'
 
-import { Box, Center, HStack, Image, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Center,
+  HStack,
+  Image,
+  Text,
+  VStack,
+  useTheme,
+} from '@chakra-ui/react'
 
 import { RankItem } from '@/types'
 
@@ -10,6 +18,8 @@ interface RankingGraphProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const RankingGraph = ({ rank }: RankingGraphProps) => {
+  const theme = useTheme()
+  const borderColor = theme.colors.brown[300]
   const maxAmount = rank.find((item) => item.rank === 1)?.count || 1
 
   // ranking 값을 기준으로 2등, 1등, 3등 순서로 정렬
@@ -57,7 +67,7 @@ export const RankingGraph = ({ rank }: RankingGraphProps) => {
                 <Center position="relative" width="44px" height="44px">
                   {item.imageSrc && (
                     <Image
-                      src={item.imageSrc}
+                      src={`${item.imageSrc}`}
                       boxSize="40px"
                       objectFit="cover"
                       borderRadius="full"
@@ -65,6 +75,9 @@ export const RankingGraph = ({ rank }: RankingGraphProps) => {
                       top="-27px"
                       left="50%"
                       transform="translateX(-50%)"
+                      bg="white"
+                      padding="5px"
+                      border={`1px solid ${borderColor}`}
                     />
                   )}
                   <Box
@@ -93,6 +106,8 @@ export const RankingGraph = ({ rank }: RankingGraphProps) => {
                 boxSize="40px"
                 objectFit="cover"
                 borderRadius="full"
+                bg="white"
+                padding="5px"
               />
             )}
             {!item.imageSrc && <div style={{ width: '60px' }} />}
