@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Box, Button, Radio, RadioGroup, Stack, Text } from '@chakra-ui/react'
@@ -9,6 +9,8 @@ import {
   getGroupQuestions,
 } from '@/api/services/group/group.api'
 import { Loading } from '@/components/Loading'
+
+import Navigate from '../../Navigate'
 
 interface Question {
   questionId: number
@@ -133,19 +135,22 @@ export default function QuestionManagement() {
   }
 
   return (
-    <Box
-      p="30px"
-      bg="white"
-      borderRadius="10px"
-      backgroundColor="secondary_background"
-    >
-      <Text fontSize="lg" fontWeight="bold" mb="20px">
-        질문 관리
-      </Text>
-      {statusButtons}
-      <Box maxHeight="400px" overflowY="scroll">
-        {content}
+    <Suspense fallback={<Loading />}>
+      <Navigate />
+      <Box
+        p="30px"
+        bg="white"
+        borderRadius="10px"
+        backgroundColor="secondary_background"
+      >
+        <Text fontSize="lg" fontWeight="bold" mb="20px">
+          질문 관리
+        </Text>
+        {statusButtons}
+        <Box maxHeight="400px" overflowY="scroll">
+          {content}
+        </Box>
       </Box>
-    </Box>
+    </Suspense>
   )
 }
