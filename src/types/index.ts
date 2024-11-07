@@ -102,7 +102,7 @@ export type Member = {
   userName: string
   joinedAt: string
 }
-  
+
 export type PointOptions = 'ALL' | 'CHARGED' | 'USED'
 
 export type Point = {
@@ -110,4 +110,17 @@ export type Point = {
   point: number
   option: PointOptions
   createdAt: string
+}
+
+export type RankItem = {
+  imageSrc?: string
+  rankingId: number
+  question: string
+  rank: number
+  count: number
+  groupName: string
+}
+
+export type Ranks = {
+  ranks: RankItem[]
 }
