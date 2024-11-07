@@ -20,7 +20,9 @@ const getAnswerRecordPaging = async (params: AnswerRecordRequsetParams) => {
   return {
     records: data.content,
     nextPageToken:
-      data.page !== data.totalPages ? (data.page + 1).toString() : undefined,
+      data.page !== data.totalPages - 1
+        ? (data.page + 1).toString()
+        : undefined,
   }
 }
 

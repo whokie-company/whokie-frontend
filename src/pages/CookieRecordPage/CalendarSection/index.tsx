@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
-import { BiSolidCircle } from 'react-icons/bi'
 
 import { Flex } from '@chakra-ui/react'
 import { format, formatDate } from 'date-fns'
@@ -19,7 +18,6 @@ export const CalendarSection = ({ hintDrawer }: CalendarSectionProps) => {
   const [activeMonth, setActiveMonth] = useState(
     format(new Date(), 'yyyy-MM-01')
   )
-  const [cookieDays, setCookieDays] = useState<Date[]>([])
 
   const getActiveMonth = (activeStartDate: Date) => {
     const newActiveMonth = format(activeStartDate, 'yyyy-MM-01')
@@ -33,33 +31,37 @@ export const CalendarSection = ({ hintDrawer }: CalendarSectionProps) => {
         next2Label={null}
         prev2Label={null}
         showNeighboringMonth={false}
-        tileContent={({ date }) => MarkedCircle(cookieDays, date)}
+        // tileContent={({ date }) => MarkedCircle({ cookieDates, date })}
         onActiveStartDateChange={({ activeStartDate }) => {
           if (activeStartDate) getActiveMonth(activeStartDate)
         }}
       />
-      <MonthlyCookieLogList
-        hintDrawer={hintDrawer}
-        curMonth={activeMonth}
-        setCookieDays={(days) => setCookieDays(days)}
-      />
+      <MonthlyCookieLogList hintDrawer={hintDrawer} curMonth={activeMonth} />
     </Flex>
   )
 }
 
-const MarkedCircle = (cookieDays: Date[], date: Date) => {
-  const cookieDaysSet = new Set(
-    cookieDays.map((cookie) => format(cookie, 'yyyy-MM-dd'))
-  )
-  const formattedDate = format(date, 'yyyy-MM-dd')
+// const MarkedCircle = ({
+//   cookieDates,
+//   date,
+// }: {
+//   cookieDates: Date[]
+//   date: Date
+// }) => {
+//   if (!cookieDates.length) return <p />
 
-  if (cookieDaysSet.has(formattedDate)) {
-    return (
-      <Flex height="fit-content" justifyContent="center" color="primary">
-        <BiSolidCircle size={10} />
-      </Flex>
-    )
-  }
+//   const cookieDaysSet = new Set(
+//     cookieDates.map((cookie) => format(cookie, 'yyyy-MM-dd'))
+//   )
+//   const formattedDate = format(date, 'yyyy-MM-dd')
 
-  return <p />
-}
+//   if (cookieDaysSet.has(formattedDate)) {
+//     return (
+//       <Flex height="fit-content" justifyContent="center" color="primary">
+//         <BiSolidCircle size={10} />
+//       </Flex>
+//     )
+//   }
+
+//   return <p />
+// }
