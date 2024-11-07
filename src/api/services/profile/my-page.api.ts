@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query'
 import { authorizationInstance, fetchInstance } from '@/api/instance'
 import { MyPageItem, Ranks } from '@/types'
 
-// 마이페이지 정보 가져오기
 const getMyPage = async (userId: string) => {
   const response = await fetchInstance.get<MyPageItem>(`/api/profile/${userId}`)
 
@@ -17,7 +16,6 @@ export const useMyPage = (userId: string) => {
   })
 }
 
-// 내 포인트 정보 가져오기
 type PointResponse = {
   amount: number
 }
@@ -36,7 +34,6 @@ export const useGetMyPoint = () => {
   })
 }
 
-// 프로필 배경 수정
 type UploadProfileBgRequest = {
   image: File
 }
@@ -49,7 +46,6 @@ export const uploadProfileBg = async ({ image }: UploadProfileBgRequest) => {
   })
 }
 
-// 마이페이지 랭킹 정보 가져오기
 const getMyRanking = async (userId: string) => {
   const response = await fetchInstance.get<Ranks>(`/api/ranking/${userId}`)
 
@@ -63,7 +59,6 @@ export const useMyRanking = (userId: string) => {
   })
 }
 
-// 마이페이지 description 수정하기
 export type PatchProfileDescriptionRequest = {
   description: string
 }
