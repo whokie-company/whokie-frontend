@@ -36,7 +36,7 @@ export const GroupList = () => {
             avatarSrc={group.groupdImageUrl}
             label={group.groupName}
             tooltipLabel={`${group.groupName} 페이지`}
-            linkTo="/"
+            linkTo={`/group/${group.groupId}`}
           />
         </ActiveBrownBox>
       ))}
