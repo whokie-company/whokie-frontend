@@ -102,7 +102,7 @@ export type Member = {
   userName: string
   joinedAt: string
 }
-  
+
 export type PointOptions = 'ALL' | 'CHARGED' | 'USED'
 
 export type Point = {
