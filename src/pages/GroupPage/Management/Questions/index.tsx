@@ -2,8 +2,12 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Box, Button, Radio, RadioGroup, Stack, Text } from '@chakra-ui/react'
+import { useMutation } from '@tanstack/react-query'
 
-import { getGroupQuestions } from '@/api/services/group/group.api'
+import {
+  approveGroupQuestion,
+  getGroupQuestions,
+} from '@/api/services/group/group.api'
 
 interface Question {
   questionId: number
@@ -26,6 +30,16 @@ export default function QuestionManagement() {
     'READY'
   )
 
+  const { mutate } = useMutation({
+    mutationFn: (data: { questionId: number; approve: boolean }) => {
+      const { questionId, approve } = data
+      return approveGroupQuestion(String(groupId), questionId, approve)
+    },
+    onSuccess: () => {
+      console.log('API 호출 성공이다!!!!!!!!!')
+    },
+  })
+
   useEffect(() => {
     const fetchQuestions = () => {
       if (groupId) {
@@ -42,6 +56,10 @@ export default function QuestionManagement() {
     }
     fetchQuestions()
   }, [groupId, status])
+
+  const handleStatusChange = (questionId: number, approve: boolean) => {
+    mutate({ questionId, approve })
+  }
 
   return (
     <Box
@@ -100,7 +118,13 @@ export default function QuestionManagement() {
                   {question.questionContent}
                 </Text>
 
-                <RadioGroup value={question.status}>
+                <RadioGroup
+                  onChange={(value) => {
+                    const approve = value === 'APPROVED'
+                    handleStatusChange(question.questionId, approve)
+                  }}
+                  value={question.status}
+                >
                   <Stack direction="row">
                     <Radio value="APPROVED" colorScheme="green">
                       {}
