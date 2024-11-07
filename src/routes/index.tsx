@@ -10,6 +10,9 @@ import LoginPage from '@/pages/LoginPage'
 import LoginRedirectPage from '@/pages/LoginRedirectPage'
 import MainPage from '@/pages/MainPage'
 import MyPage from '@/pages/MyPage'
+import PointPage from '@/pages/PointPage'
+import PointCancelModal from '@/pages/PointPage/PointCancelModal'
+import PointFailureModal from '@/pages/PointPage/PointFailureModal'
 import ProfileQuestionPage from '@/pages/ProfileQuestionPage'
 
 import { ProtectedRoute } from './ProtectedRoute'
@@ -31,17 +34,32 @@ const router = createBrowserRouter([
             path: '/mypage/:userId',
             element: <MyPage />,
           },
+
           {
             path: '/cookie-record',
             element: <CookieRecordPage />,
           },
           {
-            path: '/grouppage',
+            path: '/group/:groupId',
             element: <GroupPage />,
           },
           {
             path: '/group/create',
             element: <CreateGroupPage />,
+          },
+          {
+            path: '/point',
+            element: <PointPage />,
+            children: [
+              {
+                path: '/point/failure',
+                element: <PointFailureModal />,
+              },
+              {
+                path: '/point/cancel',
+                element: <PointCancelModal />,
+              },
+            ],
           },
         ],
       },

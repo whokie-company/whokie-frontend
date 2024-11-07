@@ -5,14 +5,16 @@ import { ActiveBrownBox } from '@/components/ActiveBrownBox'
 import { AvatarLabelWithNavigate } from '@/components/AvatarLabel'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
 import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
-import { useSeletedGroupStore } from '@/stores/selected-group'
+import { useMemberTypeStore } from '@/stores/member-type'
+import { useSelectedGroupStore } from '@/stores/selected-group'
 
 export const GroupList = () => {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useGroupPaging({})
 
-  const groupId = useSeletedGroupStore((state) => state.groupId)
-  const setSeletedGroup = useSeletedGroupStore((state) => state.setGroupId)
+  const groupId = useSelectedGroupStore((state) => state.groupId)
+  const setSeletedGroup = useSelectedGroupStore((state) => state.setGroupId)
+  const setMemberType = useMemberTypeStore((state) => state.setMemberType)
 
   const groups = data?.pages.flatMap((page) => page.groups)
 
@@ -24,7 +26,10 @@ export const GroupList = () => {
         <ActiveBrownBox
           key={group.groupId}
           isActive={!!groupId && groupId === group.groupId}
-          onClick={() => setSeletedGroup(group.groupId)}
+          onClick={() => {
+            setSeletedGroup(group.groupId)
+            setMemberType('GROUP')
+          }}
         >
           <AvatarLabelWithNavigate
             isNavigate

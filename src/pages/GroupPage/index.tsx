@@ -1,7 +1,13 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Suspense } from 'react'
+import { useParams } from 'react-router-dom'
 
+import { Box } from '@chakra-ui/react'
+
+import { useGroupInfo } from '@/api/services/group/group.api'
+import { Loading } from '@/components/Loading'
 import { RankingGraph } from '@/components/RankingGraph'
 
+import ErrorPage from '../ErrorPage'
 import Management from './Management'
 import Navigate from './Navigate'
 import Profile from './Profile'
@@ -36,20 +42,22 @@ const dummyRankData = [
 const userRole = 'leader' // "leader" or "member"
 
 export default function GroupPage() {
+  const { groupId } = useParams<{ groupId: string }>()
+  const { data: groupData, error } = useGroupInfo(groupId || '')
+
+  if (error) return <ErrorPage />
+  if (!groupData) return <ErrorPage />
+
   return (
     <div>
-      <Navigate />
-      <Profile role={userRole} />
-      <Box p="0 30px">
-        <Text fontSize="md" fontWeight="bold" mb="2">
-          랭킹
-        </Text>
-        <Text fontSize="xs" color="text_description">
-          쿠키를 가장 많이 주고 받은 멤버를 확인해보세요
-        </Text>
-        <RankingGraph rank={dummyRankData} />
-      </Box>
-      <Management role={userRole} />
+      <Suspense fallback={<Loading />}>
+        <Navigate />
+        <Profile role={userRole} gprofile={groupData} />
+        <Box p="0 30px">
+          <RankingGraph rank={dummyRankData} />
+        </Box>
+        <Management role={userRole} />
+      </Suspense>
     </div>
   )
 }

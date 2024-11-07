@@ -1,8 +1,21 @@
 import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
-import { authorizationInstance } from '@/api/instance'
+import { authorizationInstance, fetchInstance } from '@/api/instance'
 import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
 import { Group, PagingRequestParams, PagingResponse } from '@/types'
+
+const getGroupInfo = async (groupId: string) => {
+  const response = await fetchInstance.get<Group>(`/api/group/info/${groupId}`)
+
+  return response.data
+}
+
+export const useGroupInfo = (groupId: string) => {
+  return useQuery({
+    queryKey: ['group', groupId],
+    queryFn: () => getGroupInfo(groupId),
+  })
+}
 
 type GroupResponse = PagingResponse<Omit<Group, 'groupDescription'>[]>
 
@@ -78,4 +91,23 @@ export const useGroupInviteCode = ({
     refetchOnWindowFocus: false,
     enabled: false,
   })
+}
+
+export const modifyGroup = async (
+  groupId: number,
+  groupName: string,
+  description: string
+) => {
+  const requestData = {
+    groupId,
+    groupName,
+    description,
+  }
+
+  const response = await authorizationInstance.patch(
+    '/api/group/modify',
+    requestData
+  )
+
+  return response.data
 }
