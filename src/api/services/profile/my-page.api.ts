@@ -31,7 +31,7 @@ const getMyPoint = async () => {
 
 export const useGetMyPoint = () => {
   return useQuery({
-    queryKey: ['myPage'],
+    queryKey: ['myPagePoint'],
     queryFn: () => getMyPoint(),
   })
 }
