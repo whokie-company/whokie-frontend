@@ -136,7 +136,7 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
 
   const handleDelete = () => {
     if (selectedQuestionId !== undefined && selectedQuestionId !== null) {
-      deleteQuestion({ deleteQuestionId: selectedQuestionId }) // API 호출
+      deleteQuestion({ deleteQuestionId: selectedQuestionId })
     }
   }
 
