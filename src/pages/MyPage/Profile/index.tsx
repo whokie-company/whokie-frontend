@@ -1,15 +1,22 @@
-import { BiEditAlt } from 'react-icons/bi'
+import { useState } from 'react'
 
-import { Box, Button, Icon, IconButton, Text } from '@chakra-ui/react'
+import { Avatar, Box, Button, Text } from '@chakra-ui/react'
 
 import { MyPageItem } from '@/types'
 
 type ProfileProps = {
   profile: MyPageItem
-  pointAmount: number
+  pointAmount?: number | null
+  isMyPage: boolean
 }
 
-export default function Profile({ profile, pointAmount }: ProfileProps) {
+export default function Profile({
+  profile,
+  pointAmount = null,
+  isMyPage,
+}: ProfileProps) {
+  const [isHovered, setIsHovered] = useState(false)
+
   return (
     <header>
       <Box
@@ -19,31 +26,34 @@ export default function Profile({ profile, pointAmount }: ProfileProps) {
         backgroundPosition="center"
         position="relative"
         marginBottom="40px"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
-        {/* <Avatar // absolute
-          src={profile.profileImage}
+        {isMyPage && isHovered && (
+          <Button
+            aria-label="Edit"
+            borderRadius={3}
+            minWidth="20px"
+            maxHeight="25px"
+            padding="5px 8px"
+            position="absolute"
+            right="23px"
+            fontSize="small"
+            fontWeight="400"
+            color="GrayText"
+            border="0.4px solid"
+            borderColor="black.700"
+            bg="white"
+          >
+            Change Cover
+          </Button>
+        )}
+        <Avatar
+          src={profile.imageUrl}
           size="lg"
           position="absolute"
           bottom="-30px"
           left="30px"
-          sx={{
-            border: '0.8px solid',
-            borderColor: 'black.700',
-          }}
-        /> */}
-        <IconButton
-          aria-label="Edit"
-          icon={<Icon as={BiEditAlt} boxSize="10px" />}
-          borderRadius="20px"
-          minWidth="20px"
-          width="20px"
-          height="20px"
-          padding="0"
-          position="absolute"
-          bottom="-25px"
-          left="80px"
-          border="0.8px solid"
-          borderColor="black.700"
         />
       </Box>
       <Box padding="0 30px">
@@ -51,35 +61,37 @@ export default function Profile({ profile, pointAmount }: ProfileProps) {
           <Text fontSize="xl" fontWeight="400">
             {profile.name}
           </Text>
-          <Button
-            color="primary_background"
-            bg="#ea780c"
-            display="flex"
-            flexDirection="row"
-            fontSize="xs"
-            alignItems="center"
-            padding="4px 7px"
-            borderRadius="20px"
-            minHeight="5px"
-            height="auto"
-            _hover={{ bg: 'orange.600', boxShadow: 'md' }}
-          >
-            <Text
-              width="13px"
-              height="13px"
-              textAlign="center"
-              lineHeight="1.05"
+          {isMyPage && (
+            <Button
+              color="primary_background"
+              bg="#ea780c"
+              display="flex"
+              flexDirection="row"
+              fontSize="xs"
+              alignItems="center"
+              padding="4px 7px"
               borderRadius="20px"
-              border="1px solid white"
-              marginRight="3px"
+              minHeight="5px"
+              height="auto"
+              _hover={{ bg: 'orange.600', boxShadow: 'md' }}
             >
-              P
-            </Text>
-            <Text fontWeight="bold" marginRight="6px">
-              포인트
-            </Text>
-            <Text>{pointAmount}</Text>
-          </Button>
+              <Text
+                width="13px"
+                height="13px"
+                textAlign="center"
+                lineHeight="1.05"
+                borderRadius="20px"
+                border="1px solid white"
+                marginRight="3px"
+              >
+                P
+              </Text>
+              <Text fontWeight="bold" marginRight="6px">
+                포인트
+              </Text>
+              <Text>{pointAmount}</Text>
+            </Button>
+          )}
         </Box>
         <Box
           display="flex"

@@ -13,27 +13,36 @@ export type Group = {
   groupMemberCount: number
 }
 
-export interface ChatItem {
+export type ChatItem = {
   chatId: number
   direction: 'left' | 'right'
   content: string
   createdAt: string
+  deleteBtn: boolean
+  onDelete?: () => void
 }
 
-export interface ChatBoxProps {
+export type ChatBoxProps = {
   chatItem: ChatItem
 }
 
-export interface QuestionItem {
+export type QuestionItem = {
   profileQuestionId: number
   profileQuestionContent: string
   createdAt: string
 }
 
-export interface Question {
+export type Question = {
   questionId: number
   content: string
   users: Friend[]
+}
+
+export type ProfileAnswerItem = {
+  profileAnswerId: string
+  content: string
+  profileQuestionContent: string
+  createdAt: string
 }
 
 export type AnswerRecord = {
@@ -70,6 +79,7 @@ export type MyPageItem = {
   totalVisited: number
   description: string
   backgroundImageUrl: string
+  imageUrl: string
   name: string
 }
 

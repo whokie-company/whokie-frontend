@@ -1,12 +1,20 @@
 import { BiCookie } from 'react-icons/bi'
+import { useLocation } from 'react-router-dom'
 
-import { Text } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 
 import { PageLayout } from '@/components/PageLayout'
+import { useMyUserIdStore } from '@/stores/my-user-id'
 
+import { CreateQuestionButton } from '../CreateQuestionButton'
 import { QuestionList } from '../QuestionList'
 
 export const QuestionSection = () => {
+  const location = useLocation()
+  const userId: number = location.state?.userId
+  const myUserId = useMyUserIdStore((state) => state.myUserId)
+  const isMyPage = Number(userId) === myUserId
+
   return (
     <PageLayout.SideSection
       SectionHeader={
@@ -16,28 +24,10 @@ export const QuestionSection = () => {
         />
       }
     >
-      <Text fontSize="small">
-        <QuestionList questions={mockGroupList} />
-      </Text>
+      <Box fontSize="small">
+        <QuestionList isMyPage={isMyPage} />
+      </Box>
+      {isMyPage && <CreateQuestionButton userId={userId} />}
     </PageLayout.SideSection>
   )
 }
-
-const mockGroupList = [
-  {
-    profileQuestionId: 1,
-    profileQuestionContent: '내 MBTI는?',
-    createdAt: '2024-10-1',
-  },
-  {
-    profileQuestionId: 2,
-    profileQuestionContent:
-      '내 키는? 가나다라마바사아자차카타파하 가나다라마바사 아자 차카 타파하',
-    createdAt: '2024-10-1',
-  },
-  {
-    profileQuestionId: 3,
-    profileQuestionContent: '내 혈액형은?',
-    createdAt: '2024-10-1',
-  },
-]
