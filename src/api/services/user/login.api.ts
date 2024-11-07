@@ -25,3 +25,16 @@ export const useKakaoLogin = ({ code }: KakaoLoginParam) => {
     queryFn: () => kakaoLogin({ code }),
   })
 }
+
+const login = async () => {
+  await fetchInstance.get('/api/user/login')
+}
+
+export const useLogin = () => {
+  return useQuery({
+    queryKey: ['login'],
+    queryFn: () => login(),
+    refetchOnWindowFocus: false,
+    enabled: false,
+  })
+}
