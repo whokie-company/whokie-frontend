@@ -46,6 +46,23 @@ export default function QuestionManagement() {
           </Button>
         </Stack>
       </Box>
+
+      <Box maxHeight="400px" overflowY="scroll">
+        <Stack spacing="15px">
+          <Box
+            p="10px"
+            bg="white"
+            borderRadius="8px"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Text fontSize="16px" flex="1">
+              질문 내용 텍스트
+            </Text>
+          </Box>
+        </Stack>
+      </Box>
     </Box>
   )
 }
