@@ -3,7 +3,9 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import CookieRecordPage from '@/pages/CookieRecordPage'
 import CreateGroupPage from '@/pages/CreateGroupPage'
 import ErrorPage from '@/pages/ErrorPage'
+import GroupMembersPage from '@/pages/GroupMembersPage'
 import GroupPage from '@/pages/GroupPage'
+import { GroupMemberLayout } from '@/pages/Layout/GroupMemberLayout'
 import { MainLayout } from '@/pages/Layout/MainLayout'
 import { ProfileQuestionLayout } from '@/pages/Layout/ProfileQuestionLayout'
 import LoginPage from '@/pages/LoginPage'
@@ -77,6 +79,13 @@ const router = createBrowserRouter([
     path: '/',
     element: <ProfileQuestionLayout />,
     children: [{ path: '/profile-question', element: <ProfileQuestionPage /> }],
+  },
+  {
+    path: '/',
+    element: <GroupMemberLayout />,
+    children: [
+      { path: '/group/members/:groupId', element: <GroupMembersPage /> },
+    ],
   },
   {
     path: '*',
