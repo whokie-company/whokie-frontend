@@ -53,6 +53,8 @@ const Answer: React.FC<AnswerProps> = ({ userId, isMyPage }: AnswerProps) => {
     },
   })
 
+  if (!userId) return <ErrorPage />
+
   const {
     data: answers,
     isLoading,
