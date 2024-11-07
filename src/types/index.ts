@@ -92,3 +92,12 @@ export type Member = {
   userName: string
   joinedAt: string
 }
+  
+export type PointOptions = 'ALL' | 'CHARGED' | 'USED'
+
+export type Point = {
+  id: number
+  point: number
+  option: PointOptions
+  createdAt: string
+}
