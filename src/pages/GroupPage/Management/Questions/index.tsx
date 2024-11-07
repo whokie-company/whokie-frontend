@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { Box, Button, Stack, Text } from '@chakra-ui/react'
+import { Box, Button, Radio, RadioGroup, Stack, Text } from '@chakra-ui/react'
 
 import { getGroupQuestions } from '@/api/services/group/group.api'
 
@@ -99,6 +99,17 @@ export default function QuestionManagement() {
                 <Text fontSize="16px" flex="1">
                   {question.questionContent}
                 </Text>
+
+                <RadioGroup value={question.status}>
+                  <Stack direction="row">
+                    <Radio value="APPROVED" colorScheme="green">
+                      {}
+                    </Radio>
+                    <Radio value="REJECTED" colorScheme="red">
+                      {}
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
               </Box>
             ))
           ) : (
