@@ -11,6 +11,7 @@ import ErrorPage from '../ErrorPage'
 import Navigate from './Navigate'
 import OvenMenu from './OvenMenu'
 import Profile from './Profile'
+import Ranking from './Ranking'
 
 // ranking Component dummy data
 const dummyRankData = [
@@ -43,6 +44,7 @@ const dummyRankData = [
 export default function MyPage() {
   const { userId } = useParams<{ userId: string }>()
   const myUserId = useMyUserIdStore((state) => state.myUserId)
+
   const {
     data: profile,
     isLoading: isLoadingProfile,
@@ -59,6 +61,7 @@ export default function MyPage() {
   if (isLoadingProfile || (isMyPage && isLoadingPoints)) return <Loading />
   if (profileError || (isMyPage && pointsError)) return <ErrorPage />
   if (!profile) return <ErrorPage />
+  if (!userId) return <ErrorPage />
 
   return (
     <div>
@@ -77,9 +80,7 @@ export default function MyPage() {
           userId={Number(userId)}
         />
       )}
-      <Box p="0 30px">
-        <RankingGraph rank={dummyRankData} />
-      </Box>
+      <Ranking userId={userId} />
       <OvenMenu userId={userId} isMyPage={isMyPage} />
     </div>
   )
