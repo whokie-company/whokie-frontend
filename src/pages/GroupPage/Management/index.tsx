@@ -8,13 +8,14 @@ import { InviteMemberModal } from './InviteMemberModal'
 
 interface ManagementProps {
   role: 'leader' | 'member'
+  groupId: number
 }
 
-export default function Management({ role }: ManagementProps) {
+export default function Management({ role, groupId }: ManagementProps) {
   return (
     <Box p="30px">
       <Flex gap={4} marginTop="10px" marginBottom="16px">
-        <InviteMemberModal />
+        <InviteMemberModal groupId={groupId} />
         <CardButton
           variant="white"
           orientation="horizontal"

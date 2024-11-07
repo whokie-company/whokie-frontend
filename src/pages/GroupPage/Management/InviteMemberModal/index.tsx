@@ -4,20 +4,31 @@ import { BiCopyAlt, BiLink } from 'react-icons/bi'
 import { Flex, Input, useClipboard, useDisclosure } from '@chakra-ui/react'
 
 import { useGroupInviteCode } from '@/api/services/group/group.api'
+import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
 import { CardButton } from '@/components/CardButton'
 import { FormConfirmModalButton, FormModal } from '@/components/Modal/FormModal'
 
-export const InviteMemberModal = () => {
+interface InviteMemberModalProps {
+  groupId: number
+}
+
+export const InviteMemberModal = ({ groupId }: InviteMemberModalProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { onCopy, setValue, hasCopied } = useClipboard('')
+  const { onCopy, setValue, value, hasCopied } = useClipboard('')
 
   const { data: inviteCode, refetch } = useGroupInviteCode({ groupId: 13 })
 
   useEffect(() => {
     if (inviteCode) {
-      setValue(inviteCode)
+      const inviteURL = appendParamsToUrl(
+        `${import.meta.env.VITE_DOMAIN}/invite/${groupId}`,
+        {
+          inviteCode,
+        }
+      )
+      setValue(inviteURL)
     }
-  }, [setValue, inviteCode])
+  }, [setValue, inviteCode, groupId])
 
   return (
     <>
@@ -39,13 +50,19 @@ export const InviteMemberModal = () => {
         title="초대 링크 공유하기"
         description="초대링크 복사 후, 원하는 곳에 링크를 공유하세요!"
         confirmButton={
-          <FormConfirmModalButton onClick={onCopy}>
-            {hasCopied ? '복사완료' : '복사하기'}
-          </FormConfirmModalButton>
+          value ? (
+            <FormConfirmModalButton onClick={onCopy}>
+              {hasCopied ? '복사완료' : '복사하기'}
+            </FormConfirmModalButton>
+          ) : (
+            <FormConfirmModalButton>로딩중</FormConfirmModalButton>
+          )
         }
       >
         <Flex alignItems="center" gap={2}>
-          <Input size="sm" borderRadius="6" value={inviteCode} isReadOnly />
+          {value && (
+            <Input size="sm" borderRadius="6" value={value} isReadOnly />
+          )}
         </Flex>
       </FormModal>
     </>
