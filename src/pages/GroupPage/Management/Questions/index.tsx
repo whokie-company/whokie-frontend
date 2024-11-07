@@ -10,7 +10,7 @@ import {
 } from '@/api/services/group/group.api'
 import { Loading } from '@/components/Loading'
 
-import Navigate from '../../Navigate'
+import Navigate from '../Navigate'
 
 interface Question {
   questionId: number
