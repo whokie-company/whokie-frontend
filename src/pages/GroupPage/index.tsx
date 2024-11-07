@@ -1,4 +1,3 @@
-import { Suspense } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Box } from '@chakra-ui/react'
@@ -43,21 +42,29 @@ const userRole = 'leader' // "leader" or "member"
 
 export default function GroupPage() {
   const { groupId } = useParams<{ groupId: string }>()
-  const { data: groupData, error } = useGroupInfo(groupId || '')
-
-  if (error) return <ErrorPage />
-  if (!groupData) return <ErrorPage />
 
   return (
     <div>
-      <Suspense fallback={<Loading />}>
-        <Navigate />
-        <Profile role={userRole} gprofile={groupData} />
-        <Box p="0 30px">
-          <RankingGraph rank={dummyRankData} />
-        </Box>
-        <Management role={userRole} />
-      </Suspense>
+      <Navigate />
+      <GroupSection groupId={Number(groupId)} />
+      <Box p="0 30px">
+        <RankingGraph rank={dummyRankData} />
+      </Box>
+      <Management role={userRole} />
     </div>
   )
+}
+
+interface GroupSectionProps {
+  groupId: number
+}
+
+const GroupSection = ({ groupId }: GroupSectionProps) => {
+  const { data: groupData, error, status } = useGroupInfo(groupId)
+
+  if (status === 'pending') return <Loading />
+  if (error) return <ErrorPage />
+  if (!groupData) return <ErrorPage />
+
+  return <Profile role={userRole} gprofile={groupData} />
 }

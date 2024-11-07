@@ -1,19 +1,10 @@
-import { useState } from 'react'
-import { BiCheck, BiEditAlt } from 'react-icons/bi'
+import { useEffect, useState } from 'react'
 
-import {
-  Avatar,
-  Box,
-  HStack,
-  Icon,
-  IconButton,
-  Input,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Avatar, Box, HStack, Input, Text, VStack } from '@chakra-ui/react'
 
-import { modifyGroup } from '@/api/services/group/group.api'
 import { Group } from '@/types'
+
+import { EditProfile } from './EditProfile'
 
 type GroupProps = {
   gprofile: Group
@@ -22,19 +13,14 @@ type GroupProps = {
 
 export default function Profile({ role, gprofile }: GroupProps) {
   const [isEditing, setIsEditing] = useState(false)
-  const [groupName, setGroupName] = useState(gprofile.groupName)
-  const [groupDescription, setGroupDescription] = useState(
-    gprofile.groupDescription
-  )
+  const [groupNameInput, setGroupNameInput] = useState('')
+  const [groupDescriptionInput, setGroupDescriptionInput] = useState('')
 
-  const handleEditClick = () => {
-    setIsEditing(true)
-  }
-
-  const handleSaveClick = async () => {
-    await modifyGroup(gprofile.groupId, groupName, groupDescription)
+  useEffect(() => {
     setIsEditing(false)
-  }
+    setGroupNameInput(gprofile.groupName)
+    setGroupDescriptionInput(gprofile.groupDescription)
+  }, [gprofile])
 
   return (
     <header>
@@ -56,13 +42,12 @@ export default function Profile({ role, gprofile }: GroupProps) {
               }}
             />
           </Box>
-
           <VStack align="flex-start" spacing={0}>
             <HStack spacing={2} alignItems="center">
               {isEditing ? (
                 <Input
-                  value={groupName}
-                  onChange={(e) => setGroupName(e.target.value)}
+                  value={groupNameInput}
+                  onChange={(e) => setGroupNameInput(e.target.value)}
                   fontSize="xl"
                   width="180px"
                   textColor="black.500"
@@ -74,7 +59,7 @@ export default function Profile({ role, gprofile }: GroupProps) {
                   verticalAlign="middle"
                 />
               ) : (
-                <Text fontSize="xl">{groupName}</Text>
+                <Text fontSize="xl">{gprofile.groupName}</Text>
               )}
               <Text
                 fontSize="xs"
@@ -92,8 +77,8 @@ export default function Profile({ role, gprofile }: GroupProps) {
             <HStack spacing={2} alignItems="center">
               {isEditing ? (
                 <Input
-                  value={groupDescription}
-                  onChange={(e) => setGroupDescription(e.target.value)}
+                  value={groupDescriptionInput}
+                  onChange={(e) => setGroupDescriptionInput(e.target.value)}
                   color="text_secondary"
                   fontSize="md"
                   width="320px"
@@ -107,27 +92,18 @@ export default function Profile({ role, gprofile }: GroupProps) {
                 />
               ) : (
                 <Text color="text_secondary" fontSize="md">
-                  {groupDescription}
+                  {gprofile.groupDescription}
                 </Text>
               )}
               {role === 'leader' && (
-                <IconButton
-                  aria-label="Edit"
-                  icon={
-                    isEditing ? (
-                      <Icon as={BiCheck} boxSize="12px" />
-                    ) : (
-                      <Icon as={BiEditAlt} boxSize="10px" />
-                    )
-                  }
-                  borderRadius="20px"
-                  minWidth="20px"
-                  width="20px"
-                  height="20px"
-                  padding="0"
-                  border="1px solid"
-                  borderColor="black.400"
-                  onClick={isEditing ? handleSaveClick : handleEditClick}
+                <EditProfile
+                  isEditing={isEditing}
+                  setIsEditing={(isEdit) => setIsEditing(isEdit)}
+                  groupInfo={{
+                    groupId: gprofile.groupId,
+                    groupName: groupNameInput,
+                    groupDescription: groupDescriptionInput,
+                  }}
                 />
               )}
             </HStack>

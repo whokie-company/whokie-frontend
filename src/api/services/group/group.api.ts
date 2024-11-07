@@ -4,13 +4,13 @@ import { authorizationInstance, fetchInstance } from '@/api/instance'
 import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
 import { Group, PagingRequestParams, PagingResponse } from '@/types'
 
-const getGroupInfo = async (groupId: string) => {
+const getGroupInfo = async (groupId: number) => {
   const response = await fetchInstance.get<Group>(`/api/group/info/${groupId}`)
 
   return response.data
 }
 
-export const useGroupInfo = (groupId: string) => {
+export const useGroupInfo = (groupId: number) => {
   return useQuery({
     queryKey: ['group', groupId],
     queryFn: () => getGroupInfo(groupId),
@@ -93,21 +93,22 @@ export const useGroupInviteCode = ({
   })
 }
 
-export const modifyGroup = async (
-  groupId: number,
-  groupName: string,
+export type ModifyGroupRequestBody = {
+  groupId: number
+  groupName: string
   description: string
-) => {
-  const requestData = {
+}
+
+export const modifyGroup = async ({
+  groupId,
+  groupName,
+  description,
+}: ModifyGroupRequestBody) => {
+  const response = await authorizationInstance.patch('/api/group/modify', {
     groupId,
     groupName,
     description,
-  }
-
-  const response = await authorizationInstance.patch(
-    '/api/group/modify',
-    requestData
-  )
+  })
 
   return response.data
 }
