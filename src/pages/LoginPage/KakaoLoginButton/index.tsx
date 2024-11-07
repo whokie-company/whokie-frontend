@@ -6,7 +6,7 @@ import KakaoSymbol from '@/assets/kakao-logo-symbol.svg'
 
 export const KakaoLoginButton = () => {
   return (
-    <Link to={`${import.meta.env.VITE_LOGIN_URL}/api/user/login`}>
+    <Link to={'/api/user/login'}>
       <Flex
         background="kakao"
         rounded="6px"
