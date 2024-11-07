@@ -140,6 +140,10 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
     }
   }
 
+  const adjustedXPosition = contextMenuPosition
+    ? contextMenuPosition.x - contextMenuPosition.x * 0.6
+    : 0
+
   return (
     <Flex
       flexDirection="column"
@@ -152,6 +156,7 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
         {questions?.map((question) => (
           <Box
             key={question.profileQuestionId}
+            width="full"
             onContextMenu={
               isMyPage ? (e) => handleContextMenu(e, question) : undefined
             }
@@ -176,7 +181,7 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
           position="absolute"
           zIndex="10000"
           top={`${contextMenuPosition.y - 100}px`}
-          left={`${contextMenuPosition.x - 30}px`}
+          left={`${adjustedXPosition}`}
           bg="white"
           boxShadow="md"
           padding="0.5rem"
