@@ -62,7 +62,7 @@ export const GroupSection = () => {
             </ActiveBrownBox>
           </Link>
         </Flex>
-        <Flex flexDirection="column" width="full">
+        <Flex flexDirection="column" width="full" height="26rem">
           <Text
             fontSize="small"
             color="text_description"

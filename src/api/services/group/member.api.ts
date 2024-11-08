@@ -1,21 +1,35 @@
-import { queryOptions } from '@tanstack/react-query'
+import {
+  queryOptions,
+  useQuery,
+  useSuspenseInfiniteQuery,
+} from '@tanstack/react-query'
 
 import { authorizationInstance } from '@/api/instance'
 import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
-import { Member, PaginationRequestParams } from '@/types'
+import {
+  GroupRole,
+  Member,
+  PaginationRequestParams,
+  PagingRequestParams,
+  PagingResponse,
+} from '@/types'
 
-type GroupMembersRequestParams = {
+type GroupMembersManageRequestParams = {
   groupId: number
 } & PaginationRequestParams
 
-type GroupMembersResponse = {
+type GroupMembersRequestParams = {
+  groupId: number
+} & PagingRequestParams
+
+type GroupMembersManageResponse = {
   content: Member[]
   totalPages?: number
   totalElements?: number
 }
 
-const getGroupMembers = async (params: GroupMembersRequestParams) => {
-  const response = await authorizationInstance.get<GroupMembersResponse>(
+const getGroupMembers = async (params: GroupMembersManageRequestParams) => {
+  const response = await authorizationInstance.get<GroupMembersManageResponse>(
     appendParamsToUrl(`/api/group/${params.groupId}/member`, params)
   )
 
@@ -26,13 +40,93 @@ const getGroupMembers = async (params: GroupMembersRequestParams) => {
   }
 }
 
-export const membersQuries = {
+export const membersManageQuries = {
+  all: () => ['membersManage'],
+  groupMembers: (groupId: number, page?: number) =>
+    queryOptions({
+      queryKey: [...membersPageQuries.all(), groupId, page],
+      queryFn: () => getGroupMembers({ groupId, page, size: 5 }),
+    }),
+}
+
+type GroupMembersResponse = PagingResponse<Member[]>
+
+const getGrupMemberPaging = async ({
+  page,
+  size,
+  sort,
+  groupId,
+}: GroupMembersRequestParams) => {
+  const params = { page, size, sort }
+  const { data } = await authorizationInstance.get<GroupMembersResponse>(
+    appendParamsToUrl(`/api/group/${groupId}/member`, params)
+  )
+
+  return {
+    records: data.content,
+    nextPageToken:
+      data.page !== data.totalPages - 1
+        ? (data.page + 1).toString()
+        : undefined,
+  }
+}
+
+interface GroupRecordPaigngProps extends PagingRequestParams {
+  initPageToken?: string
+  groupId: number
+}
+
+export const useGrupMemberPaging = ({
+  size = 10,
+  sort,
+  initPageToken,
+  groupId,
+}: GroupRecordPaigngProps) => {
+  return useSuspenseInfiniteQuery({
+    queryKey: ['group', 'member', groupId],
+    queryFn: ({ pageParam = initPageToken }) =>
+      getGrupMemberPaging({ page: pageParam, size, sort, groupId }),
+    initialPageParam: initPageToken,
+    getNextPageParam: (lastPage) => lastPage.nextPageToken,
+  })
+}
+
+export const membersPageQuries = {
   all: () => ['members'],
   groupMembers: (groupId: number, page?: number) =>
     queryOptions({
-      queryKey: [...membersQuries.all(), groupId, page],
+      queryKey: [...membersPageQuries.all(), groupId, page],
       queryFn: () => getGroupMembers({ groupId, page, size: 5 }),
     }),
+}
+
+export const joinGroupMember = async (inviteCode: string) => {
+  await authorizationInstance.post('/api/group/join', { inviteCode })
+}
+
+export const exitGroupMember = async (groupId: number) => {
+  await authorizationInstance.post('/api/group/exit', {
+    groupId,
+  })
+}
+
+type GruopRoleResponse = {
+  role: GroupRole
+}
+
+const getGroupRole = async (groupId: number) => {
+  const response = await authorizationInstance.get<GruopRoleResponse>(
+    `/api/group/${groupId}/role`
+  )
+
+  return response.data.role
+}
+
+export const useGroupRole = (groupId: number) => {
+  return useQuery({
+    queryKey: ['group', 'role', groupId],
+    queryFn: () => getGroupRole(groupId),
+  })
 }
 
 export type ExpelMemberRequest = {

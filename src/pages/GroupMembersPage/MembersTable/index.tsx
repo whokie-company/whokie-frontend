@@ -19,7 +19,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 
-import { membersQuries } from '@/api/services/group/member.api'
+import { membersManageQuries } from '@/api/services/group/member.api'
 import { Loading } from '@/components/Loading'
 import ErrorPage from '@/pages/ErrorPage'
 
@@ -50,7 +50,7 @@ export default function MembersTable({
   const [page, setPage] = useState<number>(0)
 
   const { data, status, isLoading, isError } = useQuery(
-    membersQuries.groupMembers(groupId, page)
+    membersManageQuries.groupMembers(groupId, page)
   )
 
   const members = data?.members
