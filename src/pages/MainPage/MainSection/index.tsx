@@ -13,11 +13,12 @@ import ProfileGrid from './ProfileGrid'
 
 interface MainSectionProps {
   friends: Friend[]
+  onFinsihGame: () => void
 }
 
 const QUESTION_SIZE = 5
 
-export const MainSection = ({ friends }: MainSectionProps) => {
+export const MainSection = ({ friends, onFinsihGame }: MainSectionProps) => {
   const { data: questions, refetch } = useRandomQuestion({
     size: QUESTION_SIZE,
   })
@@ -28,15 +29,13 @@ export const MainSection = ({ friends }: MainSectionProps) => {
 
   useEffect(() => {
     if (questionIndex === QUESTION_SIZE) {
+      onFinsihGame()
       refetch()
-      setQuestionIndex(0)
     }
-  }, [questionIndex, refetch])
+  }, [questionIndex, onFinsihGame, refetch])
 
   if (!questions)
     return <Heading>질문이 없습니다 관리자에게 문의해주세요</Heading>
-
-  if (questionIndex === QUESTION_SIZE) return <Loading />
 
   const handleQuestionSkip = () => {
     reloadRandomProfiles()
@@ -50,6 +49,8 @@ export const MainSection = ({ friends }: MainSectionProps) => {
       pickedId,
     })
   }
+
+  if (questionIndex === QUESTION_SIZE) return <Loading />
 
   return (
     <Flex
