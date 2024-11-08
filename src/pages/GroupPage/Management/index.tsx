@@ -39,9 +39,14 @@ const CardData: CardButtonProps[] = [
 interface ManagementProps {
   role: 'leader' | 'member'
   groupId: string
+  groupName: string
 }
 
-export default function Management({ role, groupId }: ManagementProps) {
+export default function Management({
+  role,
+  groupId,
+  groupName,
+}: ManagementProps) {
   return (
     <Box p="30px">
       <Flex gap={4} marginTop="10px" marginBottom="16px">
@@ -75,7 +80,10 @@ export default function Management({ role, groupId }: ManagementProps) {
           </Box>
           <Flex gap={4}>
             <CardButton buttonElement={CardData[0]} />
-            <Link to={`/group/${groupId}/members`}>
+            <Link
+              to={`/group/${groupId}/members`}
+              state={{ groupName: `${groupName}` }}
+            >
               <CardButton buttonElement={CardData[1]} />
             </Link>
           </Flex>
