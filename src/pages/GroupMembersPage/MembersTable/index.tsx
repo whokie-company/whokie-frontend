@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   Box,
@@ -24,6 +24,7 @@ import { membersQuries } from '@/api/services/group/member.api'
 import { Loading } from '@/components/Loading'
 import ErrorPage from '@/pages/ErrorPage'
 
+import ExpelBtn from '../ExpelBtn'
 import Pagination from '../Pagination'
 import Title from '../Title'
 
@@ -39,63 +40,6 @@ type MemberTable = {
   joinedAt: string
   isExpel?: string
 }
-
-const clms: ColumnDef<MemberTable>[] = [
-  {
-    header: '',
-    accessorKey: 'id',
-    cell: ({ row, table }) => (
-      <Box>{table.getSortedRowModel().flatRows.indexOf(row) + 1}</Box>
-    ),
-  },
-  {
-    header: '프로필',
-    accessorKey: 'memberImageUrl',
-    cell: ({ row }) => {
-      const imageUrl = row.getValue<string>('memberImageUrl')
-      return (
-        <Box>
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt="Profile"
-              margin="auto"
-              width="40px"
-              height="40px"
-              borderRadius="50%"
-            />
-          ) : (
-            'No Image'
-          )}
-        </Box>
-      )
-    },
-  },
-  {
-    header: '이름',
-    accessorKey: 'userName',
-  },
-  {
-    header: '가입일',
-    accessorKey: 'joinedAt',
-  },
-  {
-    header: '내보내기',
-    accessorKey: 'isExpel',
-    cell: () => (
-      <Button
-        color="white"
-        bg="orange.500"
-        width="100px"
-        height="35px"
-        margin="5px 0"
-        _hover={{ bg: 'orange' }}
-      >
-        내보내기
-      </Button>
-    ),
-  },
-]
 
 export default function MembersTable({
   groupId,
@@ -113,7 +57,55 @@ export default function MembersTable({
   const totalPages = data?.totalPages
   const totalElements = data?.totalElements
 
-  const table = useReactTable({
+  const clms: ColumnDef<MemberTable>[] = [
+    {
+      header: '',
+      accessorKey: 'id',
+      cell: ({ row, table }) => (
+        <Box>
+          {table.getSortedRowModel().flatRows.indexOf(row) + 1 + page * 5}
+        </Box>
+      ),
+    },
+    {
+      header: '프로필',
+      accessorKey: 'memberImageUrl',
+      cell: ({ row }) => {
+        const imageUrl = row.getValue<string>('memberImageUrl')
+        return (
+          <Box>
+            {imageUrl ? (
+              <Image
+                src={imageUrl}
+                alt="Profile"
+                margin="auto"
+                width="40px"
+                height="40px"
+                borderRadius="50%"
+              />
+            ) : (
+              'No Image'
+            )}
+          </Box>
+        )
+      },
+    },
+    {
+      header: '이름',
+      accessorKey: 'userName',
+    },
+    {
+      header: '가입일',
+      accessorKey: 'joinedAt',
+    },
+    {
+      header: '내보내기',
+      accessorKey: 'isExpel',
+      cell: () => <ExpelBtn />,
+    },
+  ]
+
+  let table = useReactTable({
     data: members,
     columns: clms,
     getCoreRowModel: getCoreRowModel(),
