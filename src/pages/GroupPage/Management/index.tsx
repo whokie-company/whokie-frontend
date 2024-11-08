@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom'
 import { Box, Flex, Text } from '@chakra-ui/react'
 
 import { CardButton } from '@/components/CardButton'
+import { GroupRole } from '@/types'
 
 import { InviteMemberModal } from './InviteMemberModal'
 
 interface ManagementProps {
-  role: 'leader' | 'member'
+  role: GroupRole
   groupId: number
 }
 
@@ -25,7 +26,7 @@ export default function Management({ role, groupId }: ManagementProps) {
           Icon={BiPlus}
         />
       </Flex>
-      {role === 'leader' && (
+      {role === 'LEADER' && (
         <Box
           display="flex"
           flexDirection="row"

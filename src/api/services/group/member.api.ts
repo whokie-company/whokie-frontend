@@ -1,8 +1,8 @@
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
+import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
 import { authorizationInstance } from '@/api/instance'
 import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
-import { Member, PagingRequestParams, PagingResponse } from '@/types'
+import { GroupRole, Member, PagingRequestParams, PagingResponse } from '@/types'
 
 type GroupMembersRequestParams = {
   groupId: number
@@ -56,4 +56,29 @@ export const membersQuries = {
 
 export const joinGroupMember = async (inviteCode: string) => {
   await authorizationInstance.post('/api/group/join', { inviteCode })
+}
+
+export const exitGroupMember = async (groupId: number) => {
+  await authorizationInstance.post('/api/group/exit', {
+    groupId,
+  })
+}
+
+type GruopRoleResponse = {
+  role: GroupRole
+}
+
+const getGroupRole = async (groupId: number) => {
+  const response = await authorizationInstance.get<GruopRoleResponse>(
+    `/api/group/${groupId}/role`
+  )
+
+  return response.data.role
+}
+
+export const useGroupRole = (groupId: number) => {
+  return useQuery({
+    queryKey: ['group', 'role', groupId],
+    queryFn: () => getGroupRole(groupId),
+  })
 }
