@@ -59,6 +59,12 @@ export type PagingRequestParams = {
   sort?: string[]
 }
 
+export type PaginationRequestParams = {
+  size?: number
+  page?: number
+  sort?: string[]
+}
+
 export type PagingResponse<T> = {
   content: T
   totalElements: number
