@@ -7,7 +7,7 @@ type ProfileButtonProps = {
   onClick: () => void
 }
 
-const ProfileButton = ({ profile, onClick }: ProfileButtonProps) => {
+export const ProfileButton = ({ profile, onClick }: ProfileButtonProps) => {
   return (
     <Button
       variant="ghost"
@@ -30,5 +30,3 @@ const ProfileButton = ({ profile, onClick }: ProfileButtonProps) => {
     </Button>
   )
 }
-
-export default ProfileButton
