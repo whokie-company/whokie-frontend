@@ -1,27 +1,21 @@
-import { IconType } from 'react-icons'
 import { BiListUl, BiSolidMessageRounded } from 'react-icons/bi'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { Box, Flex, Text } from '@chakra-ui/react'
 
-import CardButton from '@/components/CardButton'
+import { CardButton } from '@/components/CardButton'
 
-const CardData1 = {
-  variant: 'orange' as const,
-  orientation: 'vertical' as const,
-  label: '프로필 Q&A',
-  description: '프로필 답변을 확인해보세요',
-  Icon: BiSolidMessageRounded as IconType,
-}
-const CardData2 = {
-  variant: 'white' as const,
-  orientation: 'vertical' as const,
-  label: '쿠키 로그',
-  description: '지목된 질문을 확인해보세요',
-  Icon: BiListUl as IconType,
+type OvenMenuProps = {
+  isMyPage: boolean
+  userId: string | undefined
 }
 
-export default function OvenMenu() {
+export default function OvenMenu({ userId, isMyPage }: OvenMenuProps) {
+  const navigate = useNavigate()
+  const goToProfileQuestion = () => {
+    navigate('/profile-question', { state: { userId } })
+  }
+
   return (
     <Box
       display="flex"
@@ -39,10 +33,34 @@ export default function OvenMenu() {
         </Text>
       </Box>
       <Flex gap={4}>
-        <Link to="/profile-question">
-          <CardButton buttonElement={CardData1} />
-        </Link>
-        <CardButton buttonElement={CardData2} />
+        {isMyPage ? (
+          <CardButton
+            variant="orange"
+            orientation="vertical"
+            label="프로필 Q&A"
+            description="프로필 답변을 확인해보세요"
+            Icon={BiSolidMessageRounded}
+            onClick={goToProfileQuestion}
+          />
+        ) : (
+          <CardButton
+            variant="white"
+            orientation="horizontal"
+            label="프로필 Q&A"
+            description="프로필 질문에 답변해보세요"
+            Icon={BiSolidMessageRounded}
+            onClick={goToProfileQuestion}
+          />
+        )}
+        {isMyPage && (
+          <CardButton
+            variant="white"
+            orientation="vertical"
+            label="쿠키 로그"
+            description="지목된 질문을 확인해보세요"
+            Icon={BiListUl}
+          />
+        )}
       </Flex>
     </Box>
   )

@@ -8,15 +8,17 @@ import { Center, Flex, HStack, Text } from '@chakra-ui/react'
 import { ActiveBrownBox } from '@/components/ActiveBrownBox'
 import { PageLayout } from '@/components/PageLayout'
 import { useAuthTokenStore } from '@/stores/auth-token'
-import { useSeletedGroupStore } from '@/stores/selected-group'
+import { useMemberTypeStore } from '@/stores/member-type'
+import { useSelectedGroupStore } from '@/stores/selected-group'
 
 import { CreateGroupButton } from './CreateGroupButton'
 import { GroupErrorFallback } from './GroupErrorFallback'
 import { GroupList } from './GroupList'
 
 export const GroupSection = () => {
-  const groupId = useSeletedGroupStore((state) => state.groupId)
-  const setSeletedGroup = useSeletedGroupStore((state) => state.setGroupId)
+  const groupId = useSelectedGroupStore((state) => state.groupId)
+  const setSeletedGroup = useSelectedGroupStore((state) => state.setGroupId)
+  const setMemberType = useMemberTypeStore((state) => state.setMemberType)
   const isLoggedIn = useAuthTokenStore((state) => state.isLoggedIn())
 
   return (
@@ -41,7 +43,10 @@ export const GroupSection = () => {
           <Link to="/">
             <ActiveBrownBox
               isActive={!groupId}
-              onClick={() => setSeletedGroup(undefined)}
+              onClick={() => {
+                setSeletedGroup(undefined)
+                setMemberType('FRIEND')
+              }}
             >
               <HStack>
                 <Center
@@ -57,7 +62,7 @@ export const GroupSection = () => {
             </ActiveBrownBox>
           </Link>
         </Flex>
-        <Flex flexDirection="column" width="full">
+        <Flex flexDirection="column" width="full" height="26rem">
           <Text
             fontSize="small"
             color="text_description"

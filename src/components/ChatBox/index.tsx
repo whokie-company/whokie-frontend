@@ -1,9 +1,11 @@
-import { Box, Flex } from '@chakra-ui/react'
+import { BiX } from 'react-icons/bi'
+
+import { Box, Button, Flex } from '@chakra-ui/react'
 
 import { ChatBoxProps } from '@/types'
 
 export const ChatBox = ({
-  chatItem: { direction, content, createdAt },
+  chatItem: { direction, content, createdAt, deleteBtn = false, onDelete },
 }: ChatBoxProps) => {
   const isRight = direction === 'right'
 
@@ -41,6 +43,19 @@ export const ChatBox = ({
         <Box fontSize="small">{content}</Box>
       </Flex>
       <Flex fontSize="xx-small">{createdAt}</Flex>
+      {deleteBtn && (
+        <Button
+          bg="none"
+          height="3px"
+          width="3px"
+          marginBottom={2}
+          padding="0"
+          _hover={{ bg: 'none' }}
+          onClick={onDelete}
+        >
+          <BiX />
+        </Button>
+      )}
     </Flex>
   )
 }
