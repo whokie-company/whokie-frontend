@@ -57,3 +57,9 @@ export const membersQuries = {
 export const joinGroupMember = async (inviteCode: string) => {
   await authorizationInstance.post('/api/group/join', { inviteCode })
 }
+
+export const exitGroupMember = async (groupId: number) => {
+  await authorizationInstance.post('/api/group/exit', {
+    groupId,
+  })
+}
