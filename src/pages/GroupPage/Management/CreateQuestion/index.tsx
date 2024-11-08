@@ -1,14 +1,7 @@
 import { useState } from 'react'
 import { BiError, BiPlus } from 'react-icons/bi'
 
-import {
-  Box,
-  Button,
-  Flex,
-  Text,
-  Textarea,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Box, Flex, Text, Textarea, useDisclosure } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 
 import {
@@ -16,7 +9,7 @@ import {
   createGroupQuestion,
 } from '@/api/services/question/group.api'
 import { AlertModal } from '@/components/Modal/AlertModal'
-import { FormModal } from '@/components/Modal/FormModal'
+import { FormConfirmModalButton, FormModal } from '@/components/Modal/FormModal'
 
 interface GroupQuestionCreateModalProps {
   isOpen: boolean
@@ -68,16 +61,9 @@ export const GroupQuestionCreateModal = ({
         title="그룹 질문 추가 요청"
         description="그룹에 새로운 질문을 요청해보세요"
         confirmButton={
-          <Button
-            colorScheme="primary"
-            fontSize="small"
-            height="fit-content"
-            paddingY="0.6rem"
-            width="full"
-            onClick={handleCreateQuestion}
-          >
+          <FormConfirmModalButton onClick={handleCreateQuestion}>
             요청하기
-          </Button>
+          </FormConfirmModalButton>
         }
       >
         <Flex padding="0 10px" flexDirection="column" gap={3}>
