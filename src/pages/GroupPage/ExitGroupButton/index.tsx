@@ -36,7 +36,13 @@ export const ExitGroupButton = ({
 
   return (
     <Flex justifyContent="end" paddingX={8} paddingBottom={5}>
-      <Button variant="link" size="sm" colorScheme="secondary" onClick={onOpen}>
+      <Button
+        variant="link"
+        size="sm"
+        color="brown.500"
+        onClick={onOpen}
+        _hover={{ color: 'brown.600' }}
+      >
         그룹 탈퇴하기
       </Button>
       <ConfirmModal
