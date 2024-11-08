@@ -31,6 +31,6 @@ export const membersQuries = {
   groupMembers: (groupId: number, page?: number) =>
     queryOptions({
       queryKey: [...membersQuries.all(), groupId, page],
-      queryFn: () => getGroupMembers({ groupId, page: 0, size: 5 }),
+      queryFn: () => getGroupMembers({ groupId, page, size: 5 }),
     }),
 }
