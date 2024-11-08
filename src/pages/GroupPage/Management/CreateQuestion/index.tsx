@@ -43,13 +43,15 @@ export const GroupQuestionCreateModal = ({
     },
     onError: () => {
       setErrorMessage('질문 생성에 실패하였습니다')
+      onClose()
       errorAlert.onOpen()
     },
   })
 
   const handleCreateQuestion = () => {
-    if (!questionContent.trim()) {
+    if (!questionContent) {
       setErrorMessage('질문을 입력해주세요')
+      onClose()
       errorAlert.onOpen()
       return
     }
