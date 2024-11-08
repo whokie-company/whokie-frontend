@@ -1,8 +1,9 @@
-import { useMemo } from 'react'
+import { useState } from 'react'
 
 import {
   Box,
   Button,
+  Image,
   Table,
   Tbody,
   Td,
@@ -11,6 +12,7 @@ import {
   Tr,
   useTheme,
 } from '@chakra-ui/react'
+import { useQuery } from '@tanstack/react-query'
 import {
   ColumnDef,
   flexRender,
@@ -18,165 +20,176 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 
-import Pagination from '../Pagination'
+import { membersQuries } from '@/api/services/group/member.api'
+import { Loading } from '@/components/Loading'
+import ErrorPage from '@/pages/ErrorPage'
 
-export default function MembersTable() {
+import Pagination from '../Pagination'
+import Title from '../Title'
+
+type MembersTableProps = {
+  groupId: number
+  groupName: string
+}
+
+type MemberTable = {
+  id: number
+  memberImageUrl: string
+  userName: string
+  joinedAt: string
+  isExpel?: string
+}
+
+const clms: ColumnDef<MemberTable>[] = [
+  {
+    header: '',
+    accessorKey: 'id',
+    cell: ({ row, table }) => (
+      <Box>{table.getSortedRowModel().flatRows.indexOf(row) + 1}</Box>
+    ),
+  },
+  {
+    header: '프로필',
+    accessorKey: 'memberImageUrl',
+    cell: ({ row }) => {
+      const imageUrl = row.getValue<string>('memberImageUrl')
+      return (
+        <Box>
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt="Profile"
+              margin="auto"
+              width="40px"
+              height="40px"
+              borderRadius="50%"
+            />
+          ) : (
+            'No Image'
+          )}
+        </Box>
+      )
+    },
+  },
+  {
+    header: '이름',
+    accessorKey: 'userName',
+  },
+  {
+    header: '가입일',
+    accessorKey: 'joinedAt',
+  },
+  {
+    header: '내보내기',
+    accessorKey: 'isExpel',
+    cell: () => (
+      <Button
+        color="white"
+        bg="orange.500"
+        width="100px"
+        height="35px"
+        margin="5px 0"
+        _hover={{ bg: 'orange' }}
+      >
+        내보내기
+      </Button>
+    ),
+  },
+]
+
+export default function MembersTable({
+  groupId,
+  groupName,
+}: MembersTableProps) {
   const theme = useTheme()
   const borderColor = theme.colors.black[300]
-  const list = useMemo(
-    () => [
-      {
-        id: 1,
-        profile: 'image',
-        name: 'John Doe',
-        createdAt: '2024.09.01',
-        isExpel: '내보내기',
-      },
-      {
-        id: 2,
-        profile: 'image',
-        name: 'Jane Smith',
-        createdAt: '2024.09.01',
-        isExpel: '내보내기',
-      },
-      {
-        id: 3,
-        profile: 'image',
-        name: 'Jane Smith',
-        createdAt: '2024.09.01',
-        isExpel: '내보내기',
-      },
-      {
-        id: 4,
-        profile: 'image',
-        name: 'Jane Smith',
-        createdAt: '2024.09.01',
-        isExpel: '내보내기',
-      },
-      {
-        id: 5,
-        profile: 'image',
-        name: 'Jane Smith',
-        createdAt: '2024.09.01',
-        isExpel: '내보내기',
-      },
-    ],
-    []
+  const [page, setPage] = useState<number>(0)
+
+  const { data, status, isLoading, isError } = useQuery(
+    membersQuries.groupMembers(groupId, page)
   )
 
-  const clms = useMemo<
-    ColumnDef<{
-      id: number
-      profile: string
-      name: string
-      createdAt: string
-      isExpel: string
-    }>[]
-  >(
-    () => [
-      {
-        header: '',
-        accessorKey: 'id',
-      },
-      {
-        header: '프로필',
-        accessorKey: 'profile',
-      },
-      {
-        header: '이름',
-        accessorKey: 'name',
-      },
-      {
-        header: '가입일',
-        accessorKey: 'createdAt',
-      },
-      {
-        header: '내보내기',
-        accessorKey: 'isExpel',
-        cell: ({ cell }) => (
-          <Button
-            color="white"
-            bg="orange.500"
-            width="100px"
-            height="35px"
-            margin="5px 0"
-            _hover={{ bg: 'orange' }}
-          >
-            내보내기
-          </Button>
-        ),
-      },
-    ],
-    []
-  )
+  const members = data?.members
+  const totalPages = data?.totalPages
+  const totalElements = data?.totalElements
+
+  console.log(members, totalPages, totalElements)
 
   const table = useReactTable({
-    data: list,
+    data: members,
     columns: clms,
     getCoreRowModel: getCoreRowModel(),
   })
 
+  if (status === 'pending') return <Loading />
+  if (isLoading) return <Loading />
+  if (isError) return <ErrorPage />
+  if (!members || !totalPages) return '멤버가 없어요!'
+
   return (
-    <Box padding="0 40px">
-      <Box width="full">
-        <Table
-          borderRadius="20px"
-          borderStyle="hidden"
-          boxShadow={`0 0 0 1px ${borderColor}`}
-          bg="white"
-        >
-          <Thead top={0}>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <Tr borderTop="1px solid gray" key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <Th
-                      borderBottom={`1px solid ${borderColor}`}
-                      key={header.id}
-                      colSpan={header.colSpan}
-                      fontSize="large"
-                      textAlign="center"
-                    >
-                      {header.isPlaceholder ? null : (
-                        <Box>
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                        </Box>
-                      )}
-                    </Th>
-                  )
-                })}
-              </Tr>
-            ))}
-          </Thead>
-          <Tbody>
-            {table.getRowModel().rows.map((row) => {
-              return (
-                <Tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => {
+    <Box>
+      <Title groupName={groupName} totalElements={totalElements} />
+      <Box padding="0 40px">
+        <Box width="full">
+          <Table
+            borderRadius="20px"
+            borderStyle="hidden"
+            boxShadow={`0 0 0 1px ${borderColor}`}
+            bg="white"
+          >
+            <Thead top={0}>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <Tr borderTop="1px solid gray" key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
                     return (
-                      <Td
-                        textAlign="center"
+                      <Th
                         borderBottom={`1px solid ${borderColor}`}
-                        padding="0"
-                        key={cell.id}
+                        key={header.id}
+                        colSpan={header.colSpan}
+                        fontSize="large"
+                        textAlign="center"
                       >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
+                        {header.isPlaceholder ? null : (
+                          <Box>
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                          </Box>
                         )}
-                      </Td>
+                      </Th>
                     )
                   })}
                 </Tr>
-              )
-            })}
-          </Tbody>
-        </Table>
+              ))}
+            </Thead>
+            <Tbody>
+              {table.getRowModel().rows.map((row) => {
+                return (
+                  <Tr key={row.id}>
+                    {row.getVisibleCells().map((cell) => {
+                      return (
+                        <Td
+                          textAlign="center"
+                          borderBottom={`1px solid ${borderColor}`}
+                          padding="0"
+                          key={cell.id}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </Td>
+                      )
+                    })}
+                  </Tr>
+                )
+              })}
+            </Tbody>
+          </Table>
+        </Box>
+        <Pagination page={page} totalPages={totalPages} setPage={setPage} />
       </Box>
-      <Pagination />
     </Box>
   )
 }
