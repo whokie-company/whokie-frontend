@@ -34,3 +34,15 @@ export const membersQuries = {
       queryFn: () => getGroupMembers({ groupId, page, size: 5 }),
     }),
 }
+
+export type ExpelMemberRequest = {
+  groupId: number
+  userId: number
+}
+
+export const expelMember = async ({ groupId, userId }: ExpelMemberRequest) => {
+  await authorizationInstance.post('/api/group/expel', {
+    groupId,
+    userId,
+  })
+}
