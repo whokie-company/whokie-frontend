@@ -53,7 +53,7 @@ const router = createBrowserRouter([
             element: <GroupPage />,
           },
           {
-            path: '/group/:groupId/QM',
+            path: '/group/:groupId/management',
             element: <QuestionManagement />,
           },
           {
