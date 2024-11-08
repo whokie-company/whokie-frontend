@@ -1,71 +1,38 @@
-import { BiCog, BiGroup, BiLink, BiPlus } from 'react-icons/bi'
-import { Link, useNavigate } from 'react-router-dom'
+
+import { BiCog, BiGroup, BiPlus } from 'react-icons/bi'
+import { Link } from 'react-router-dom'
 
 import { Box, Flex, Text } from '@chakra-ui/react'
 
-import CardButton from '@/components/CardButton'
+import { CardButton } from '@/components/CardButton'
+import { GroupRole } from '@/types'
 
-const CardData = [
-  {
-    variant: 'orange' as const,
-    orientation: 'vertical' as const,
-    label: '질문 관리',
-    description: '그룹 질문을 관리해보세요',
-    Icon: BiCog,
-  },
-  {
-    variant: 'white' as const,
-    orientation: 'vertical' as const,
-    label: '멤버 관리',
-    description: '그룹 멤버를 관리해보세요',
-    Icon: BiGroup,
-  },
-  {
-    variant: 'white' as const,
-    orientation: 'horizontal' as const,
-    label: '초대하기',
-    description: '새로운 멤버를 초대해보세요',
-    Icon: BiLink,
-  },
-  {
-    variant: 'white' as const,
-    orientation: 'horizontal' as const,
-    label: '질문 추가',
-    description: '그룹 질문을 건의해보세요',
-    Icon: BiPlus,
-  },
-]
+import { InviteMemberModal } from './InviteMemberModal'
 
 interface ManagementProps {
-  role: 'leader' | 'member'
-  groupId: string
+  role: GroupRole
+  groupId: number
+  groupName: string
 }
 
-export default function Management({ role, groupId }: ManagementProps) {
-  const navigate = useNavigate()
-
-  const goToQuestionManagement = () => {
-    navigate(`/group/${groupId}/QM`)
-  }
-
+export default function Management({
+  role,
+  groupId,
+  groupName,
+}: ManagementProps) {
   return (
     <Box p="30px">
       <Flex gap={4} marginTop="10px" marginBottom="16px">
+        <InviteMemberModal groupId={groupId} />
         <CardButton
-          buttonElement={CardData[2]}
-          onClick={() => {
-            /* 초대하기 클릭 시 동작 */
-          }}
-        />
-        <CardButton
-          buttonElement={CardData[3]}
-          onClick={() => {
-            /* 질문 추가 클릭 시 동작 */
-          }}
+          variant="white"
+          orientation="horizontal"
+          label="질문 추가"
+          description="그룹 질문을 건의해보세요"
+          Icon={BiPlus}
         />
       </Flex>
-
-      {role === 'leader' && (
+      {role === 'LEADER' && (
         <Box
           display="flex"
           flexDirection="row"
@@ -91,11 +58,23 @@ export default function Management({ role, groupId }: ManagementProps) {
           </Box>
           <Flex gap={4}>
             <CardButton
-              buttonElement={CardData[0]}
-              onClick={goToQuestionManagement}
-            />{' '}
-            <Link to={`/group/${groupId}/members`}>
-              <CardButton buttonElement={CardData[1]} />
+              variant="orange"
+              orientation="vertical"
+              label="질문 관리"
+              description="그룹 질문을 관리해보세요"
+              Icon={BiCog}
+            />
+            <Link
+              to={`/group/${groupId}/members`}
+              state={{ groupName: `${groupName}` }}
+            >
+              <CardButton
+                variant="white"
+                orientation="vertical"
+                label="멤버 관리"
+                description="그룹 멤버를 관리해보세요"
+                Icon={BiGroup}
+              />
             </Link>
           </Flex>
         </Box>

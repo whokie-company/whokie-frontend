@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { authorizationInstance, fetchInstance } from '@/api/instance'
-import { MyPageItem, Ranks } from '@/types'
+import { MyPageItem, UserRankingItem } from '@/types'
 
 const getMyPage = async (userId: string) => {
   const response = await fetchInstance.get<MyPageItem>(`/api/profile/${userId}`)
@@ -46,8 +46,14 @@ export const uploadProfileBg = async ({ image }: UploadProfileBgRequest) => {
   })
 }
 
+export type MyRankingResponse = {
+  ranks: UserRankingItem[]
+}
+
 const getMyRanking = async (userId: string) => {
-  const response = await fetchInstance.get<Ranks>(`/api/ranking/${userId}`)
+  const response = await fetchInstance.get<MyRankingResponse>(
+    `/api/ranking/${userId}`
+  )
 
   return response.data.ranks
 }

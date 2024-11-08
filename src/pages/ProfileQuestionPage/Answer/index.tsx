@@ -53,8 +53,6 @@ const Answer: React.FC<AnswerProps> = ({ userId, isMyPage }: AnswerProps) => {
     },
   })
 
-  if (!userId) return <ErrorPage />
-
   const {
     data: answers,
     isLoading,
@@ -67,6 +65,8 @@ const Answer: React.FC<AnswerProps> = ({ userId, isMyPage }: AnswerProps) => {
       boxRef.current.scrollTop = boxRef.current.scrollHeight
     }
   }, [answers])
+
+  if (!userId) return <ErrorPage />
 
   if (isLoading) return <Loading />
   if (isError) return <ErrorPage />

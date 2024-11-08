@@ -1,6 +1,6 @@
 export function appendParamsToUrl(
   url: string,
-  params: Record<string, string | number | boolean | string[]>
+  params: Record<string, string | number | boolean | string[] | undefined>
 ) {
   const searchParams = new URLSearchParams()
 
