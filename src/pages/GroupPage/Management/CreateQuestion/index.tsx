@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { BiError, BiPlus } from 'react-icons/bi'
 
 import {
@@ -8,21 +9,53 @@ import {
   Textarea,
   useDisclosure,
 } from '@chakra-ui/react'
+import { useMutation } from '@tanstack/react-query'
 
+import {
+  CreateGroupQuestionPayload,
+  createGroupQuestion,
+} from '@/api/services/question/group.api'
 import { AlertModal } from '@/components/Modal/AlertModal'
 import { FormModal } from '@/components/Modal/FormModal'
 
 interface GroupQuestionCreateModalProps {
   isOpen: boolean
   onClose: () => void
+  groupId: number
 }
 
 export const GroupQuestionCreateModal = ({
   isOpen,
   onClose,
+  groupId,
 }: GroupQuestionCreateModalProps) => {
+  const [questionContent, setQuestionContent] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+
   const errorAlert = useDisclosure()
-  const errorMessage = '질문을 입력해주세요'
+
+  const { mutate: createQuestion } = useMutation({
+    mutationFn: (payload: CreateGroupQuestionPayload) =>
+      createGroupQuestion(payload),
+    onSuccess: () => {
+      onClose()
+      setQuestionContent('')
+    },
+    onError: () => {
+      setErrorMessage('질문 생성에 실패하였습니다')
+      errorAlert.onOpen()
+    },
+  })
+
+  const handleCreateQuestion = () => {
+    if (!questionContent.trim()) {
+      setErrorMessage('질문을 입력해주세요')
+      errorAlert.onOpen()
+      return
+    }
+
+    createQuestion({ groupId, content: questionContent })
+  }
 
   return (
     <Box>
@@ -39,6 +72,7 @@ export const GroupQuestionCreateModal = ({
             height="fit-content"
             paddingY="0.6rem"
             width="full"
+            onClick={handleCreateQuestion}
           >
             요청하기
           </Button>
@@ -51,6 +85,8 @@ export const GroupQuestionCreateModal = ({
             resize="none"
             whiteSpace="nowrap"
             placeholder="100자 이내 입력"
+            value={questionContent}
+            onChange={(e) => setQuestionContent(e.target.value)}
           />
           <Box textAlign="center">
             <Text fontSize="small" textColor="text_description">

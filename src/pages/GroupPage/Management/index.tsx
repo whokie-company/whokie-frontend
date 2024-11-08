@@ -99,7 +99,11 @@ export default function Management({ role, groupId }: ManagementProps) {
         </Box>
       )}
 
-      <GroupQuestionCreateModal isOpen={isOpen} onClose={onClose} />
+      <GroupQuestionCreateModal
+        isOpen={isOpen}
+        onClose={onClose}
+        groupId={parseInt(groupId, 10)}
+      />
     </Box>
   )
 }
