@@ -1,12 +1,13 @@
 import { useParams } from 'react-router-dom'
 
-import { Box } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 
 import { useGroupInfo } from '@/api/services/group/group.api'
 import { Loading } from '@/components/Loading'
 import { RankingGraph } from '@/components/RankingGraph'
 import ErrorPage from '@/pages/ErrorPage'
 
+import { ExitGroupButton } from './ExitGroupButton'
 import Management from './Management'
 import Navigate from './Navigate'
 import Profile from './Profile'
@@ -47,10 +48,6 @@ export default function GroupPage() {
     <div>
       <Navigate />
       <GroupSection groupId={Number(groupId)} />
-      <Box p="0 30px">
-        <RankingGraph rank={dummyRankData} />
-      </Box>
-      {groupId && <Management role={userRole} groupId={Number(groupId)} />}
     </div>
   )
 }
@@ -66,5 +63,17 @@ const GroupSection = ({ groupId }: GroupSectionProps) => {
   if (error) return <ErrorPage />
   if (!groupData) return <ErrorPage />
 
-  return <Profile role={userRole} gprofile={groupData} />
+  return (
+    <Flex flexDirection="column">
+      <Profile role={userRole} gprofile={groupData} />
+      <Box p="0 30px">
+        <RankingGraph rank={dummyRankData} />
+      </Box>
+      {groupId && <Management role={userRole} groupId={Number(groupId)} />}
+      <ExitGroupButton
+        groupName={groupData.groupName}
+        groupId={groupData.groupId}
+      />
+    </Flex>
+  )
 }
