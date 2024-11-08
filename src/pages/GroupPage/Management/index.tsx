@@ -11,9 +11,14 @@ import { InviteMemberModal } from './InviteMemberModal'
 interface ManagementProps {
   role: GroupRole
   groupId: number
+  groupName: string
 }
 
-export default function Management({ role, groupId }: ManagementProps) {
+export default function Management({
+  role,
+  groupId,
+  groupName,
+}: ManagementProps) {
   return (
     <Box p="30px">
       <Flex gap={4} marginTop="10px" marginBottom="16px">
@@ -58,7 +63,10 @@ export default function Management({ role, groupId }: ManagementProps) {
               description="그룹 질문을 관리해보세요"
               Icon={BiCog}
             />
-            <Link to={`/group/${groupId}/members`}>
+            <Link
+              to={`/group/${groupId}/members`}
+              state={{ groupName: `${groupName}` }}
+            >
               <CardButton
                 variant="white"
                 orientation="vertical"

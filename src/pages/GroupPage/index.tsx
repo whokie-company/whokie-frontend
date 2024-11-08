@@ -71,7 +71,13 @@ const GroupSection = ({ groupId }: GroupSectionProps) => {
       <Box p="0 30px">
         <RankingGraph rank={dummyRankData} />
       </Box>
-      {groupId && <Management role={role} groupId={Number(groupId)} />}
+      {groupId && (
+        <Management
+          role={role}
+          groupId={Number(groupId)}
+          groupName={groupData.groupName}
+        />
+      )}
       <ExitGroupButton
         groupName={groupData.groupName}
         groupId={groupData.groupId}
