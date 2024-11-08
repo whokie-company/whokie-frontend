@@ -1,26 +1,11 @@
 import { BiCog, BiGroup, BiLink, BiPlus } from 'react-icons/bi'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Flex, Text, useDisclosure } from '@chakra-ui/react'
 
-import { createGroupQuestion } from '@/api/services/question/group.api'
 import CardButton from '@/components/CardButton'
 
-const Test = async () => {
-  try {
-    const test = {
-      groupId: 13,
-      content: '추가할 질문 내용',
-    }
-
-    const responseMessage = await createGroupQuestion(test)
-    console.log('API 호출 성공:', responseMessage)
-  } catch (error) {
-    console.error('API 호출 실패:', error)
-  }
-}
-
-Test()
+import { GroupQuestionCreateModal } from './CreateQuestion'
 
 const CardData = [
   {
@@ -60,6 +45,7 @@ interface ManagementProps {
 
 export default function Management({ role, groupId }: ManagementProps) {
   const navigate = useNavigate()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const goToQuestionManagement = () => {
     navigate(`/group/${groupId}/QM`)
@@ -74,12 +60,7 @@ export default function Management({ role, groupId }: ManagementProps) {
             /* 초대하기 클릭 시 동작 */
           }}
         />
-        <CardButton
-          buttonElement={CardData[3]}
-          onClick={() => {
-            /* 질문 추가 클릭 시 동작 */
-          }}
-        />
+        <CardButton buttonElement={CardData[3]} onClick={onOpen} />
       </Flex>
 
       {role === 'leader' && (
@@ -110,13 +91,15 @@ export default function Management({ role, groupId }: ManagementProps) {
             <CardButton
               buttonElement={CardData[0]}
               onClick={goToQuestionManagement}
-            />{' '}
+            />
             <Link to={`/group/${groupId}/members`}>
               <CardButton buttonElement={CardData[1]} />
             </Link>
           </Flex>
         </Box>
       )}
+
+      <GroupQuestionCreateModal isOpen={isOpen} onClose={onClose} />
     </Box>
   )
 }
