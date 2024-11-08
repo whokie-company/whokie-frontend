@@ -1,5 +1,7 @@
 import { Flex, Slide } from '@chakra-ui/react'
+import { useQuery } from '@tanstack/react-query'
 
+import { pointQuries } from '@/api/services/user/point.api'
 import { useSelectedAnswerStore } from '@/stores/selected-answer'
 import { Modal } from '@/types'
 
@@ -15,8 +17,10 @@ interface HintDrawerProps {
 
 export const HintDrawer = ({ isOpen, modal }: HintDrawerProps) => {
   const selectedAnswer = useSelectedAnswerStore((state) => state.selectedAnswer)
+  const { data: point } = useQuery(pointQuries.point())
 
   if (!selectedAnswer) return null
+  if (!point) return null
 
   return (
     <Slide
@@ -39,7 +43,7 @@ export const HintDrawer = ({ isOpen, modal }: HintDrawerProps) => {
           paddingY={8}
           paddingX={4}
         >
-          <MyPoint />
+          <MyPoint point={point} />
           <Flex flexDirection="column" alignItems="center">
             <AnswerDetail answer={selectedAnswer} />
             <HintList
@@ -49,7 +53,11 @@ export const HintDrawer = ({ isOpen, modal }: HintDrawerProps) => {
           </Flex>
         </Flex>
       </div>
-      <BuyHintModal modal={modal} answerId={selectedAnswer.answerId} />
+      <BuyHintModal
+        modal={modal}
+        answerId={selectedAnswer.answerId}
+        point={point}
+      />
     </Slide>
   )
 }

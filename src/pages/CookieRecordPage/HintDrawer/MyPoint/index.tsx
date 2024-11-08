@@ -1,15 +1,10 @@
 import { Flex, Tag, Text } from '@chakra-ui/react'
-import { useQuery } from '@tanstack/react-query'
 
-import { pointQuries } from '@/api/services/user/point.api'
+interface MyPointProps {
+  point: number
+}
 
-export const MyPoint = () => {
-  const { data: point, status, error } = useQuery(pointQuries.point())
-
-  if (status === 'pending') return null
-
-  if (error) throw error
-
+export const MyPoint = ({ point }: MyPointProps) => {
   return (
     <Flex justifyContent="end">
       <Tag

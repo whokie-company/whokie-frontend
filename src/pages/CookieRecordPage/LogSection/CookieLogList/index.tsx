@@ -12,6 +12,7 @@ interface CookieLogListProps {
     questionContent,
     createdAt,
     answerId,
+    hintCount,
   }: SelectedAnswer) => void
 }
 
@@ -42,6 +43,7 @@ export const CookieLogList = ({
                     questionContent: cookie.questionContent,
                     createdAt: curDay.createdAt,
                     answerId: cookie.answerId,
+                    hintCount: cookie.hintCount,
                   })
                 }
               />
