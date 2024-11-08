@@ -59,12 +59,6 @@ export type PagingRequestParams = {
   sort?: string[]
 }
 
-export type PaginationRequestParams = {
-  size?: number
-  page?: number
-  sort?: string[]
-}
-
 export type PagingResponse<T> = {
   content: T
   totalElements: number
@@ -106,7 +100,6 @@ export type Member = {
   userId: number
   role: GroupRole
   userName: string
-  memberImageUrl: string
   joinedAt: string
   memberImageUrl?: string
 }

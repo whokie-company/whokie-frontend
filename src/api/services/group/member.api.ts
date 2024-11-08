@@ -6,17 +6,7 @@ import {
 
 import { authorizationInstance } from '@/api/instance'
 import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
-import {
-  GroupRole,
-  Member,
-  PaginationRequestParams,
-  PagingRequestParams,
-  PagingResponse,
-} from '@/types'
-
-type GroupMembersManageRequestParams = {
-  groupId: number
-} & PaginationRequestParams
+import { GroupRole, Member, PagingRequestParams, PagingResponse } from '@/types'
 
 type GroupMembersRequestParams = {
   groupId: number
@@ -28,7 +18,7 @@ type GroupMembersManageResponse = {
   totalElements?: number
 }
 
-const getGroupMembers = async (params: GroupMembersManageRequestParams) => {
+const getGroupMembers = async (params: GroupMembersRequestParams) => {
   const response = await authorizationInstance.get<GroupMembersManageResponse>(
     appendParamsToUrl(`/api/group/${params.groupId}/member`, params)
   )
@@ -45,7 +35,7 @@ export const membersManageQuries = {
   groupMembers: (groupId: number, page?: number) =>
     queryOptions({
       queryKey: [...membersPageQuries.all(), groupId, page],
-      queryFn: () => getGroupMembers({ groupId, page, size: 5 }),
+      queryFn: () => getGroupMembers({ groupId, page: String(page), size: 5 }),
     }),
 }
 
@@ -96,7 +86,7 @@ export const membersPageQuries = {
   groupMembers: (groupId: number, page?: number) =>
     queryOptions({
       queryKey: [...membersPageQuries.all(), groupId, page],
-      queryFn: () => getGroupMembers({ groupId, page, size: 5 }),
+      queryFn: () => getGroupMembers({ groupId, page: String(page), size: 5 }),
     }),
 }
 
