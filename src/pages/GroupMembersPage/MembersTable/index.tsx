@@ -113,8 +113,6 @@ export default function MembersTable({
   const totalPages = data?.totalPages
   const totalElements = data?.totalElements
 
-  console.log(members, totalPages, totalElements)
-
   const table = useReactTable({
     data: members,
     columns: clms,
