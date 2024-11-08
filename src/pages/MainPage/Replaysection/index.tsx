@@ -3,11 +3,13 @@ import { Button, Center, Flex, Heading, Text } from '@chakra-ui/react'
 interface ReplaySectionProps {
   onClickEndButton: () => void
   onClickReplayButton: () => void
+  score: number
 }
 
 export const ReplaySection = ({
   onClickEndButton,
   onClickReplayButton,
+  score,
 }: ReplaySectionProps) => {
   return (
     <Center height="full">
@@ -21,10 +23,10 @@ export const ReplaySection = ({
           Whokie
         </Heading>
         <Text textAlign="center" fontSize="1.2rem" fontWeight="bold">
-          0명 친구에게 칭찬 쿠키를 전달했어요!
+          친구 {score}명에게 칭찬 쿠키를 전달했어요!
         </Text>
         <Heading textAlign="center" paddingTop={4} paddingBottom={16}>
-          🎉 +100 P 🎉
+          🎉 +{score * 5} P 🎉
         </Heading>
         <Flex justifyContent="center" gap={4}>
           <Button

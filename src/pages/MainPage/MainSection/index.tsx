@@ -14,11 +14,16 @@ import ProfileGrid from './ProfileGrid'
 interface MainSectionProps {
   friends: Friend[]
   onFinsihGame: () => void
+  onClickProfile: () => void
 }
 
 const QUESTION_SIZE = 5
 
-export const MainSection = ({ friends, onFinsihGame }: MainSectionProps) => {
+export const MainSection = ({
+  friends,
+  onFinsihGame,
+  onClickProfile,
+}: MainSectionProps) => {
   const { data: questions, refetch } = useRandomQuestion({
     size: QUESTION_SIZE,
   })
@@ -48,6 +53,7 @@ export const MainSection = ({ friends, onFinsihGame }: MainSectionProps) => {
       questionId: questions[questionIndex].questionId,
       pickedId,
     })
+    onClickProfile()
   }
 
   if (questionIndex === QUESTION_SIZE) return <Loading />

@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 
 import { Text } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
@@ -15,6 +15,13 @@ type PlayType = 'READY' | 'REPLAY' | 'PLAY'
 export default function MainPage() {
   const [play, setPlay] = useState<PlayType>('READY')
   const { data: friends, status } = useQuery(friendsQueries.myFriends())
+  const [score, setScore] = useState(0)
+
+  useEffect(() => {
+    if (play === 'PLAY') {
+      setScore(0)
+    }
+  }, [play])
 
   if (status === 'pending') return <Loading />
   if (!friends) return <Text>친구를 초대해보세요!</Text>
@@ -28,13 +35,18 @@ export default function MainPage() {
       <ReplaySection
         onClickEndButton={() => setPlay('READY')}
         onClickReplayButton={() => setPlay('PLAY')}
+        score={score}
       />
     )
   }
 
   return (
     <Suspense fallback={<Loading />}>
-      <MainSection friends={friends} onFinsihGame={() => setPlay('REPLAY')} />
+      <MainSection
+        friends={friends}
+        onFinsihGame={() => setPlay('REPLAY')}
+        onClickProfile={() => setScore(score + 1)}
+      />
     </Suspense>
   )
 }
