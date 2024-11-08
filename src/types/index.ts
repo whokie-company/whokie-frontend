@@ -100,6 +100,7 @@ export type Member = {
   userId: number
   role: 'LEADER' | 'MEMBER'
   userName: string
+  memberImageUrl: string
   joinedAt: string
 }
 
@@ -113,14 +114,17 @@ export type Point = {
 }
 
 export type RankItem = {
+  rank: number
   imageSrc?: string
-  rankingId: number
+  title: string
+  subtitle: string
+  count: number
+}
+
+export type UserRankingItem = {
+  rakingId: number
   question: string
   rank: number
   count: number
   groupName: string
-}
-
-export type Ranks = {
-  ranks: RankItem[]
 }

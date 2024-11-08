@@ -5,6 +5,8 @@ import CreateGroupPage from '@/pages/CreateGroupPage'
 import ErrorPage from '@/pages/ErrorPage'
 import GroupMembersPage from '@/pages/GroupMembersPage'
 import GroupPage from '@/pages/GroupPage'
+import InvitePage from '@/pages/InvitePage'
+import { CardLayout } from '@/pages/Layout/CardLayout'
 import { GroupMemberLayout } from '@/pages/Layout/GroupMemberLayout'
 import { MainLayout } from '@/pages/Layout/MainLayout'
 import { ProfileQuestionLayout } from '@/pages/Layout/ProfileQuestionLayout'
@@ -22,11 +24,10 @@ import { ProtectedRoute } from './ProtectedRoute'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <MainLayout />,
+    element: <ProtectedRoute />,
     children: [
       {
-        path: '/',
-        element: <ProtectedRoute />,
+        element: <MainLayout />,
         children: [
           {
             path: '/',
@@ -66,12 +67,10 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: '/login',
-        element: <LoginPage />,
-      },
-      {
-        path: '/login/redirect',
-        element: <LoginRedirectPage />,
+        element: <GroupMemberLayout />,
+        children: [
+          { path: '/group/:groupId/members', element: <GroupMembersPage /> },
+        ],
       },
     ],
   },
@@ -82,9 +81,25 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <GroupMemberLayout />,
+    element: <CardLayout />,
     children: [
-      { path: '/group/:groupId/members', element: <GroupMembersPage /> },
+      {
+        path: '/invite/:groupId',
+        element: <InvitePage />,
+      },
+    ],
+  },
+  {
+    element: <MainLayout />,
+    children: [
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/login/redirect',
+        element: <LoginRedirectPage />,
+      },
     ],
   },
   {

@@ -49,7 +49,7 @@ export const RankingGraph = ({ rank }: RankingGraphProps) => {
 
           return (
             <VStack
-              key={item.rankingId}
+              key={item.rank}
               align="center"
               height="100%"
               justifyContent="flex-end"
@@ -115,7 +115,7 @@ export const RankingGraph = ({ rank }: RankingGraphProps) => {
               {' '}
               {/* 이미지 높이에 맞춰 텍스트 위아래 정렬 */}
               <Text fontWeight="400" isTruncated width="100%">
-                {item.groupName}
+                {item.title}
               </Text>
               <Text
                 fontSize="sm"
@@ -123,7 +123,7 @@ export const RankingGraph = ({ rank }: RankingGraphProps) => {
                 isTruncated
                 width="100%"
               >
-                {item.question}
+                {item.subtitle}
               </Text>
             </VStack>
           </HStack>
