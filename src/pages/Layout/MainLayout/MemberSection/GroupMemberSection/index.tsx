@@ -22,7 +22,7 @@ export const GroupMemberSection = ({ groupId }: GroupMemberSectionProps) => {
   return (
     <PageLayout.SideSection SectionHeader={<GroupMemberHeader />}>
       <Flex flexDirection="column" width="full" maxHeight="30rem">
-        {members.map((member) => (
+        {members.members.map((member) => (
           <Box key={member.userId} paddingY={1} paddingX={2} width="full">
             <AvatarLabelWithNavigate
               isNavigate
