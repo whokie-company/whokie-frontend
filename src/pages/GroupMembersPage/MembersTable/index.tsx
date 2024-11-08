@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import {
   Box,
-  Button,
   Image,
   Table,
   Tbody,
@@ -39,6 +38,7 @@ type MemberTable = {
   userName: string
   joinedAt: string
   isExpel?: string
+  userId: number
 }
 
 export default function MembersTable({
@@ -101,7 +101,13 @@ export default function MembersTable({
     {
       header: '내보내기',
       accessorKey: 'isExpel',
-      cell: () => <ExpelBtn />,
+      cell: ({ row }) => (
+        <ExpelBtn
+          groupId={groupId}
+          userId={row.original.userId}
+          userName={row.original.userName}
+        />
+      ),
     },
   ]
 
