@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Box, Flex } from '@chakra-ui/react'
 
 import { useGroupInfo } from '@/api/services/group/group.api'
+import { useGroupRole } from '@/api/services/group/member.api'
 import { Loading } from '@/components/Loading'
 import { RankingGraph } from '@/components/RankingGraph'
 import ErrorPage from '@/pages/ErrorPage'
@@ -39,10 +40,10 @@ const dummyRankData = [
   },
 ]
 
-const userRole = 'leader' // "leader" or "member"
-
 export default function GroupPage() {
   const { groupId } = useParams<{ groupId: string }>()
+
+  if (!groupId) return <ErrorPage />
 
   return (
     <div>
@@ -58,21 +59,23 @@ interface GroupSectionProps {
 
 const GroupSection = ({ groupId }: GroupSectionProps) => {
   const { data: groupData, error, status } = useGroupInfo(groupId)
+  const { data: role } = useGroupRole(groupId)
 
   if (status === 'pending') return <Loading />
   if (error) return <ErrorPage />
-  if (!groupData) return <ErrorPage />
+  if (!groupData || !role) return <ErrorPage />
 
   return (
     <Flex flexDirection="column">
-      <Profile role={userRole} gprofile={groupData} />
+      <Profile role={role} gprofile={groupData} />
       <Box p="0 30px">
         <RankingGraph rank={dummyRankData} />
       </Box>
-      {groupId && <Management role={userRole} groupId={Number(groupId)} />}
+      {groupId && <Management role={role} groupId={Number(groupId)} />}
       <ExitGroupButton
         groupName={groupData.groupName}
         groupId={groupData.groupId}
+        role={role}
       />
     </Flex>
   )

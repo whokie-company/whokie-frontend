@@ -10,15 +10,18 @@ import {
   ConfirmModal,
   ConfirmModalButton,
 } from '@/components/Modal/ConfirmModal'
+import { GroupRole } from '@/types'
 
 interface ExitGroupButtonProps {
   groupId: number
   groupName: string
+  role: GroupRole
 }
 
 export const ExitGroupButton = ({
   groupId,
   groupName,
+  role,
 }: ExitGroupButtonProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const navigate = useNavigate()
@@ -41,7 +44,11 @@ export const ExitGroupButton = ({
         onClose={onClose}
         icon={<BiSolidError />}
         title={`정말로 ${groupName} 그룹에서 나가시겠습니까?`}
-        description="그룹에서의 모든 활동은 삭제됩니다."
+        description={
+          role === 'LEADER'
+            ? '그룹장이 그룹을 나가면 그룹이 삭제됩니다.'
+            : '그룹에서의 모든 활동은 삭제됩니다.'
+        }
         confirmButton={
           <ConfirmModalButton
             onClick={() => {
