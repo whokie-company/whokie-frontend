@@ -98,7 +98,7 @@ export type Modal = {
 export type Member = {
   groupMemberId: number
   userId: number
-  role: 'LEADER' | 'MEMBER'
+  role: GroupRole
   userName: string
   memberImageUrl: string
   joinedAt: string
@@ -128,3 +128,5 @@ export type UserRankingItem = {
   count: number
   groupName: string
 }
+
+export type GroupRole = 'MEMBER' | 'LEADER'

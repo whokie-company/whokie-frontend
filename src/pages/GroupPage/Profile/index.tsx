@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 
 import { Avatar, Box, HStack, Input, Text, VStack } from '@chakra-ui/react'
 
-import { Group } from '@/types'
+import { Group, GroupRole } from '@/types'
 
 import { EditProfile } from './EditProfile'
 
 type GroupProps = {
   gprofile: Group
-  role: 'leader' | 'member'
+  role: GroupRole
 }
 
 export default function Profile({ role, gprofile }: GroupProps) {
@@ -70,7 +70,7 @@ export default function Profile({ role, gprofile }: GroupProps) {
                 fontWeight="bold"
                 color="primary"
               >
-                {role === 'leader' ? '그룹장' : '그룹원'}
+                {role === 'LEADER' ? '그룹장' : '그룹원'}
               </Text>
             </HStack>
 
@@ -95,7 +95,7 @@ export default function Profile({ role, gprofile }: GroupProps) {
                   {gprofile.groupDescription}
                 </Text>
               )}
-              {role === 'leader' && (
+              {role === 'LEADER' && (
                 <EditProfile
                   isEditing={isEditing}
                   setIsEditing={(isEdit) => setIsEditing(isEdit)}
