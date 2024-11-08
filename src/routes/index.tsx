@@ -113,6 +113,11 @@ const router = createBrowserRouter([
     ],
   },
   {
+    path: '/',
+    element: <ProfileQuestionLayout />,
+    children: [{ path: '/profile-question', element: <ProfileQuestionPage /> }],
+  },
+  {
     path: '*',
     element: <ErrorPage />,
   },

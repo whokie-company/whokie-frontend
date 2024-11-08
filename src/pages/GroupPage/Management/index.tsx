@@ -4,18 +4,23 @@ import { Link } from 'react-router-dom'
 import { Box, Flex, Text, useDisclosure } from '@chakra-ui/react'
 
 import { CardButton } from '@/components/CardButton'
+import { GroupRole } from '@/types'
 
 import { GroupQuestionCreateModal } from './CreateQuestion'
 import { InviteMemberModal } from './InviteMemberModal'
 
 interface ManagementProps {
-  role: 'leader' | 'member'
+  role: GroupRole
   groupId: number
+  groupName: string
 }
 
-export default function Management({ role, groupId }: ManagementProps) {
+export default function Management({
+  role,
+  groupId,
+  groupName,
+}: ManagementProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
   return (
     <Box p="30px">
       <Flex gap={4} marginTop="10px" marginBottom="16px">
@@ -29,7 +34,7 @@ export default function Management({ role, groupId }: ManagementProps) {
           onClick={onOpen}
         />
       </Flex>
-      {role === 'leader' && (
+      {role === 'LEADER' && (
         <Box
           display="flex"
           flexDirection="row"
@@ -61,7 +66,10 @@ export default function Management({ role, groupId }: ManagementProps) {
               description="그룹 질문을 관리해보세요"
               Icon={BiCog}
             />
-            <Link to={`/group/${groupId}/members`}>
+            <Link
+              to={`/group/${groupId}/members`}
+              state={{ groupName: `${groupName}` }}
+            >
               <CardButton
                 variant="white"
                 orientation="vertical"
