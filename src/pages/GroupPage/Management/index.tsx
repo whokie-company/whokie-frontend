@@ -1,4 +1,5 @@
 import { BiCog, BiGroup, BiPlus } from 'react-icons/bi'
+import { Link } from 'react-router-dom'
 
 import { Box, Flex, Text } from '@chakra-ui/react'
 
@@ -56,13 +57,15 @@ export default function Management({ role, groupId }: ManagementProps) {
               description="그룹 질문을 관리해보세요"
               Icon={BiCog}
             />
-            <CardButton
-              variant="white"
-              orientation="vertical"
-              label="멤버 관리"
-              description="그룹 멤버를 관리해보세요"
-              Icon={BiGroup}
-            />
+            <Link to={`/group/${groupId}/members`}>
+              <CardButton
+                variant="white"
+                orientation="vertical"
+                label="멤버 관리"
+                description="그룹 멤버를 관리해보세요"
+                Icon={BiGroup}
+              />
+            </Link>
           </Flex>
         </Box>
       )}

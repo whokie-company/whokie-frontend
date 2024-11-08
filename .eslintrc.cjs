@@ -61,5 +61,6 @@ module.exports = {
       { variables: false, functions: false, classes: false },
     ],
     'react/jsx-props-no-spreading': 'off',
+    'react/no-unstable-nested-components': 'off',
   },
 }
