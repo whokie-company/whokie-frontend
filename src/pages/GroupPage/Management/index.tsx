@@ -3,7 +3,24 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { Box, Flex, Text } from '@chakra-ui/react'
 
+import { createGroupQuestion } from '@/api/services/question/group.api'
 import CardButton from '@/components/CardButton'
+
+const Test = async () => {
+  try {
+    const test = {
+      groupId: 13,
+      content: '추가할 질문 내용',
+    }
+
+    const responseMessage = await createGroupQuestion(test)
+    console.log('API 호출 성공:', responseMessage)
+  } catch (error) {
+    console.error('API 호출 실패:', error)
+  }
+}
+
+Test()
 
 const CardData = [
   {
