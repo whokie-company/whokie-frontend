@@ -132,9 +132,7 @@ export type UserRankingItem = {
 export type GroupRole = 'MEMBER' | 'LEADER'
 
 export type GroupRankingItem = {
-  rakingId: number
-  description: string
   rank: number
   count: number
-  groupName: string
+  userId: number
 }

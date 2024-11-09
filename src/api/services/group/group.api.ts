@@ -2,7 +2,12 @@ import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
 import { authorizationInstance, fetchInstance } from '@/api/instance'
 import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
-import { Group, PagingRequestParams, PagingResponse } from '@/types'
+import {
+  Group,
+  GroupRankingItem,
+  PagingRequestParams,
+  PagingResponse,
+} from '@/types'
 
 const getGroupInfo = async (groupId: number) => {
   const response = await fetchInstance.get<Group>(`/api/group/info/${groupId}`)
@@ -111,4 +116,19 @@ export const modifyGroup = async ({
   })
 
   return response.data
+}
+
+const getGroupRanking = async (groupId: string) => {
+  const response = await fetchInstance.get<GroupRankingItem>(
+    `/api/ranking/group/${groupId}`
+  )
+
+  return response.data
+}
+
+export const useGroupRanking = (groupId: string) => {
+  return useQuery({
+    queryKey: ['groupRanking', groupId],
+    queryFn: () => getGroupRanking(groupId),
+  })
 }
