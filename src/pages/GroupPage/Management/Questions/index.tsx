@@ -1,5 +1,5 @@
 import { Suspense, useCallback, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
 import { Box, Button, Radio, RadioGroup, Stack, Text } from '@chakra-ui/react'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -9,6 +9,7 @@ import {
   getGroupQuestions,
 } from '@/api/services/group/group.api'
 import { Loading } from '@/components/Loading'
+import ErrorPage from '@/pages/ErrorPage'
 
 import Navigate from '../Navigate'
 
@@ -27,7 +28,10 @@ interface GroupQuestionsResponse {
 }
 
 export default function QuestionManagement() {
+  const location = useLocation()
   const { groupId } = useParams<{ groupId: string }>()
+  const role = location.state?.role
+
   const [status, setStatus] = useState<'READY' | 'APPROVED' | 'REJECTED'>(
     'READY'
   )
@@ -61,6 +65,8 @@ export default function QuestionManagement() {
     },
     [mutate]
   )
+
+  if (!role || role === 'MEMBER') return <ErrorPage />
 
   const statusButtons = (
     <Box mb="20px">

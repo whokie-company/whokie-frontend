@@ -59,13 +59,18 @@ export default function Management({
             </Text>
           </Box>
           <Flex gap={4}>
-            <CardButton
-              variant="orange"
-              orientation="vertical"
-              label="질문 관리"
-              description="그룹 질문을 관리해보세요"
-              Icon={BiCog}
-            />
+            <Link
+              to={`/group/${groupId}/management`}
+              state={{ role: `${role}` }}
+            >
+              <CardButton
+                variant="orange"
+                orientation="vertical"
+                label="질문 관리"
+                description="그룹 질문을 관리해보세요"
+                Icon={BiCog}
+              />
+            </Link>
             <Link
               to={`/group/${groupId}/members`}
               state={{ groupName: `${groupName}`, role: `${role}` }}
