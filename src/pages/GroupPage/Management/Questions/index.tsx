@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react'
+import { Suspense, useCallback, useEffect, useState } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 
 import { Box, Button, Radio, RadioGroup, Stack, Text } from '@chakra-ui/react'
@@ -35,6 +35,7 @@ export default function QuestionManagement() {
   const [status, setStatus] = useState<'READY' | 'APPROVED' | 'REJECTED'>(
     'READY'
   )
+  const [content, setContent] = useState<JSX.Element | null>(null)
 
   const {
     data: groupQuestionsResponse = { content: [] },
@@ -58,9 +59,12 @@ export default function QuestionManagement() {
     },
   })
 
-  const handleStatusChange = (questionId: number, approve: boolean) => {
-    mutate({ questionId, approve })
-  }
+  const handleStatusChange = useCallback(
+    (questionId: number, approve: boolean) => {
+      mutate({ questionId, approve })
+    },
+    [mutate]
+  )
 
   if (!role || role === 'MEMBER') return <ErrorPage />
 
@@ -95,51 +99,48 @@ export default function QuestionManagement() {
     </Box>
   )
 
-  let content
-  if (isLoading) {
-    content = <Loading />
-  } else if (isError) {
-    content = <Text>질문을 불러오는 데 실패했습니다.</Text>
-  } else if (groupQuestionsResponse.content.length > 0) {
-    content = (
-      <Stack spacing="15px">
-        {groupQuestionsResponse.content.map((question: Question) => (
-          <Box
-            key={question.questionId}
-            p="10px"
-            bg="white"
-            borderRadius="8px"
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Text fontSize="16px" flex="1">
-              {question.questionContent}
-            </Text>
-
-            <RadioGroup
-              onChange={(value) => {
-                const approve = value === 'APPROVED'
-                handleStatusChange(question.questionId, approve)
-              }}
-              value={question.status}
+  useEffect(() => {
+    if (isLoading) {
+      setContent(<Loading />)
+    } else if (isError) {
+      setContent(<Text>질문을 불러오는 데 실패했습니다.</Text>)
+    } else if (groupQuestionsResponse.content.length > 0) {
+      setContent(
+        <Stack spacing="15px">
+          {groupQuestionsResponse.content.map((question: Question) => (
+            <Box
+              key={question.questionId}
+              p="10px"
+              bg="white"
+              borderRadius="8px"
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
             >
-              <Stack direction="row">
-                <Radio value="APPROVED" colorScheme="green">
-                  {}
-                </Radio>
-                <Radio value="REJECTED" colorScheme="red">
-                  {}
-                </Radio>
-              </Stack>
-            </RadioGroup>
-          </Box>
-        ))}
-      </Stack>
-    )
-  } else {
-    content = <Text>질문이 없습니다.</Text>
-  }
+              <Text fontSize="16px" flex="1">
+                {question.questionContent}
+              </Text>
+
+              <RadioGroup
+                onChange={(value) => {
+                  const approve = value === 'APPROVED'
+                  handleStatusChange(question.questionId, approve)
+                }}
+                value={question.status}
+              >
+                <Stack direction="row">
+                  <Radio value="APPROVED" colorScheme="green" />
+                  <Radio value="REJECTED" colorScheme="red" />
+                </Stack>
+              </RadioGroup>
+            </Box>
+          ))}
+        </Stack>
+      )
+    } else {
+      setContent(<Text>질문이 없습니다.</Text>)
+    }
+  }, [isLoading, isError, groupQuestionsResponse, handleStatusChange])
 
   return (
     <Suspense fallback={<Loading />}>

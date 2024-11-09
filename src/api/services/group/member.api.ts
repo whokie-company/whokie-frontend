@@ -147,6 +147,33 @@ export const expelMember = async ({ groupId, userId }: ExpelMemberRequest) => {
   })
 }
 
+type GroupMemberListRequestParams = {
+  groupId: number
+}
+
+type GroupMemberListResponse = {
+  members: Member[]
+}
+
+const getGroupMemberList = async ({
+  groupId,
+}: GroupMemberListRequestParams) => {
+  const response = await authorizationInstance.get<GroupMemberListResponse>(
+    `/api/group/${groupId}/member/list`
+  )
+
+  return response.data.members
+}
+
+export const useGroupMemberList = ({
+  groupId,
+}: GroupMemberListRequestParams) => {
+  return useQuery({
+    queryKey: ['group', 'member', 'list', groupId],
+    queryFn: () => getGroupMemberList({ groupId }),
+  })
+}
+
 export type ChangeLeaderRequest = {
   groupId: number
   pastLeaderId: number

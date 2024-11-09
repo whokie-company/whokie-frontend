@@ -29,3 +29,14 @@ export const useGroupQuestion = (groupId: number) => {
     queryFn: () => getGroupQuestion(groupId),
   })
 }
+export type CreateGroupQuestionPayload = {
+  groupId: number
+  content: string
+}
+
+export const createGroupQuestion = async (
+  data: CreateGroupQuestionPayload
+): Promise<string> => {
+  const response = await authorizationInstance.post('/api/group/question', data)
+  return response.data.message
+}

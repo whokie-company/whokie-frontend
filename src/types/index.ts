@@ -129,3 +129,13 @@ export type UserRankingItem = {
 }
 
 export type GroupRole = 'MEMBER' | 'LEADER'
+
+export type MemberTable = {
+  id: number
+  memberImageUrl: string
+  userName: string
+  joinedAt: string
+  isExpel?: string
+  userId: number
+  role: GroupRole
+}

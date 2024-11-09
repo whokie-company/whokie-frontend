@@ -1,49 +1,23 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import {
-  Box,
-  Image,
-  Radio,
-  RadioGroup,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  useTheme,
-} from '@chakra-ui/react'
+import { Box, Image, useTheme } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
+import { ColumnDef } from '@tanstack/react-table'
 
 import { membersManageQuries } from '@/api/services/group/member.api'
 import { Loading } from '@/components/Loading'
 import ErrorPage from '@/pages/ErrorPage'
-import { GroupRole } from '@/types'
+import { Member, MemberTable } from '@/types'
 
 import ExpelBtn from '../ExpelBtn'
 import LeaderChangeBtn from '../LeaderChangeBtn'
 import Pagination from '../Pagination'
 import Title from '../Title'
+import TableComponent from './TableComponent'
 
 type MembersTableProps = {
   groupId: number
   groupName: string
-}
-
-type MemberTable = {
-  id: number
-  memberImageUrl: string
-  userName: string
-  joinedAt: string
-  isExpel?: string
-  userId: number
-  role: GroupRole
 }
 
 export default function MembersTable({
@@ -57,6 +31,7 @@ export default function MembersTable({
   const [selectBtn, setSelectBtn] = useState<number | null>(null)
   const [changeSelectId, setChangeSelectId] = useState<number | null>(null)
   const [changeSelectName, setChangeSelectName] = useState<string>('')
+  const [tableList, setTableList] = useState<MemberTable[]>()
 
   const { data, status, isLoading, isError } = useQuery(
     membersManageQuries.groupMembers(groupId, page)
@@ -66,7 +41,29 @@ export default function MembersTable({
   const totalPages = data?.totalPages
   const totalElements = data?.totalElements
 
-  const clms: ColumnDef<MemberTable>[] = [
+  useEffect(() => {
+    if (members && members.length > 0) {
+      const transformedData = transformMembersToMemberTable(members, page)
+      setTableList(transformedData)
+    }
+  }, [members, page, setTableList])
+
+  const transformMembersToMemberTable = (
+    membersData: Member[],
+    pageData: number
+  ): MemberTable[] => {
+    return membersData.map((member, index) => ({
+      id: index + 1 + pageData * 5,
+      memberImageUrl: member.memberImageUrl || '',
+      userName: member.userName,
+      joinedAt: member.joinedAt,
+      isExpel: '내보내기',
+      userId: member.userId,
+      role: member.role,
+    }))
+  }
+
+  const columns: ColumnDef<MemberTable>[] = [
     {
       header: '',
       accessorKey: 'id',
@@ -121,12 +118,6 @@ export default function MembersTable({
     },
   ]
 
-  let table = useReactTable({
-    data: members,
-    columns: clms,
-    getCoreRowModel: getCoreRowModel(),
-  })
-
   if (status === 'pending') return <Loading />
   if (isLoading) return <Loading />
   if (isError) return <ErrorPage />
@@ -146,89 +137,18 @@ export default function MembersTable({
           changeSelectId={changeSelectId}
           changeSelectName={changeSelectName}
         />
-        <Box width="full">
-          <Table
-            borderRadius="20px"
-            borderStyle="hidden"
-            boxShadow={`0 0 0 1px ${borderColor}`}
-            bg="white"
-          >
-            <Thead top={0} borderBottom={`1px solid ${borderColor}`}>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <Tr borderTop="1px solid gray" key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <Th
-                        borderBottom={`1px solid ${borderColor}`}
-                        key={header.id}
-                        colSpan={header.colSpan}
-                        fontSize="large"
-                        textAlign="center"
-                      >
-                        {header.isPlaceholder ? null : (
-                          <Box>
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                          </Box>
-                        )}
-                      </Th>
-                    )
-                  })}
-                </Tr>
-              ))}
-            </Thead>
-            <Tbody>
-              {table.getRowModel().rows.map((row, idx) => {
-                return (
-                  <Tr key={row.id} position="relative">
-                    {row.getVisibleCells().map((cell) => {
-                      return (
-                        <Td
-                          textAlign="center"
-                          borderBottom={`1px solid ${borderColor}`}
-                          padding="0"
-                          key={cell.id}
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </Td>
-                      )
-                    })}
-                    {leaderChangeBtn && (
-                      <Td padding="0">
-                        <RadioGroup
-                          margin="auto"
-                          marginRight={2}
-                          name="changeLeader"
-                          value={selectBtn !== null ? String(selectBtn) : ''}
-                          onChange={() => {
-                            setSelectBtn(idx)
-                            setChangeSelectId(row.original.userId)
-                            setChangeSelectName(row.original.userName)
-                          }}
-                        >
-                          <Radio
-                            value={String(idx)}
-                            colorScheme="brown"
-                            variant="outline"
-                            sx={{
-                              borderColor: 'brown.400',
-                            }}
-                            isChecked={idx === selectBtn}
-                          />
-                        </RadioGroup>
-                      </Td>
-                    )}
-                  </Tr>
-                )
-              })}
-            </Tbody>
-          </Table>
-        </Box>
+        {members && tableList && (
+          <TableComponent
+            members={tableList}
+            columns={columns}
+            borderColor={borderColor}
+            leaderChangeBtn={leaderChangeBtn}
+            selectBtn={selectBtn}
+            setSelectBtn={setSelectBtn}
+            setChangeSelectId={setChangeSelectId}
+            setChangeSelectName={setChangeSelectName}
+          />
+        )}
         <Pagination page={page} totalPages={totalPages} setPage={setPage} />
       </Box>
     </Box>
