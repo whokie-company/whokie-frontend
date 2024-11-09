@@ -35,7 +35,6 @@ export type QuestionItem = {
 export type Question = {
   questionId: number
   content: string
-  users: Friend[]
 }
 
 export type ProfileAnswerItem = {

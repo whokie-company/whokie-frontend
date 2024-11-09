@@ -17,10 +17,11 @@ import Cookie4 from '@/assets/cookie4.svg'
 const Cookies = [Cookie4, Cookie2, Cookie3, Cookie1]
 
 interface ReadySectionProps {
+  groupName?: string
   onClickPlay: () => void
 }
 
-export const ReadySection = ({ onClickPlay }: ReadySectionProps) => {
+export const ReadySection = ({ groupName, onClickPlay }: ReadySectionProps) => {
   return (
     <Center height="full">
       <Flex flexDirection="column">
@@ -33,7 +34,7 @@ export const ReadySection = ({ onClickPlay }: ReadySectionProps) => {
           Whokie
         </Heading>
         <Text textAlign="center" fontSize="1.2rem" fontWeight="bold">
-          모든 친구에게 칭찬 쿠키 주기
+          {groupName ? `${groupName} 멤버에게` : '모든 친구에게'} 칭찬 쿠키 주기
         </Text>
         <Flex paddingY={10} gap={1}>
           {Array.from({ length: 4 }, (_, index) => (

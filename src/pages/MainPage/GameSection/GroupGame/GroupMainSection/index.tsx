@@ -1,46 +1,75 @@
 import { useEffect, useState } from 'react'
 import { BiChevronsRight, BiGroup } from 'react-icons/bi'
+import { Link } from 'react-router-dom'
 
 import { Button, Flex, Heading, Text } from '@chakra-ui/react'
 
 import { useAnswerRandomQuestion } from '@/api/services/answer/question.api'
-import { useRandomQuestion } from '@/api/services/question/random.api'
+import { useGroupRandomQuestion } from '@/api/services/question/random.api'
 import { Loading } from '@/components/Loading'
 import { useProfileRandom } from '@/hooks/useProfileRandom'
-import { Friend } from '@/types'
+import { Member } from '@/types'
 
 import ProfileGrid from './ProfileGrid'
 
-interface MainSectionProps {
-  friends: Friend[]
+interface GroupMainSectionProps {
+  groupId: number
+  members: Member[]
   onFinsihGame: () => void
   onClickProfile: () => void
 }
 
 const QUESTION_SIZE = 5
 
-export const MainSection = ({
-  friends,
+export const GroupMainSection = ({
+  groupId,
+  members,
   onFinsihGame,
   onClickProfile,
-}: MainSectionProps) => {
-  const { data: questions, refetch } = useRandomQuestion({
-    size: QUESTION_SIZE,
-  })
+}: GroupMainSectionProps) => {
+  const {
+    data: questions,
+    status,
+    refetch,
+  } = useGroupRandomQuestion({ groupId })
   const { mutate: answerQuestion } = useAnswerRandomQuestion()
-  const { pickedProfiles, reloadRandomProfiles } = useProfileRandom(friends)
+  const { pickedProfiles, reloadRandomProfiles } = useProfileRandom(members)
 
+  const [questionSize, setQuestionSize] = useState(QUESTION_SIZE)
   const [questionIndex, setQuestionIndex] = useState(0)
 
   useEffect(() => {
-    if (questionIndex === QUESTION_SIZE) {
+    if (questionIndex === questionSize) {
       onFinsihGame()
       refetch()
     }
-  }, [questionIndex, onFinsihGame, refetch])
+  }, [questionIndex, onFinsihGame, refetch, questionSize])
 
-  if (!questions)
-    return <Heading>질문이 없습니다 관리자에게 문의해주세요</Heading>
+  useEffect(() => {
+    if (questions?.length && questions.length < QUESTION_SIZE) {
+      setQuestionSize(questions.length)
+    }
+  }, [questions])
+
+  if (status === 'pending') return <Loading />
+
+  if (!questions?.length)
+    return (
+      <Flex
+        flexDirection="column"
+        justifyContent="center"
+        textAlign="center"
+        gap={5}
+      >
+        <Heading size="lg">그룹 질문이 없습니다😢</Heading>
+        <Heading size="md">그룹 페이지에서 질문을 추가해보세요!</Heading>
+        <Link to={`/group/${groupId}`}>
+          <Button colorScheme="primary" width="full" height="2.5rem">
+            그룹 페이지로 이동하기
+          </Button>
+        </Link>
+      </Flex>
+    )
 
   const handleQuestionSkip = () => {
     reloadRandomProfiles()
