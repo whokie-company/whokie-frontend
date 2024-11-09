@@ -95,6 +95,7 @@ export default function Profile({
         return
       }
       setFile(selectedFile)
+      console.log(file)
       uploadImage({ image: selectedFile })
     }
   }

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 import { Button, Flex, Heading } from '@chakra-ui/react'
 
-import { useGrupMemberPaging } from '@/api/services/group/member.api'
+import { useGroupMemberList } from '@/api/services/group/member.api'
 import { Loading } from '@/components/Loading'
 
 import { GroupMainSection } from './GroupMainSection'
@@ -18,13 +18,13 @@ export const GroupGame = ({
   handleFinishGame,
   handleClickProfile,
 }: GroupGameProps) => {
-  const { data, status } = useGrupMemberPaging({ groupId })
-
-  const members = data?.pages.flatMap((page) => page.records)
+  const { data: members, status, error } = useGroupMemberList({ groupId })
 
   if (status === 'pending') return <Loading />
 
-  if (!members?.length)
+  if (error) throw error
+
+  if (!members.length)
     return (
       <Flex
         flexDirection="column"

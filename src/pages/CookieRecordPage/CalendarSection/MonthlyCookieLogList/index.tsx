@@ -1,31 +1,31 @@
-import { Flex } from '@chakra-ui/react'
+import { Flex, Text } from '@chakra-ui/react'
+import { format } from 'date-fns'
 
 import { useAnswerRecordPaging } from '@/api/services/answer/record.api'
 import { convertToDailyCookies } from '@/api/utils/answer/convertToDailyCookies'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
-import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
 import {
   SelectedAnswer,
   useSelectedAnswerStore,
 } from '@/stores/selected-answer'
 import { Modal } from '@/types'
 
-import { CookieLogList } from './CookieLogList'
+import { CookieLogList } from '../../LogSection/CookieLogList'
 
-interface LogSectionProps {
+interface MonthlyCookieLogListProps {
   hintDrawer: Modal
+  curMonth: string
 }
 
-export const LogSection = ({ hintDrawer }: LogSectionProps) => {
+export const MonthlyCookieLogList = ({
+  hintDrawer,
+  curMonth,
+}: MonthlyCookieLogListProps) => {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
-    useAnswerRecordPaging({})
+    useAnswerRecordPaging({ size: 20, date: curMonth })
+
   const answerRecords = data?.pages.flatMap((page) => page.records)
 
-  if (!answerRecords.length) {
-    throw new Error(DATA_ERROR_MESSAGES.ANSWER_RECORD_NOT_FOUND)
-  }
-
-  const cookieLogs = convertToDailyCookies(answerRecords)
   const setSelectedAnswer = useSelectedAnswerStore(
     (state) => state.setSelectedAnswer
   )
@@ -35,8 +35,18 @@ export const LogSection = ({ hintDrawer }: LogSectionProps) => {
     setSelectedAnswer(selectedAnswer)
   }
 
+  if (!answerRecords.length) {
+    return (
+      <Text paddingTop={6}>
+        {format(curMonth, 'M')}월 쿠키 기록이 없습니다.
+      </Text>
+    )
+  }
+
+  const cookieLogs = convertToDailyCookies(answerRecords)
+
   return (
-    <Flex flexDirection="column" alignItems="center">
+    <Flex paddingTop={10} flexDirection="column" alignItems="center">
       <CookieLogList
         cookieLogs={cookieLogs}
         onClickCookieLog={onClickCookieLog}
