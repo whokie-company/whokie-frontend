@@ -29,7 +29,6 @@ export const useGroupQuestion = (groupId: number) => {
     queryFn: () => getGroupQuestion(groupId),
   })
 }
-
 export type CreateGroupQuestionPayload = {
   groupId: number
   content: string
