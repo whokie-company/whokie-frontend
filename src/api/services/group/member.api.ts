@@ -1,7 +1,7 @@
 import {
   queryOptions,
-  useQuery,
   useSuspenseInfiniteQuery,
+  useSuspenseQuery,
 } from '@tanstack/react-query'
 
 import { authorizationInstance } from '@/api/instance'
@@ -113,7 +113,7 @@ const getGroupRole = async (groupId: number) => {
 }
 
 export const useGroupRole = (groupId: number) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['group', 'role', groupId],
     queryFn: () => getGroupRole(groupId),
   })
