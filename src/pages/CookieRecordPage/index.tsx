@@ -15,6 +15,7 @@ import {
 import { Loading } from '@/components/Loading'
 
 import { CalendarSection } from './CalendarSection'
+import { CalendarSkeleton } from './CalendarSection/CookieCalendar'
 import { CookieRecordErrorFallback } from './CookieRecordErrorFallback'
 import { CookieRecordHeader } from './CookieRecordHeader'
 import { HintDrawer } from './HintDrawer'
@@ -98,7 +99,13 @@ export default function CookieRecordPage() {
           </TabPanel>
           <TabPanel>
             <ErrorBoundary FallbackComponent={CookieRecordErrorFallback}>
-              <Suspense fallback={<Loading />}>
+              <Suspense
+                fallback={
+                  <Flex justifyContent="center">
+                    <CalendarSkeleton />
+                  </Flex>
+                }
+              >
                 <CalendarSection hintDrawer={hintDrawer} />
               </Suspense>
             </ErrorBoundary>
