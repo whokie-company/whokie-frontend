@@ -1,5 +1,6 @@
 import {
   queryOptions,
+  useInfiniteQuery,
   useQuery,
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query'
@@ -66,13 +67,28 @@ interface GroupRecordPaigngProps extends PagingRequestParams {
   groupId: number
 }
 
-export const useGrupMemberPaging = ({
+export const useGrupMemberPagingSuspense = ({
   size = 10,
   sort,
   initPageToken,
   groupId,
 }: GroupRecordPaigngProps) => {
   return useSuspenseInfiniteQuery({
+    queryKey: ['group', 'member', groupId],
+    queryFn: ({ pageParam = initPageToken }) =>
+      getGrupMemberPaging({ page: pageParam, size, sort, groupId }),
+    initialPageParam: initPageToken,
+    getNextPageParam: (lastPage) => lastPage.nextPageToken,
+  })
+}
+
+export const useGrupMemberPaging = ({
+  size = 10,
+  sort,
+  initPageToken,
+  groupId,
+}: GroupRecordPaigngProps) => {
+  return useInfiniteQuery({
     queryKey: ['group', 'member', groupId],
     queryFn: ({ pageParam = initPageToken }) =>
       getGrupMemberPaging({ page: pageParam, size, sort, groupId }),

@@ -2,7 +2,7 @@ import { BiSolidGroup } from 'react-icons/bi'
 
 import { Box, Flex } from '@chakra-ui/react'
 
-import { useGrupMemberPaging } from '@/api/services/group/member.api'
+import { useGrupMemberPagingSuspense } from '@/api/services/group/member.api'
 import { AvatarLabelWithNavigate } from '@/components/AvatarLabel'
 import { PageLayout } from '@/components/PageLayout'
 import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
@@ -12,7 +12,7 @@ interface GroupMemberSectionProps {
 }
 
 export const GroupMemberSection = ({ groupId }: GroupMemberSectionProps) => {
-  const { data } = useGrupMemberPaging({ groupId })
+  const { data } = useGrupMemberPagingSuspense({ groupId })
   const members = data?.pages.flatMap((page) => page.records)
 
   if (!members) throw Error(DATA_ERROR_MESSAGES.MEMBER_NOT_FOUND)
