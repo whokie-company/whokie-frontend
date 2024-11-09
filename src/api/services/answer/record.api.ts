@@ -1,4 +1,4 @@
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
+import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
 import { authorizationInstance } from '@/api/instance'
 import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
@@ -20,7 +20,9 @@ const getAnswerRecordPaging = async (params: AnswerRecordRequsetParams) => {
   return {
     records: data.content,
     nextPageToken:
-      data.page !== data.totalPages ? (data.page + 1).toString() : undefined,
+      data.page !== data.totalPages - 1
+        ? (data.page + 1).toString()
+        : undefined,
   }
 }
 
@@ -36,10 +38,33 @@ export const useAnswerRecordPaging = ({
   date,
 }: AnswerRecordPagingProps) => {
   return useSuspenseInfiniteQuery({
-    queryKey: ['answer', 'record', initPageToken],
+    queryKey: ['answer', 'record', initPageToken, date],
     queryFn: ({ pageParam = initPageToken }) =>
       getAnswerRecordPaging({ page: pageParam, size, sort, date }),
     initialPageParam: initPageToken,
     getNextPageParam: (lastPage) => lastPage.nextPageToken,
+  })
+}
+
+type AnswerDaysRequestPrams = {
+  date: string
+}
+
+type AnswerDaysResponse = {
+  days: number[]
+}
+
+const getAnswerDays = async ({ date }: AnswerDaysRequestPrams) => {
+  const response = await authorizationInstance.get<AnswerDaysResponse>(
+    appendParamsToUrl('/api/answer/record/days', { date })
+  )
+
+  return response.data.days
+}
+
+export const useAnswerDays = ({ date }: AnswerDaysRequestPrams) => {
+  return useQuery({
+    queryKey: ['answer', 'record', 'days', date],
+    queryFn: () => getAnswerDays({ date }),
   })
 }
