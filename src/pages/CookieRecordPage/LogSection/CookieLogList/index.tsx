@@ -1,9 +1,10 @@
 import { Flex, Heading } from '@chakra-ui/react'
 import { format } from 'date-fns'
 
-import { CookieLogText } from '@/components/CookieLogText'
 import { SelectedAnswer } from '@/stores/selected-answer'
 import { DailyCookie } from '@/types'
+
+import { CookieLogText } from '../../CookieLogText'
 
 interface CookieLogListProps {
   cookieLogs: DailyCookie[]
@@ -11,6 +12,7 @@ interface CookieLogListProps {
     questionContent,
     createdAt,
     answerId,
+    hintCount,
   }: SelectedAnswer) => void
 }
 
@@ -41,6 +43,7 @@ export const CookieLogList = ({
                     questionContent: cookie.questionContent,
                     createdAt: curDay.createdAt,
                     answerId: cookie.answerId,
+                    hintCount: cookie.hintCount,
                   })
                 }
               />

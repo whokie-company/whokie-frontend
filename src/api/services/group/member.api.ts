@@ -173,3 +173,21 @@ export const useGroupMemberList = ({
     queryFn: () => getGroupMemberList({ groupId }),
   })
 }
+
+export type ChangeLeaderRequest = {
+  groupId: number
+  pastLeaderId: number
+  newLeaderId: number
+}
+
+export const changeLeader = async ({
+  groupId,
+  pastLeaderId,
+  newLeaderId,
+}: ChangeLeaderRequest) => {
+  await authorizationInstance.patch('/api/group/leader', {
+    groupId,
+    pastLeaderId,
+    newLeaderId,
+  })
+}

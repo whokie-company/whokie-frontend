@@ -65,7 +65,7 @@ export default function Management({
             />
             <Link
               to={`/group/${groupId}/members`}
-              state={{ groupName: `${groupName}` }}
+              state={{ groupName: `${groupName}`, role: `${role}` }}
             >
               <CardButton
                 variant="white"
