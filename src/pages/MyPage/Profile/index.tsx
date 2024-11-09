@@ -57,7 +57,7 @@ export default function Profile({
       window.location.reload()
     },
     onError: () => {
-      setErrorMessage('이미지 파일은 20MB를 초과할 수 없습니다')
+      setErrorMessage('이미지 파일은 10MB를 초과할 수 없습니다')
       errorAlert.onOpen()
     },
   })
@@ -221,7 +221,7 @@ export default function Profile({
               />
             ) : (
               <Text color="text_secondary" fontSize="md">
-                {profile.description}
+                {profileDescription}
               </Text>
             )}
             {isMyPage && (
@@ -275,7 +275,6 @@ export default function Profile({
         isOpen={successAlert.isOpen}
         onClose={() => {
           successAlert.onClose()
-          window.location.reload()
         }}
         icon={<BiCheckCircle />}
         title="한 줄 소개를 수정하였습니다"
