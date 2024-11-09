@@ -35,7 +35,6 @@ export type QuestionItem = {
 export type Question = {
   questionId: number
   content: string
-  users: Friend[]
 }
 
 export type ProfileAnswerItem = {
@@ -135,4 +134,14 @@ export type GroupRankingItem = {
   rank: number
   count: number
   userId: number
+}
+
+export type MemberTable = {
+  id: number
+  memberImageUrl: string
+  userName: string
+  joinedAt: string
+  isExpel?: string
+  userId: number
+  role: GroupRole
 }

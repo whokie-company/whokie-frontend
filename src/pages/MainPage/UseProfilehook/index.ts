@@ -7,6 +7,7 @@ import { Friend } from '@/types'
 
 const useProfile = () => {
   const { data: all } = useSuspenseQuery(friendsQueries.myFriends())
+
   const [remain, setRemain] = useState<Friend[]>([])
   const [picked, setPicked] = useState<Friend[]>([])
 

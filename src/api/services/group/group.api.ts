@@ -140,3 +140,34 @@ export const useGroupRanking = ({ groupId }: { groupId: number }) => {
     queryFn: () => getGroupRanking(groupId),
   })
 }
+
+export const getGroupQuestions = async (
+  groupId: string,
+  status: 'READY' | 'APPROVED' | 'REJECTED',
+  page: number,
+  size: number
+) => {
+  const response = await authorizationInstance.get(
+    `/api/group/${groupId}/question`,
+    {
+      params: { status, page, size },
+    }
+  )
+  return response.data
+}
+
+export const approveGroupQuestion = async (
+  groupId: string,
+  questionId: number,
+  approve: boolean
+) => {
+  const response = await authorizationInstance.patch(
+    `/api/group/question/status`,
+    {
+      groupId,
+      questionId,
+      status: approve ? 'true' : 'false',
+    }
+  )
+  return response.data
+}
