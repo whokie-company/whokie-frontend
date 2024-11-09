@@ -3,7 +3,12 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import CookieRecordPage from '@/pages/CookieRecordPage'
 import CreateGroupPage from '@/pages/CreateGroupPage'
 import ErrorPage from '@/pages/ErrorPage'
+import GroupMembersPage from '@/pages/GroupMembersPage'
 import GroupPage from '@/pages/GroupPage'
+import QuestionManagement from '@/pages/GroupPage/Management/Questions'
+import InvitePage from '@/pages/InvitePage'
+import { CardLayout } from '@/pages/Layout/CardLayout'
+import { GroupMemberLayout } from '@/pages/Layout/GroupMemberLayout'
 import { MainLayout } from '@/pages/Layout/MainLayout'
 import { ProfileQuestionLayout } from '@/pages/Layout/ProfileQuestionLayout'
 import LoginPage from '@/pages/LoginPage'
@@ -20,11 +25,10 @@ import { ProtectedRoute } from './ProtectedRoute'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <MainLayout />,
+    element: <ProtectedRoute />,
     children: [
       {
-        path: '/',
-        element: <ProtectedRoute />,
+        element: <MainLayout />,
         children: [
           {
             path: '/',
@@ -42,6 +46,10 @@ const router = createBrowserRouter([
           {
             path: '/group/:groupId',
             element: <GroupPage />,
+          },
+          {
+            path: '/group/:groupId/management',
+            element: <QuestionManagement />,
           },
           {
             path: '/group/create',
@@ -63,6 +71,32 @@ const router = createBrowserRouter([
           },
         ],
       },
+      {
+        element: <GroupMemberLayout />,
+        children: [
+          { path: '/group/:groupId/members', element: <GroupMembersPage /> },
+        ],
+      },
+    ],
+  },
+  {
+    path: '/',
+    element: <ProfileQuestionLayout />,
+    children: [{ path: '/profile-question', element: <ProfileQuestionPage /> }],
+  },
+  {
+    path: '/',
+    element: <CardLayout />,
+    children: [
+      {
+        path: '/invite/:groupId',
+        element: <InvitePage />,
+      },
+    ],
+  },
+  {
+    element: <MainLayout />,
+    children: [
       {
         path: '/login',
         element: <LoginPage />,

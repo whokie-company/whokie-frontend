@@ -35,7 +35,6 @@ export type QuestionItem = {
 export type Question = {
   questionId: number
   content: string
-  users: Friend[]
 }
 
 export type ProfileAnswerItem = {
@@ -98,9 +97,10 @@ export type Modal = {
 export type Member = {
   groupMemberId: number
   userId: number
-  role: 'LEADER' | 'MEMBER'
+  role: GroupRole
   userName: string
   joinedAt: string
+  memberImageUrl?: string
 }
 
 export type PointOptions = 'ALL' | 'CHARGED' | 'USED'
@@ -111,3 +111,21 @@ export type Point = {
   option: PointOptions
   createdAt: string
 }
+
+export type RankItem = {
+  rank: number
+  imageSrc?: string
+  title: string
+  subtitle: string
+  count: number
+}
+
+export type UserRankingItem = {
+  rakingId: number
+  question: string
+  rank: number
+  count: number
+  groupName: string
+}
+
+export type GroupRole = 'MEMBER' | 'LEADER'

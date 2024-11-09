@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import {
   Avatar,
   Box,
+  Flex,
   HStack,
   StackProps,
   Text,
@@ -23,6 +24,7 @@ interface AvatarLabelWithNavigateProps extends StackProps {
   isNavigate: true
   tooltipLabel: string
   linkTo: string
+  onClick?: () => void
 }
 
 export const AvatarLabelWithNavigate = ({
@@ -31,6 +33,7 @@ export const AvatarLabelWithNavigate = ({
   isNavigate,
   tooltipLabel,
   linkTo,
+  onClick,
 }: AvatarLabelProps | AvatarLabelWithNavigateProps) => {
   return (
     <HStack gap={1.5}>
@@ -46,7 +49,6 @@ export const AvatarLabelWithNavigate = ({
               rounded="full"
               color="transparent"
               _hover={{ color: 'brown.400' }}
-              marginLeft="-2px"
             >
               <Avatar width={7} height={7} src={avatarSrc} />
             </Box>
@@ -55,7 +57,9 @@ export const AvatarLabelWithNavigate = ({
       ) : (
         <Avatar width={7} height={7} src={avatarSrc} />
       )}
-      <Text>{label}</Text>
+      <Flex onClick={onClick} width="full">
+        <Text>{label}</Text>
+      </Flex>
     </HStack>
   )
 }

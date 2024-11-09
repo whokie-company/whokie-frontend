@@ -16,8 +16,10 @@ import { GroupErrorFallback } from './GroupErrorFallback'
 import { GroupList } from './GroupList'
 
 export const GroupSection = () => {
-  const groupId = useSelectedGroupStore((state) => state.groupId)
-  const setSeletedGroup = useSelectedGroupStore((state) => state.setGroupId)
+  const selectedGroup = useSelectedGroupStore((state) => state.selectedGroup)
+  const setSeletedGroup = useSelectedGroupStore(
+    (state) => state.setSelectedGroup
+  )
   const setMemberType = useMemberTypeStore((state) => state.setMemberType)
   const isLoggedIn = useAuthTokenStore((state) => state.isLoggedIn())
 
@@ -42,7 +44,7 @@ export const GroupSection = () => {
           </Text>
           <Link to="/">
             <ActiveBrownBox
-              isActive={!groupId}
+              isActive={!selectedGroup?.groupId}
               onClick={() => {
                 setSeletedGroup(undefined)
                 setMemberType('FRIEND')
@@ -62,7 +64,7 @@ export const GroupSection = () => {
             </ActiveBrownBox>
           </Link>
         </Flex>
-        <Flex flexDirection="column" width="full">
+        <Flex flexDirection="column" width="full" height="26rem">
           <Text
             fontSize="small"
             color="text_description"
