@@ -35,6 +35,10 @@ const router = createBrowserRouter([
           },
 
           {
+            path: '/:groupId',
+            element: <GroupQuestionPage />,
+          },
+          {
             path: '/mypage/:userId',
             element: <MyPage />,
           },
@@ -46,6 +50,10 @@ const router = createBrowserRouter([
           {
             path: '/group/:groupId',
             element: <GroupPage />,
+          },
+          {
+            path: '/group/:groupId/management',
+            element: <QuestionManagement />,
           },
           {
             path: '/group/create',
