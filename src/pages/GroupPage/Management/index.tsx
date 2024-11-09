@@ -1,11 +1,12 @@
 import { BiCog, BiGroup, BiPlus } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Flex, Text, useDisclosure } from '@chakra-ui/react'
 
 import { CardButton } from '@/components/CardButton'
 import { GroupRole } from '@/types'
 
+import { GroupQuestionCreateModal } from './CreateQuestion'
 import { InviteMemberModal } from './InviteMemberModal'
 
 interface ManagementProps {
@@ -19,6 +20,7 @@ export default function Management({
   groupId,
   groupName,
 }: ManagementProps) {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <Box p="30px">
       <Flex gap={4} marginTop="10px" marginBottom="16px">
@@ -29,6 +31,7 @@ export default function Management({
           label="질문 추가"
           description="그룹 질문을 건의해보세요"
           Icon={BiPlus}
+          onClick={onOpen}
         />
       </Flex>
       {role === 'LEADER' && (
@@ -78,6 +81,12 @@ export default function Management({
           </Flex>
         </Box>
       )}
+
+      <GroupQuestionCreateModal
+        isOpen={isOpen}
+        onClose={onClose}
+        groupId={parseInt(String(groupId), 10)}
+      />
     </Box>
   )
 }

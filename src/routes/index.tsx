@@ -6,6 +6,7 @@ import ErrorPage from '@/pages/ErrorPage'
 import GroupMembersPage from '@/pages/GroupMembersPage'
 import GroupPage from '@/pages/GroupPage'
 import QuestionManagement from '@/pages/GroupPage/Management/Questions'
+import GroupQuestionPage from '@/pages/GroupQuestionPage'
 import InvitePage from '@/pages/InvitePage'
 import { CardLayout } from '@/pages/Layout/CardLayout'
 import { GroupMemberLayout } from '@/pages/Layout/GroupMemberLayout'
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
           {
             path: '/',
             element: <MainPage />,
+          },
+          {
+            path: '/:groupId',
+            element: <GroupQuestionPage />,
           },
           {
             path: '/mypage/:userId',
