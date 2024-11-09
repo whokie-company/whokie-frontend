@@ -1,4 +1,5 @@
 import { BiCheckCircle, BiUserCheck } from 'react-icons/bi'
+import { useNavigate } from 'react-router-dom'
 
 import { Box, Text, useDisclosure } from '@chakra-ui/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -20,6 +21,7 @@ export const SelectFreindHeader = ({
 }: SelectFreindHeaderProps) => {
   const queryClient = useQueryClient()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const navigate = useNavigate()
 
   const setMemberType = useMemberTypeStore((state) => state.setMemberType)
   const friendList = useFriendStore((state) => state.friendList())
@@ -62,6 +64,7 @@ export const SelectFreindHeader = ({
         onClose={() => {
           onClose()
           setMemberType('FRIEND')
+          navigate(0)
         }}
         icon={<BiCheckCircle />}
         title="친구 설정이 완료되었습니다."
