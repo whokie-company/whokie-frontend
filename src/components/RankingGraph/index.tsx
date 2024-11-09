@@ -38,12 +38,12 @@ export const RankingGraph = ({ rank }: RankingGraphProps) => {
     <HStack
       spacing={12}
       align="flex-start"
-      height="200px"
+      height="170px"
       justifyContent="center"
-      marginTop="40px"
+      marginTop="20px"
     >
       {/* 왼쪽 그래프 */}
-      <HStack align="flex-end" spacing={6} height="100%">
+      <HStack align="flex-end" spacing={6} height="80%" marginTop="30px">
         {sortedRank.map((item) => {
           const percentage = (item.count / maxAmount) * 100
 
@@ -111,9 +111,8 @@ export const RankingGraph = ({ rank }: RankingGraphProps) => {
               />
             )}
             {!item.imageSrc && <div style={{ width: '60px' }} />}
-            <VStack align="flex-start" spacing={0} height="60px" width="250px">
+            <VStack align="flex-start" spacing={0} height="50px" width="250px">
               {' '}
-              {/* 이미지 높이에 맞춰 텍스트 위아래 정렬 */}
               <Text fontWeight="400" isTruncated width="100%">
                 {item.title}
               </Text>
