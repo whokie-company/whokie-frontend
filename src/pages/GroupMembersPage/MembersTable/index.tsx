@@ -3,6 +3,8 @@ import { useState } from 'react'
 import {
   Box,
   Image,
+  Radio,
+  RadioGroup,
   Table,
   Tbody,
   Td,
@@ -22,8 +24,10 @@ import {
 import { membersManageQuries } from '@/api/services/group/member.api'
 import { Loading } from '@/components/Loading'
 import ErrorPage from '@/pages/ErrorPage'
+import { GroupRole } from '@/types'
 
 import ExpelBtn from '../ExpelBtn'
+import LeaderChangeBtn from '../LeaderChangeBtn'
 import Pagination from '../Pagination'
 import Title from '../Title'
 
@@ -39,6 +43,7 @@ type MemberTable = {
   joinedAt: string
   isExpel?: string
   userId: number
+  role: GroupRole
 }
 
 export default function MembersTable({
@@ -48,6 +53,10 @@ export default function MembersTable({
   const theme = useTheme()
   const borderColor = theme.colors.black[300]
   const [page, setPage] = useState<number>(0)
+  const [leaderChangeBtn, setLeaderChangeBtn] = useState(false)
+  const [selectBtn, setSelectBtn] = useState<number | null>(null)
+  const [changeSelectId, setChangeSelectId] = useState<number | null>(null)
+  const [changeSelectName, setChangeSelectName] = useState<string>('')
 
   const { data, status, isLoading, isError } = useQuery(
     membersManageQuries.groupMembers(groupId, page)
@@ -106,6 +115,7 @@ export default function MembersTable({
           groupId={groupId}
           userId={row.original.userId}
           userName={row.original.userName}
+          userRole={row.original.role}
         />
       ),
     },
@@ -122,10 +132,20 @@ export default function MembersTable({
   if (isError) return <ErrorPage />
   if (!members || !totalPages) return '멤버가 없어요!'
 
+  const leader = members?.find((member) => member.role === 'LEADER')
+
   return (
     <Box>
       <Title groupName={groupName} totalElements={totalElements} />
       <Box padding="0 40px">
+        <LeaderChangeBtn
+          groupId={groupId}
+          leaderChangeBtn={leaderChangeBtn}
+          setLeaderChangeBtn={setLeaderChangeBtn}
+          leader={{ userId: leader?.userId, userName: leader?.userName }}
+          changeSelectId={changeSelectId}
+          changeSelectName={changeSelectName}
+        />
         <Box width="full">
           <Table
             borderRadius="20px"
@@ -133,7 +153,7 @@ export default function MembersTable({
             boxShadow={`0 0 0 1px ${borderColor}`}
             bg="white"
           >
-            <Thead top={0}>
+            <Thead top={0} borderBottom={`1px solid ${borderColor}`}>
               {table.getHeaderGroups().map((headerGroup) => (
                 <Tr borderTop="1px solid gray" key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
@@ -160,9 +180,9 @@ export default function MembersTable({
               ))}
             </Thead>
             <Tbody>
-              {table.getRowModel().rows.map((row) => {
+              {table.getRowModel().rows.map((row, idx) => {
                 return (
-                  <Tr key={row.id}>
+                  <Tr key={row.id} position="relative">
                     {row.getVisibleCells().map((cell) => {
                       return (
                         <Td
@@ -178,6 +198,31 @@ export default function MembersTable({
                         </Td>
                       )
                     })}
+                    {leaderChangeBtn && (
+                      <Td padding="0">
+                        <RadioGroup
+                          margin="auto"
+                          marginRight={2}
+                          name="changeLeader"
+                          value={selectBtn !== null ? String(selectBtn) : ''}
+                          onChange={() => {
+                            setSelectBtn(idx)
+                            setChangeSelectId(row.original.userId)
+                            setChangeSelectName(row.original.userName)
+                          }}
+                        >
+                          <Radio
+                            value={String(idx)}
+                            colorScheme="brown"
+                            variant="outline"
+                            sx={{
+                              borderColor: 'brown.400',
+                            }}
+                            isChecked={idx === selectBtn}
+                          />
+                        </RadioGroup>
+                      </Td>
+                    )}
                   </Tr>
                 )
               })}
