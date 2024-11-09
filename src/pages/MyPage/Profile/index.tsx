@@ -56,10 +56,7 @@ export default function Profile({
       queryClient.invalidateQueries({ queryKey: ['uploadImage'] })
       window.location.reload()
     },
-    onError: () => {
-      setErrorMessage('이미지 파일은 10MB를 초과할 수 없습니다')
-      errorAlert.onOpen()
-    },
+    onError: () => {},
   })
 
   const { mutate: modifyDescription } = useMutation({
@@ -85,6 +82,7 @@ export default function Profile({
     const selectedFile = event.target.files?.[0]
     if (selectedFile) {
       const validTypes = ['image/jpeg', 'image/jpg', 'image/png']
+      const maxFileSize = 10 * 1024 * 1024
       if (!validTypes.includes(selectedFile.type)) {
         toast({
           title: 'Only JPEG, JPG, or PNG files are allowed.',
@@ -92,6 +90,11 @@ export default function Profile({
           duration: 3000,
           isClosable: true,
         })
+        return
+      }
+      if (selectedFile.size > maxFileSize) {
+        setErrorMessage('이미지 파일은 10MB를 초과할 수 없습니다')
+        errorAlert.onOpen()
         return
       }
       setFile(selectedFile)
