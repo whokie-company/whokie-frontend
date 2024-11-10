@@ -145,3 +145,11 @@ export type MemberTable = {
   userId: number
   role: GroupRole
 }
+
+export type AdminQuestion = {
+  questionId: number
+  questionContent: string
+  groupId: number
+  status: string
+  createdAt: string
+}
