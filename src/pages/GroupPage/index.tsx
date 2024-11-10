@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
-import { Box, Button, Card, Flex, Heading, Image, Text } from '@chakra-ui/react'
+import { Box, Button, Card, Flex, Image, Text } from '@chakra-ui/react'
 
 import { useGroupInfo, useGroupRanking } from '@/api/services/group/group.api'
 import { useGroupRole } from '@/api/services/group/member.api'

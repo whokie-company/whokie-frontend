@@ -37,6 +37,8 @@ export const ExitGroupButton = ({
     },
   })
 
+  const { membersLength } = useMembersLengthStore.getState()
+
   const isGroupEmpty = () => {
     if (role === 'LEADER' && membersLength) {
       errorAlert.onOpen()
@@ -44,8 +46,6 @@ export const ExitGroupButton = ({
       exitGroup()
     }
   }
-
-  const membersLength = useMembersLengthStore((state) => state.membersLength)
 
   return (
     <Flex justifyContent="end" paddingX={8} paddingBottom={5}>

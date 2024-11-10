@@ -10,7 +10,6 @@ export type Group = {
   groupName: string
   groupdImageUrl: string
   groupDescription: string
-  groupMemberCount: number
 }
 
 export type ChatItem = {
