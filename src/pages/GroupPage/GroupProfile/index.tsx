@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { BiCheck, BiEditAlt } from 'react-icons/bi'
 
-import { Avatar, Center, Flex, Text } from '@chakra-ui/react'
+import { Avatar, Center, Flex, Text, useDisclosure } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
@@ -16,6 +16,7 @@ import { ModifyGroupFields, ModifyGroupSchema } from '@/schema/group'
 import { colors } from '@/styles/colors'
 import { Group, GroupRole } from '@/types'
 
+import { ModifySuccessModal } from './ModifySuccessModal'
 import { GroupFormField } from './ProfileFormField'
 
 interface GroupProfileProps {
@@ -35,6 +36,7 @@ export const GroupProfile = ({ group, role }: GroupProfileProps) => {
   })
 
   const [isEdit, setIsEdit] = useState(false)
+  const successModal = useDisclosure()
 
   const { mutate } = useMutation({
     mutationFn: (groupFields: ModifyGroupRequestBody) =>
@@ -42,6 +44,7 @@ export const GroupProfile = ({ group, role }: GroupProfileProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['group', group.groupId] })
       queryClient.invalidateQueries({ queryKey: ['groups'] })
+      successModal.onOpen()
     },
   })
 
@@ -141,6 +144,9 @@ export const GroupProfile = ({ group, role }: GroupProfileProps) => {
           </Flex>
         </form>
       </Form>
+      {successModal.isOpen && (
+        <ModifySuccessModal successModal={successModal} />
+      )}
     </Flex>
   )
 }
