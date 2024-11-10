@@ -97,17 +97,17 @@ export default function TableComponent({
                   name="changeLeader"
                   value={selectBtn !== null ? String(selectBtn) : ''}
                   onChange={() => {
-                    setSelectBtn(idx)
+                    setSelectBtn(row.original.id)
                     setChangeSelectId(row.original.userId)
                     setChangeSelectName(row.original.userName)
                   }}
                 >
                   <Radio
-                    value={String(idx)}
+                    value={String(row.original.id)}
                     colorScheme="brown"
                     variant="outline"
                     sx={{ borderColor: 'brown.400' }}
-                    isChecked={idx === selectBtn}
+                    isChecked={row.original.id === selectBtn}
                   />
                 </RadioGroup>
               </Td>
