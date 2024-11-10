@@ -14,13 +14,18 @@ export const PointModal = () => {
   const authToken = useAuthTokenStore((state) => state.authToken)
 
   const purchasePoint = () => {
-    fetch(appendParamsToUrl('/api/point/purchase', { point: 100 }), {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${authToken}`,
-      },
-    })
+    fetch(
+      appendParamsToUrl(`${import.meta.env.VITE_BASE_URL}/api/point/purchase`, {
+        point: 100,
+      }),
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    )
   }
 
   return (
