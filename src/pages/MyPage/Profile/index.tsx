@@ -21,18 +21,19 @@ import {
   uploadProfileBg,
 } from '@/api/services/profile/my-page.api'
 import { AlertModal } from '@/components/Modal/AlertModal'
+import { PointButton } from '@/components/PointButton'
 import { MyPageItem } from '@/types'
 
 type ProfileProps = {
   profile: MyPageItem
-  pointAmount?: number | null
+  pointAmount?: number
   isMyPage: boolean
   userId: number
 }
 
 export default function Profile({
   profile,
-  pointAmount = null,
+  pointAmount,
   isMyPage,
   userId,
 }: ProfileProps) {
@@ -163,37 +164,7 @@ export default function Profile({
           <Text fontSize="xl" fontWeight="400">
             {profile.name}
           </Text>
-          {isMyPage && (
-            <Button
-              color="primary_background"
-              bg="#ea780c"
-              display="flex"
-              flexDirection="row"
-              fontSize="xs"
-              alignItems="center"
-              padding="4px 7px"
-              borderRadius="20px"
-              minHeight="5px"
-              height="auto"
-              _hover={{ bg: 'orange.600', boxShadow: 'md' }}
-            >
-              <Text
-                width="13px"
-                height="13px"
-                textAlign="center"
-                lineHeight="1.05"
-                borderRadius="20px"
-                border="1px solid white"
-                marginRight="3px"
-              >
-                P
-              </Text>
-              <Text fontWeight="bold" marginRight="6px">
-                포인트
-              </Text>
-              <Text>{pointAmount}</Text>
-            </Button>
-          )}
+          {pointAmount !== undefined && <PointButton point={pointAmount} />}
         </Box>
         <Box
           display="flex"
