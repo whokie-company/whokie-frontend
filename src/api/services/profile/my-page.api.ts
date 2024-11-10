@@ -16,24 +16,6 @@ export const useMyPage = (userId: string) => {
   })
 }
 
-type PointResponse = {
-  amount: number
-}
-
-const getMyPoint = async () => {
-  const response =
-    await authorizationInstance.get<PointResponse>(`/api/user/point`)
-
-  return response.data
-}
-
-export const useGetMyPoint = () => {
-  return useQuery({
-    queryKey: ['myPagePoint'],
-    queryFn: () => getMyPoint(),
-  })
-}
-
 type UploadProfileBgRequest = {
   image: File
 }
