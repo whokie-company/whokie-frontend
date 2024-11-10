@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from '@chakra-ui/react'
+import { Box, Button, Flex, Stack, Text } from '@chakra-ui/react'
 
 interface StatusButtonsProps {
   status: 'READY' | 'APPROVED' | 'REJECTED'
@@ -34,6 +34,16 @@ export const StatusButtons = ({ status, setStatus }: StatusButtonsProps) => {
           거절됨
         </Button>
       </Stack>
+      <Flex justifyContent="end">
+        <Text
+          fontSize="14px"
+          fontWeight="medium"
+          paddingRight="5px"
+          color="text_description"
+        >
+          승인 거절
+        </Text>
+      </Flex>
     </Box>
   )
 }
