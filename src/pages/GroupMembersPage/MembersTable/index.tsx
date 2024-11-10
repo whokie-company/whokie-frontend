@@ -4,7 +4,11 @@ import { Box, Image, useTheme } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 
-import { membersManageQuries } from '@/api/services/group/member.api'
+import { useGroupInfo } from '@/api/services/group/group.api'
+import {
+  membersManageQuries,
+  useGroupRole,
+} from '@/api/services/group/member.api'
 import { useMyPage } from '@/api/services/profile/my-page.api'
 import { Loading } from '@/components/Loading'
 import ErrorPage from '@/pages/ErrorPage'
@@ -18,15 +22,10 @@ import TableComponent from './TableComponent'
 
 type MembersTableProps = {
   groupId: number
-  groupName: string
   myUserId: number
 }
 
-export default function MembersTable({
-  groupId,
-  groupName,
-  myUserId,
-}: MembersTableProps) {
+export default function MembersTable({ groupId, myUserId }: MembersTableProps) {
   const theme = useTheme()
   const borderColor = theme.colors.black[300]
   const [page, setPage] = useState<number>(0)
@@ -38,16 +37,19 @@ export default function MembersTable({
 
   const {
     data: profile,
-    isLoading: isProfileLoading,
+    status: profileStatus,
     isError: isProfileError,
   } = useMyPage(myUserId.toString())
 
   const {
     data: memberList,
-    status,
-    isLoading: isMemberLoading,
+    status: memberStatus,
     isError: isMemberError,
   } = useQuery(membersManageQuries.groupMembers(groupId, page))
+
+  const { data: role } = useGroupRole(groupId)
+  const { data: groupData } = useGroupInfo(groupId)
+
   const members = memberList?.members
   const totalPages = memberList?.totalPages
   const totalElements = memberList?.totalElements
@@ -74,9 +76,10 @@ export default function MembersTable({
     }))
   }
 
-  if (isProfileLoading || isMemberLoading || status === 'pending') <Loading />
-  if (isProfileError || isMemberError) <ErrorPage />
-  if (!profile) return <ErrorPage />
+  if (memberStatus === 'pending' || profileStatus === 'pending')
+    return <Loading />
+  if (isProfileError || isMemberError) return <ErrorPage />
+  if (!profile || !groupData || role === 'MEMBER') return <ErrorPage />
   if (!members || !totalPages) return '멤버가 없어요!'
 
   const userName = profile.name
@@ -138,7 +141,7 @@ export default function MembersTable({
 
   return (
     <Box>
-      <Title groupName={groupName} totalElements={totalElements} />
+      <Title groupName={groupData.groupName} totalElements={totalElements} />
       <Box padding="0 40px">
         <LeaderChangeBtn
           groupId={groupId}
