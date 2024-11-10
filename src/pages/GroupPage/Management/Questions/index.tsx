@@ -5,8 +5,10 @@ import { Box, Text } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 
 import { approveGroupQuestion } from '@/api/services/group/group.api'
+import { useGroupRole } from '@/api/services/group/member.api'
 import { useGroupQuestion } from '@/api/services/question/group.api'
 import { Loading } from '@/components/Loading'
+import ErrorPage from '@/pages/ErrorPage'
 
 import Navigate from '../Navigate'
 import { QuestionList } from './QuestionList'
@@ -27,6 +29,7 @@ export const QuestionManagement = () => {
     groupId: groupId || '',
     status,
   })
+  const { data: role } = useGroupRole(Number(groupId))
 
   const { mutate } = useMutation({
     mutationFn: (data: { questionId: number; approve: boolean }) => {
@@ -44,6 +47,8 @@ export const QuestionManagement = () => {
     },
     [mutate]
   )
+
+  if (!groupId || role === 'MEMBER') return <ErrorPage />
 
   return (
     <Suspense fallback={<Loading />}>
