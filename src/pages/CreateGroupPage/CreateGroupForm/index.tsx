@@ -9,7 +9,7 @@ import {
   FormField,
   FormItem,
 } from '@/components/Form'
-import { CreateGroupFields } from '@/schema/create-group'
+import { CreateGroupFields } from '@/schema/group'
 
 interface CreateGroupFormProps {
   form: UseFormReturn<CreateGroupFields>

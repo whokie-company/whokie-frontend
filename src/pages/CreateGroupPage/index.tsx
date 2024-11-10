@@ -14,7 +14,7 @@ import {
 } from '@/api/services/group/group.api'
 import cookies from '@/assets/cookies.svg'
 import { AlertModal } from '@/components/Modal/AlertModal'
-import { CreateGroupFields, CreateGroupSchema } from '@/schema/create-group'
+import { CreateGroupFields, CreateGroupSchema } from '@/schema/group'
 import { Group } from '@/types'
 
 import { CreateGroupForm } from './CreateGroupForm'

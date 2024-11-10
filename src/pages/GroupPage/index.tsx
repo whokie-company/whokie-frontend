@@ -13,9 +13,9 @@ import ErrorPage from '@/pages/ErrorPage'
 import { colors } from '@/styles/colors'
 
 import { ExitGroupButton } from './ExitGroupButton'
+import { GroupProfile } from './GroupProfile'
 import Management from './Management'
 import Navigate from './Navigate'
-import Profile from './Profile'
 import { useRankingData } from './Ranking'
 
 export default function GroupPage() {
@@ -52,7 +52,7 @@ const GroupSection = ({ groupId }: GroupSectionProps) => {
 
   return (
     <Flex flexDirection="column">
-      <Profile role={role} gprofile={groupData} />
+      <GroupProfile group={groupData} role={role} />
       <Flex justifyContent="center" paddingY={3}>
         <Card
           width="full"
