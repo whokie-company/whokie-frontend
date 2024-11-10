@@ -7,6 +7,7 @@ import {
   HStack,
   Image,
   Text,
+  Tooltip,
   VStack,
   useTheme,
 } from '@chakra-ui/react'
@@ -55,42 +56,51 @@ export const RankingGraph = ({ rank }: RankingGraphProps) => {
               justifyContent="flex-end"
               position="relative"
             >
-              <Box
-                width="44px"
-                height={`${percentage}%`}
-                minHeight="75px"
-                bg="orange.200"
-                transition="height 0.3s ease-in-out"
-                borderRadius="md"
-                position="relative"
+              <Tooltip
+                hasArrow
+                label={item.count}
+                placement="top"
+                bg="brown.600"
+                fontWeight={600}
+                marginBottom={7}
               >
-                <Center position="relative" width="44px" height="44px">
-                  {item.imageSrc && (
-                    <Image
-                      src={`${item.imageSrc}`}
-                      boxSize="40px"
-                      objectFit="cover"
-                      borderRadius="full"
+                <Box
+                  width="44px"
+                  height={`${percentage}%`}
+                  minHeight="75px"
+                  bg="orange.200"
+                  transition="height 0.3s ease-in-out"
+                  borderRadius="md"
+                  position="relative"
+                >
+                  <Center position="relative" width="44px" height="44px">
+                    {item.imageSrc && (
+                      <Image
+                        src={`${item.imageSrc}`}
+                        boxSize="40px"
+                        objectFit="cover"
+                        borderRadius="full"
+                        position="absolute"
+                        top="-27px"
+                        left="50%"
+                        transform="translateX(-50%)"
+                        bg="white"
+                        padding="5px"
+                        border={`1px solid ${borderColor}`}
+                      />
+                    )}
+                    <Box
+                      as={rankIcons[item.rank as 1 | 2 | 3]}
+                      width="30px"
+                      height="30px"
                       position="absolute"
-                      top="-27px"
+                      top={item.imageSrc ? '30px' : '10px'}
                       left="50%"
                       transform="translateX(-50%)"
-                      bg="white"
-                      padding="5px"
-                      border={`1px solid ${borderColor}`}
                     />
-                  )}
-                  <Box
-                    as={rankIcons[item.rank as 1 | 2 | 3]}
-                    width="30px"
-                    height="30px"
-                    position="absolute"
-                    top={item.imageSrc ? '30px' : '10px'}
-                    left="50%"
-                    transform="translateX(-50%)"
-                  />
-                </Center>
-              </Box>
+                  </Center>
+                </Box>
+              </Tooltip>
             </VStack>
           )
         })}
