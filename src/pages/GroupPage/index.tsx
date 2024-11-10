@@ -1,14 +1,16 @@
 import { Suspense } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
-import { Box, Flex, Image, Text } from '@chakra-ui/react'
+import { Box, Button, Card, Flex, Heading, Image, Text } from '@chakra-ui/react'
 
 import { useGroupInfo, useGroupRanking } from '@/api/services/group/group.api'
 import { useGroupRole } from '@/api/services/group/member.api'
 import sadCookie from '@/assets/sadCookie.svg'
+import { Cookies } from '@/components/Cookies'
 import { Loading } from '@/components/Loading'
 import { RankingGraph } from '@/components/RankingGraph'
 import ErrorPage from '@/pages/ErrorPage'
+import { colors } from '@/styles/colors'
 
 import { ExitGroupButton } from './ExitGroupButton'
 import Management from './Management'
@@ -51,6 +53,37 @@ const GroupSection = ({ groupId }: GroupSectionProps) => {
   return (
     <Flex flexDirection="column">
       <Profile role={role} gprofile={groupData} />
+      <Flex justifyContent="center" paddingY={3}>
+        <Card
+          width="full"
+          marginX="23px"
+          paddingY={4}
+          borderRadius={10}
+          shadow="none"
+          border={`2.5px solid ${colors.brown[500]}`}
+        >
+          <Flex flexDirection="column" alignItems="center" paddingY={2} gap={4}>
+            <Cookies width={16} />
+            <Link to="/">
+              <Button
+                colorScheme="secondary"
+                background="brown.500"
+                fontSize="1rem"
+              >
+                {groupData.groupName} 멤버에게 쿠키 주기
+              </Button>
+            </Link>
+          </Flex>
+        </Card>
+      </Flex>
+      <Flex flexDirection="column" paddingTop={6} paddingX="30px">
+        <Text fontWeight="bold" color="text">
+          👑 쿠키 랭킹
+        </Text>
+        <Text fontSize="sm" color="text_secondary">
+          가장 많이 쿠키를 주고 받은 사람 Top3
+        </Text>
+      </Flex>
       {rankLength ? (
         <Flex justifyContent="center" textAlign="center" margin="50px auto">
           <Image src={sadCookie} />
@@ -68,7 +101,7 @@ const GroupSection = ({ groupId }: GroupSectionProps) => {
           </Box>
         </Flex>
       ) : (
-        <Box p="0 30px">
+        <Box padding="0 30px">
           <RankingGraph rank={rankingData} />
         </Box>
       )}
