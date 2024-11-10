@@ -96,7 +96,7 @@ export const GroupMainSection = ({
     onClickProfile()
   }
 
-  if (questionIndex === QUESTION_SIZE) return <Loading />
+  if (questionIndex === questionSize) return <Loading />
 
   return (
     <Flex
