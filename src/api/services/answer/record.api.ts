@@ -8,6 +8,7 @@ type AnswerRecordPagingResponse = PagingResponse<AnswerRecord[]>
 
 type AnswerRecordRequsetParams = {
   date?: string
+  direction?: 'ASC' | 'DESC'
 } & PagingRequestParams
 
 const getAnswerRecordPaging = async (params: AnswerRecordRequsetParams) => {
@@ -29,6 +30,7 @@ const getAnswerRecordPaging = async (params: AnswerRecordRequsetParams) => {
 interface AnswerRecordPagingProps extends PagingRequestParams {
   initPageToken?: string
   date?: string
+  direction?: 'ASC' | 'DESC'
 }
 
 export const useAnswerRecordPaging = ({
@@ -36,11 +38,12 @@ export const useAnswerRecordPaging = ({
   sort,
   initPageToken,
   date,
+  direction = 'ASC',
 }: AnswerRecordPagingProps) => {
   return useSuspenseInfiniteQuery({
     queryKey: ['answer', 'record', initPageToken, date],
     queryFn: ({ pageParam = initPageToken }) =>
-      getAnswerRecordPaging({ page: pageParam, size, sort, date }),
+      getAnswerRecordPaging({ page: pageParam, size, sort, date, direction }),
     initialPageParam: initPageToken,
     getNextPageParam: (lastPage) => lastPage.nextPageToken,
   })

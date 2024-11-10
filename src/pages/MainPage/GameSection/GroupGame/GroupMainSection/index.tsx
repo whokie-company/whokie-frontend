@@ -3,9 +3,15 @@ import { BiChevronsRight, BiGroup } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 
 import { Button, Flex, Heading, Text } from '@chakra-ui/react'
+import { useMutation } from '@tanstack/react-query'
 
-import { useAnswerRandomQuestion } from '@/api/services/answer/question.api'
+import { queryClient } from '@/api/instance'
+import {
+  AnswerQuestionParam,
+  answerRandomQuestion,
+} from '@/api/services/answer/question.api'
 import { useGroupRandomQuestion } from '@/api/services/question/random.api'
+import { pointQuries } from '@/api/services/user/point.api'
 import { Loading } from '@/components/Loading'
 import { useProfileRandom } from '@/hooks/useProfileRandom'
 import { Member } from '@/types'
@@ -32,7 +38,12 @@ export const GroupMainSection = ({
     status,
     refetch,
   } = useGroupRandomQuestion({ groupId })
-  const { mutate: answerQuestion } = useAnswerRandomQuestion()
+  const { mutate: answerQuestion } = useMutation({
+    mutationFn: (params: AnswerQuestionParam) => answerRandomQuestion(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: pointQuries.all() })
+    },
+  })
   const { pickedProfiles, reloadRandomProfiles } = useProfileRandom(members)
 
   const [questionSize, setQuestionSize] = useState(QUESTION_SIZE)
