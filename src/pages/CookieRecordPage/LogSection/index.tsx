@@ -18,7 +18,7 @@ interface LogSectionProps {
 
 export const LogSection = ({ hintDrawer }: LogSectionProps) => {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
-    useAnswerRecordPaging({})
+    useAnswerRecordPaging({ direction: 'DESC' })
   const answerRecords = data?.pages.flatMap((page) => page.records)
 
   if (!answerRecords.length) {
