@@ -2,35 +2,32 @@ import { BiCheckCircle } from 'react-icons/bi'
 
 import { Button, useDisclosure } from '@chakra-ui/react'
 
-import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
+import { usePurchasePoint } from '@/api/services/point/purchase.api'
 import {
   ConfirmModal,
   ConfirmModalButton,
 } from '@/components/Modal/ConfirmModal'
-import { useAuthTokenStore } from '@/stores/auth-token'
 
 export const PointModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const authToken = useAuthTokenStore((state) => state.authToken)
+  const { data: redirectUrl, refetch: purchasePoint } = usePurchasePoint({
+    point: 100,
+  })
 
-  const purchasePoint = () => {
-    fetch(
-      appendParamsToUrl(`${import.meta.env.VITE_BASE_URL}/api/point/purchase`, {
-        point: 100,
-      }),
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    )
+  const handleRedirectPurchase = () => {
+    window.location.href = `${redirectUrl}`
   }
 
   return (
     <div>
-      <Button colorScheme="primary" borderRadius={10} onClick={onOpen}>
+      <Button
+        colorScheme="primary"
+        borderRadius={10}
+        onClick={() => {
+          onOpen()
+          purchasePoint()
+        }}
+      >
         + 100P
       </Button>
       <ConfirmModal
@@ -43,8 +40,9 @@ export const PointModal = () => {
           <ConfirmModalButton
             onClick={() => {
               onClose()
-              purchasePoint()
+              handleRedirectPurchase()
             }}
+            isDisabled={!redirectUrl}
           >
             확인
           </ConfirmModalButton>
