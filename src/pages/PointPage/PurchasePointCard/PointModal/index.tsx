@@ -7,24 +7,16 @@ import {
   ConfirmModal,
   ConfirmModalButton,
 } from '@/components/Modal/ConfirmModal'
-import { useAuthTokenStore } from '@/stores/auth-token'
 
 export const PointModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const authToken = useAuthTokenStore((state) => state.authToken)
+
+  const redirectURL = import.meta.env.DEV ? import.meta.env.VITE_LOGIN_URL : ''
 
   const purchasePoint = () => {
-    fetch(
-      appendParamsToUrl(`${import.meta.env.VITE_BASE_URL}/api/point/purchase`, {
-        point: 100,
-      }),
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
+    window.location.href = appendParamsToUrl(
+      `${redirectURL}/api/point/purchase`,
+      { point: 100 }
     )
   }
 
