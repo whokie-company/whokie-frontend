@@ -15,6 +15,7 @@ import {
 import cookies from '@/assets/cookies.svg'
 import { AlertModal } from '@/components/Modal/AlertModal'
 import { CreateGroupFields, CreateGroupSchema } from '@/schema/create-group'
+import { Group } from '@/types'
 
 import { CreateGroupForm } from './CreateGroupForm'
 
@@ -29,6 +30,7 @@ export default function CreateGroupPage() {
   })
 
   const [errorMessage, setErrorMessage] = useState('')
+  const [createGroupId, setCreateGroupId] = useState<number>()
   const errorAlert = useDisclosure()
   const successAlert = useDisclosure()
 
@@ -37,8 +39,9 @@ export default function CreateGroupPage() {
   const { mutate } = useMutation({
     mutationFn: ({ groupName, groupDescription }: CreateGroupRequestBody) =>
       createGroup({ groupName, groupDescription }),
-    onSuccess: () => {
+    onSuccess: ({ groupId }: Group) => {
       successAlert.onOpen()
+      setCreateGroupId(groupId)
       queryClient.invalidateQueries({ queryKey: ['groups'] })
     },
   })
@@ -74,7 +77,7 @@ export default function CreateGroupPage() {
         isOpen={successAlert.isOpen}
         onClose={() => {
           successAlert.onClose()
-          navigate('/')
+          navigate(`/group/${createGroupId}`)
         }}
         icon={<BiCheckCircle />}
         title={`${form.getValues('groupName')} 그룹을 생성했습니다!`}
