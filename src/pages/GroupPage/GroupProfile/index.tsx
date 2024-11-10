@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { BiCheck, BiEditAlt } from 'react-icons/bi'
 
@@ -58,6 +58,15 @@ export const GroupProfile = ({ group, role }: GroupProfileProps) => {
 
     handleModifyProfile()
   }
+
+  useEffect(() => {
+    form.reset({
+      groupId: group.groupId,
+      groupName: group.groupName,
+      description: group.groupDescription,
+    })
+    setIsEdit(false)
+  }, [group, form])
 
   return (
     <Flex
