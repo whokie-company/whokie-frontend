@@ -2,7 +2,7 @@ import { BiCircle, BiSolidCheckCircle } from 'react-icons/bi'
 
 import { Box, Flex } from '@chakra-ui/react'
 
-import { AvatarLabelWithNavigate } from '@/components/AvatarLabelWithNavigate'
+import { AvatarLabel } from '@/components/AvatarLabel'
 import { useFriendStore } from '@/stores/friends'
 import { Friend } from '@/types'
 
@@ -23,10 +23,7 @@ export const MemberList = ({ members, isFriend }: MemberListProps) => {
           justifyContent="space-between"
           paddingY={1.5}
         >
-          <AvatarLabelWithNavigate
-            avatarSrc={member.imageUrl}
-            label={member.name}
-          />
+          <AvatarLabel avatarSrc={member.imageUrl} label={member.name} />
           {isFriend ? (
             <Box
               _hover={{ color: 'black.800', cursor: 'pointer' }}
