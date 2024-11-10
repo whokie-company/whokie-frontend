@@ -39,7 +39,7 @@ export default function MyPage() {
   return (
     <div>
       <Navigate />
-      {isMyPage && point ? (
+      {isMyPage && point !== undefined ? (
         <Profile
           profile={profile}
           pointAmount={point}

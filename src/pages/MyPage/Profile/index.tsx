@@ -164,7 +164,7 @@ export default function Profile({
           <Text fontSize="xl" fontWeight="400">
             {profile.name}
           </Text>
-          {pointAmount && <PointButton point={pointAmount} />}
+          {pointAmount !== undefined && <PointButton point={pointAmount} />}
         </Box>
         <Box
           display="flex"
