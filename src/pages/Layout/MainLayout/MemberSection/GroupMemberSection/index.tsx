@@ -3,7 +3,7 @@ import { BiSolidGroup } from 'react-icons/bi'
 import { Box, Flex } from '@chakra-ui/react'
 
 import { useGrupMemberPagingSuspense } from '@/api/services/group/member.api'
-import { AvatarLabelWithNavigate } from '@/components/AvatarLabel'
+import { AvatarLabelWithNavigate } from '@/components/AvatarLabelWithNavigate'
 import { PageLayout } from '@/components/PageLayout'
 import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
 
@@ -21,13 +21,17 @@ export const GroupMemberSection = ({ groupId }: GroupMemberSectionProps) => {
     <PageLayout.SideSection SectionHeader={<GroupMemberHeader />}>
       <Flex flexDirection="column" width="full" maxHeight="30rem">
         {members.map((member) => (
-          <Box key={member.userId} paddingY={1} paddingX={2} width="full">
+          <Box
+            key={member.userId}
+            paddingY={1}
+            paddingX={2}
+            width="full"
+            _hover={{ cursor: 'pointer', background: 'brown.50' }}
+          >
             <AvatarLabelWithNavigate
-              isNavigate
               avatarSrc={member.memberImageUrl}
               label={member.userName}
               linkTo={`/mypage/${member.userId}`}
-              tooltipLabel={`${member.userName} 페이지`}
             />
           </Box>
         ))}
