@@ -77,7 +77,7 @@ export default function TableComponent({
         ))}
       </Thead>
       <Tbody>
-        {table.getRowModel().rows.map((row, idx) => (
+        {table.getRowModel().rows.map((row) => (
           <Tr key={row.id} position="relative">
             {row.getVisibleCells().map((cell) => (
               <Td
