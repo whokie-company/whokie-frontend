@@ -156,3 +156,21 @@ export const approveGroupQuestion = async (
   )
   return response.data
 }
+
+export type ModifyGroupImgRequestBody = {
+  image: string
+}
+
+export const modifyGroupImg = async (
+  groupId: number,
+  { image }: ModifyGroupImgRequestBody
+) => {
+  const response = await authorizationInstance.patch(
+    `/api/group/modify/${groupId}`,
+    {
+      image,
+    }
+  )
+
+  return response.data
+}
