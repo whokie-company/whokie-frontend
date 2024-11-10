@@ -26,6 +26,13 @@ export const useGroupInfo = (groupId: number) => {
   })
 }
 
+export const useGroupInfoSuspense = (groupId: number) => {
+  return useSuspenseQuery({
+    queryKey: ['group', groupId],
+    queryFn: () => getGroupInfo(groupId),
+  })
+}
+
 type GroupResponse = PagingResponse<Omit<Group, 'groupDescription'>[]>
 
 const getGroupPaging = async (params: PagingRequestParams) => {
