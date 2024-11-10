@@ -1,5 +1,7 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
+import Admin from '@/pages/Admin'
+import GetQuestionAdminPage from '@/pages/Admin/GetQuestionAdminPage'
 import CookieRecordPage from '@/pages/CookieRecordPage'
 import CreateGroupPage from '@/pages/CreateGroupPage'
 import ErrorPage from '@/pages/ErrorPage'
@@ -96,6 +98,14 @@ const router = createBrowserRouter([
       {
         path: '/invite/:groupId',
         element: <InvitePage />,
+      },
+      {
+        path: '/admin/main',
+        element: <Admin />,
+      },
+      {
+        path: '/admin/get/questions',
+        element: <GetQuestionAdminPage />,
       },
     ],
   },
