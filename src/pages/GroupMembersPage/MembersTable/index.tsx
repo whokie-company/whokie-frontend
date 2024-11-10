@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { membersManageQuries } from '@/api/services/group/member.api'
+import { useMyPage } from '@/api/services/profile/my-page.api'
 import { Loading } from '@/components/Loading'
 import ErrorPage from '@/pages/ErrorPage'
 import { Member, MemberTable } from '@/types'
@@ -17,11 +18,13 @@ import TableComponent from './TableComponent'
 
 type MembersTableProps = {
   groupId: number
+  myUserId: number
   groupName: string
 }
 
 export default function MembersTable({
   groupId,
+  myUserId,
   groupName,
 }: MembersTableProps) {
   const theme = useTheme()
@@ -33,13 +36,21 @@ export default function MembersTable({
   const [changeSelectName, setChangeSelectName] = useState<string>('')
   const [tableList, setTableList] = useState<MemberTable[]>()
 
-  const { data, status, isLoading, isError } = useQuery(
-    membersManageQuries.groupMembers(groupId, page)
-  )
+  const {
+    data: profile,
+    status: profileStatus,
+    isError: isProfileError,
+  } = useMyPage(myUserId.toString())
 
-  const members = data?.members
-  const totalPages = data?.totalPages
-  const totalElements = data?.totalElements
+  const {
+    data: memberList,
+    status: memberStatus,
+    isError: isMemberError,
+  } = useQuery(membersManageQuries.groupMembers(groupId, page))
+
+  const members = memberList?.members
+  const totalPages = memberList?.totalPages
+  const totalElements = memberList?.totalElements
 
   useEffect(() => {
     if (members && members.length > 0) {
@@ -62,6 +73,14 @@ export default function MembersTable({
       role: member.role,
     }))
   }
+
+  if (memberStatus === 'pending' || profileStatus === 'pending')
+    return <Loading />
+  if (isProfileError || isMemberError) return <ErrorPage />
+  if (!profile) return <ErrorPage />
+  if (!members || !totalPages) return '멤버가 없어요!'
+
+  const userName = profile.name
 
   const columns: ColumnDef<MemberTable>[] = [
     {
@@ -118,13 +137,6 @@ export default function MembersTable({
     },
   ]
 
-  if (status === 'pending') return <Loading />
-  if (isLoading) return <Loading />
-  if (isError) return <ErrorPage />
-  if (!members || !totalPages) return '멤버가 없어요!'
-
-  const leader = members?.find((member) => member.role === 'LEADER')
-
   return (
     <Box>
       <Title groupName={groupName} totalElements={totalElements} />
@@ -133,7 +145,7 @@ export default function MembersTable({
           groupId={groupId}
           leaderChangeBtn={leaderChangeBtn}
           setLeaderChangeBtn={setLeaderChangeBtn}
-          leader={{ userId: leader?.userId, userName: leader?.userName }}
+          leader={{ userId: myUserId, userName }}
           changeSelectId={changeSelectId}
           changeSelectName={changeSelectName}
         />

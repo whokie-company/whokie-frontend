@@ -8,15 +8,14 @@ import { queryClient } from '@/api/instance'
 import { changeLeader } from '@/api/services/group/member.api'
 import { AlertModal } from '@/components/Modal/AlertModal'
 import { ConfirmModal } from '@/components/Modal/ConfirmModal'
-import ErrorPage from '@/pages/ErrorPage'
 
 type LeaderChangeBtnProps = {
   groupId: number
   leaderChangeBtn: boolean
   setLeaderChangeBtn: (leaderChangeBtn: boolean) => void
   leader: {
-    userId: number | undefined
-    userName: string | undefined
+    userId: number
+    userName: string
   }
   changeSelectId: number | null
   changeSelectName: string
@@ -36,11 +35,7 @@ export default function LeaderChangeBtn({
 
   const { mutate: patchChangeLeader } = useMutation({
     mutationFn: () => {
-      if (
-        groupId === undefined ||
-        leader.userId === undefined ||
-        changeSelectId === null
-      ) {
+      if (groupId === undefined || changeSelectId === null) {
         throw new Error('잘못된 접근입니다.')
       }
       return changeLeader({
@@ -58,9 +53,6 @@ export default function LeaderChangeBtn({
       errorAlert.onOpen()
     },
   })
-
-  if (leader.userId === undefined || leader.userName === undefined)
-    <ErrorPage />
 
   const onClickChangeBtn = () => {
     if (changeSelectId === null) {

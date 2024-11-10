@@ -37,6 +37,7 @@ const getGroupPaging = async (params: PagingRequestParams) => {
     groups: data.content,
     nextPageToken:
       data.page !== data.totalPages ? (data.page + 1).toString() : undefined,
+    groupSize: data.size,
   }
 }
 

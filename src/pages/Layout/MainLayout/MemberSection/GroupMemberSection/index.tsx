@@ -6,6 +6,7 @@ import { useGrupMemberPagingSuspense } from '@/api/services/group/member.api'
 import { AvatarLabelWithNavigate } from '@/components/AvatarLabel'
 import { PageLayout } from '@/components/PageLayout'
 import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
+import { useMembersLengthStore } from '@/stores/members-length'
 
 interface GroupMemberSectionProps {
   groupId: number
@@ -14,6 +15,13 @@ interface GroupMemberSectionProps {
 export const GroupMemberSection = ({ groupId }: GroupMemberSectionProps) => {
   const { data } = useGrupMemberPagingSuspense({ groupId })
   const members = data?.pages.flatMap((page) => page.records)
+  const membersLength = (data?.pages[0]?.records?.length ?? 0) - 1
+
+  const setMembersLength = useMembersLengthStore(
+    (state) => state.setMembersLength
+  )
+
+  setMembersLength(membersLength)
 
   if (!members) throw Error(DATA_ERROR_MESSAGES.MEMBER_NOT_FOUND)
 

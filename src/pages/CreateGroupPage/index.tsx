@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { BiCheckCircle, BiError } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 
-import { Flex, useDisclosure } from '@chakra-ui/react'
+import { Flex, Image, useDisclosure } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
@@ -12,6 +12,7 @@ import {
   CreateGroupRequestBody,
   createGroup,
 } from '@/api/services/group/group.api'
+import cookies from '@/assets/cookies.svg'
 import { AlertModal } from '@/components/Modal/AlertModal'
 import { CreateGroupFields, CreateGroupSchema } from '@/schema/create-group'
 
@@ -60,6 +61,7 @@ export default function CreateGroupPage() {
       justifyContent="center"
       height="full"
     >
+      <Image src={cookies} marginBottom={18} width="200px" />
       <CreateGroupForm form={form} onClickSumbitButton={onClickSumbitButton} />
       <AlertModal
         isOpen={errorAlert.isOpen}
