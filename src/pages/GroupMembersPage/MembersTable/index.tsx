@@ -4,11 +4,7 @@ import { Box, Image, useTheme } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 
-import { useGroupInfo } from '@/api/services/group/group.api'
-import {
-  membersManageQuries,
-  useGroupRole,
-} from '@/api/services/group/member.api'
+import { membersManageQuries } from '@/api/services/group/member.api'
 import { useMyPage } from '@/api/services/profile/my-page.api'
 import { Loading } from '@/components/Loading'
 import ErrorPage from '@/pages/ErrorPage'
@@ -23,9 +19,14 @@ import TableComponent from './TableComponent'
 type MembersTableProps = {
   groupId: number
   myUserId: number
+  groupName: string
 }
 
-export default function MembersTable({ groupId, myUserId }: MembersTableProps) {
+export default function MembersTable({
+  groupId,
+  myUserId,
+  groupName,
+}: MembersTableProps) {
   const theme = useTheme()
   const borderColor = theme.colors.black[300]
   const [page, setPage] = useState<number>(0)
@@ -46,9 +47,6 @@ export default function MembersTable({ groupId, myUserId }: MembersTableProps) {
     status: memberStatus,
     isError: isMemberError,
   } = useQuery(membersManageQuries.groupMembers(groupId, page))
-
-  const { data: role } = useGroupRole(groupId)
-  const { data: groupData } = useGroupInfo(groupId)
 
   const members = memberList?.members
   const totalPages = memberList?.totalPages
@@ -79,7 +77,7 @@ export default function MembersTable({ groupId, myUserId }: MembersTableProps) {
   if (memberStatus === 'pending' || profileStatus === 'pending')
     return <Loading />
   if (isProfileError || isMemberError) return <ErrorPage />
-  if (!profile || !groupData || role === 'MEMBER') return <ErrorPage />
+  if (!profile) return <ErrorPage />
   if (!members || !totalPages) return '멤버가 없어요!'
 
   const userName = profile.name
@@ -141,7 +139,7 @@ export default function MembersTable({ groupId, myUserId }: MembersTableProps) {
 
   return (
     <Box>
-      <Title groupName={groupData.groupName} totalElements={totalElements} />
+      <Title groupName={groupName} totalElements={totalElements} />
       <Box padding="0 40px">
         <LeaderChangeBtn
           groupId={groupId}
