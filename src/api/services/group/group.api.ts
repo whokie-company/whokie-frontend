@@ -168,13 +168,14 @@ export const approveGroupQuestion = async (
 }
 
 export type ModifyGroupImgRequestBody = {
+  groupId: number
   image: File
 }
 
-export const modifyGroupImg = async (
-  groupId: number,
-  { image }: ModifyGroupImgRequestBody
-) => {
+export const modifyGroupImg = async ({
+  groupId,
+  image,
+}: ModifyGroupImgRequestBody) => {
   const formData = new FormData()
   formData.append('image', image)
   const response = await authorizationInstance.patch(

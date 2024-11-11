@@ -36,3 +36,12 @@ export const CreateQuestionSchema = z.object({
 })
 
 export type CreateQuestionFields = z.infer<typeof CreateQuestionSchema>
+
+export const ModifyGroupImageSchema = z.object({
+  groupId: z.number(),
+  image: z.instanceof(File).refine((f) => f.size < 5000000, {
+    message: '이미지 파일 크기는 5MB 이하만 가능합니다.',
+  }),
+})
+
+export type ModifyGroupImageFields = z.infer<typeof ModifyGroupImageSchema>

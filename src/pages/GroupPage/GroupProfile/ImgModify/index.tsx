@@ -1,10 +1,19 @@
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { BiError } from 'react-icons/bi'
 
-import { Box, Input, useToast } from '@chakra-ui/react'
+import { Box, Input, useDisclosure } from '@chakra-ui/react'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
 import { queryClient } from '@/api/instance'
-import { modifyGroupImg } from '@/api/services/group/group.api'
+import {
+  ModifyGroupImgRequestBody,
+  modifyGroupImg,
+} from '@/api/services/group/group.api'
+import { Form, FormControl, FormField, FormItem } from '@/components/Form'
+import { AlertModal } from '@/components/Modal/AlertModal'
+import { ModifyGroupImageFields, ModifyGroupImageSchema } from '@/schema/group'
 import { Group, GroupRole } from '@/types'
 
 type ImgModifyProps = {
@@ -13,58 +22,57 @@ type ImgModifyProps = {
 }
 
 export default function ImgModify({ role, gprofile }: ImgModifyProps) {
-  const [file, setFile] = useState<File | null>(null)
-  const toast = useToast()
-
-  const { mutate: uploadImage } = useMutation({
-    mutationFn: (data: { image: File }) =>
-      modifyGroupImg(gprofile.groupId, data),
-    onSuccess: () => {
-      queryClient.refetchQueries({
-        queryKey: ['groupPage', gprofile.groupId],
-      })
-      queryClient.invalidateQueries({ queryKey: ['group', gprofile.groupId] })
+  const form = useForm<ModifyGroupImageFields>({
+    resolver: zodResolver(ModifyGroupImageSchema),
+    mode: 'onSubmit',
+    defaultValues: {
+      groupId: gprofile.groupId,
+      image: new File([], ''),
     },
-    onError: () => {},
   })
 
-  useEffect(() => {
-    if (file && role === 'LEADER') {
-      uploadImage({ image: file })
-    }
-  }, [file, uploadImage, role])
+  const [errorMessage, setErrorMessage] = useState('')
+  const errorModal = useDisclosure()
 
-  const openFilePicker = () => {
-    if (role === 'LEADER') {
-      document.getElementById('fileInput')?.click()
+  const { mutate: uploadImage } = useMutation({
+    mutationFn: (data: ModifyGroupImgRequestBody) => modifyGroupImg(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['group', gprofile.groupId] })
+    },
+  })
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null
+
+    if (file) {
+      form.setValue('image', file)
+      form.handleSubmit(
+        () => {
+          uploadImage(form.getValues())
+        },
+        (errors) => {
+          const errorMessages =
+            Object.values(errors).flatMap((error) => error.message)[0] || ''
+
+          setErrorMessage(errorMessages)
+          errorModal.onOpen()
+        }
+      )()
     }
   }
 
-  const onChangeFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0]
-    if (selectedFile) {
-      const validTypes = ['image/jpeg', 'image/jpg', 'image/png']
-      const maxFileSize = 10 * 1024 * 1024
-      if (!validTypes.includes(selectedFile.type)) {
-        toast({
-          title: 'Only JPEG, JPG, or PNG files are allowed.',
-          status: 'warning',
-          duration: 3000,
-          isClosable: true,
-        })
-        return
-      }
-      if (selectedFile.size > maxFileSize) {
-        toast({
-          title: '이미지 파일은 10MB를 초과할 수 없습니다',
-          status: 'warning',
-          duration: 3000,
-          isClosable: true,
-        })
-        return
-      }
-      setFile(selectedFile)
-    }
+  if (role === 'MEMBER') {
+    return (
+      <Box
+        width="70px"
+        height="70px"
+        sx={{ border: '0.8px solid', borderColor: 'black.300' }}
+        backgroundImage={`url('${gprofile.groupImageUrl}')`}
+        backgroundSize="cover"
+        backgroundPosition="center"
+        borderRadius="100%"
+      />
+    )
   }
 
   return (
@@ -72,20 +80,42 @@ export default function ImgModify({ role, gprofile }: ImgModifyProps) {
       width="70px"
       height="70px"
       sx={{ border: '0.8px solid', borderColor: 'black.300' }}
-      _hover={role === 'LEADER' ? { opacity: 0.5 } : { opacity: 1 }}
-      cursor={role === 'LEADER' ? 'pointer' : 'default'}
-      onClick={openFilePicker}
+      _hover={{ opacity: 0.5 }}
+      cursor="pointer"
+      onClick={() => document.getElementById('fileInput')?.click()}
       backgroundImage={`url('${gprofile.groupImageUrl}')`}
       backgroundSize="cover"
       backgroundPosition="center"
       borderRadius="100%"
     >
-      <Input
-        type="file"
-        id="fileInput"
-        style={{ display: 'none' }}
-        accept="image/*"
-        onChange={onChangeFile}
+      <Form {...form}>
+        <form>
+          <FormField
+            control={form.control}
+            name="image"
+            render={() => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    type="file"
+                    id="fileInput"
+                    accept=".jpg, .jpeg, .png"
+                    display="none"
+                    multiple={false}
+                    onChange={handleFileChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
+      <AlertModal
+        isOpen={errorModal.isOpen}
+        onClose={errorModal.onClose}
+        icon={<BiError />}
+        title={errorMessage}
+        description=""
       />
     </Box>
   )
