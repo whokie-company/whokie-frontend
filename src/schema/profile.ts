@@ -18,3 +18,15 @@ export const ModifyBackgroundImageSchema = z.object({
 export type ModifyBackgroundImageField = z.infer<
   typeof ModifyBackgroundImageSchema
 >
+
+export const AnswerProfileQuestionSchema = z.object({
+  content: z
+    .string()
+    .min(1, { message: '답변을 입력해주세요' })
+    .max(50, { message: '답변은 50자이내로 입력해주세요' }),
+  profileQuestionId: z.number(),
+})
+
+export type AnswerProfileQuestionField = z.infer<
+  typeof AnswerProfileQuestionSchema
+>
