@@ -26,3 +26,13 @@ export const ModifyGroupSchema = z.object({
 })
 
 export type ModifyGroupFields = z.infer<typeof ModifyGroupSchema>
+
+export const CreateQuestionSchema = z.object({
+  groupId: z.number(),
+  content: z
+    .string()
+    .min(1, { message: '질문 내용을 입력해주세요' })
+    .max(25, { message: '질문을 25자 이내로 작성해주세요' }),
+})
+
+export type CreateQuestionFields = z.infer<typeof CreateQuestionSchema>

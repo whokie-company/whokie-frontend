@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { BiError, BiPlus } from 'react-icons/bi'
 
-import { Box, Flex, Text, Textarea, useDisclosure } from '@chakra-ui/react'
+import { Box, Flex, useDisclosure } from '@chakra-ui/react'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
 import {
@@ -10,6 +12,9 @@ import {
 } from '@/api/services/question/group.api'
 import { AlertModal } from '@/components/Modal/AlertModal'
 import { FormConfirmModalButton, FormModal } from '@/components/Modal/FormModal'
+import { CreateQuestionFields, CreateQuestionSchema } from '@/schema/group'
+
+import { CreateQuestionForm } from './CreateQuestionForm'
 
 interface GroupQuestionCreateModalProps {
   isOpen: boolean
@@ -22,17 +27,23 @@ export const GroupQuestionCreateModal = ({
   onClose,
   groupId,
 }: GroupQuestionCreateModalProps) => {
-  const [questionContent, setQuestionContent] = useState('')
+  const errorAlert = useDisclosure()
   const [errorMessage, setErrorMessage] = useState('')
 
-  const errorAlert = useDisclosure()
+  const form = useForm<CreateQuestionFields>({
+    resolver: zodResolver(CreateQuestionSchema),
+    mode: 'onChange',
+    defaultValues: {
+      groupId,
+      content: '',
+    },
+  })
 
   const { mutate: createQuestion } = useMutation({
     mutationFn: (payload: CreateGroupQuestionPayload) =>
       createGroupQuestion(payload),
     onSuccess: () => {
       onClose()
-      setQuestionContent('')
     },
     onError: () => {
       setErrorMessage('질문 생성에 실패하였습니다')
@@ -41,16 +52,12 @@ export const GroupQuestionCreateModal = ({
     },
   })
 
-  const handleCreateQuestion = () => {
-    if (!questionContent) {
-      setErrorMessage('질문을 입력해주세요')
-      onClose()
-      errorAlert.onOpen()
-      return
-    }
-
-    createQuestion({ groupId, content: questionContent })
-  }
+  useEffect(() => {
+    form.reset({
+      groupId,
+      content: '',
+    })
+  }, [groupId, form])
 
   return (
     <Box>
@@ -61,26 +68,17 @@ export const GroupQuestionCreateModal = ({
         title="그룹 질문 추가 요청"
         description="그룹에 새로운 질문을 요청해보세요"
         confirmButton={
-          <FormConfirmModalButton onClick={handleCreateQuestion}>
+          <FormConfirmModalButton
+            onClick={form.handleSubmit(() => {
+              createQuestion(form.getValues())
+            })}
+          >
             요청하기
           </FormConfirmModalButton>
         }
       >
         <Flex padding="0 10px" flexDirection="column" gap={3}>
-          <Text fontSize={14}>질문</Text>
-          <Textarea
-            rows={1}
-            resize="none"
-            whiteSpace="nowrap"
-            placeholder="100자 이내 입력"
-            value={questionContent}
-            onChange={(e) => setQuestionContent(e.target.value)}
-          />
-          <Box textAlign="center">
-            <Text fontSize="small" textColor="text_description">
-              요청한 질문은 수정하거나 취소할 수 없습니다
-            </Text>
-          </Box>
+          <CreateQuestionForm form={form} />
         </Flex>
       </FormModal>
 
