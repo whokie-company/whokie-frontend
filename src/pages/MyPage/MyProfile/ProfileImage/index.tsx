@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { BiError } from 'react-icons/bi'
 
@@ -46,10 +46,15 @@ export const ProfileImage = ({
     },
   })
 
-  useEffect(() => {
-    if (form.getValues('image')) {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null
+
+    if (file) {
+      form.setValue('image', file)
       form.handleSubmit(
-        () => uploadImage(form.getValues()),
+        () => {
+          uploadImage(form.getValues())
+        },
         (errors) => {
           const errorMessages =
             Object.values(errors).flatMap((error) => error.message)[0] || ''
@@ -57,9 +62,9 @@ export const ProfileImage = ({
           setErrorMessage(errorMessages)
           errorModal.onOpen()
         }
-      )
+      )()
     }
-  }, [form, uploadImage, errorModal])
+  }
 
   return (
     <Box
@@ -94,7 +99,7 @@ export const ProfileImage = ({
           <FormField
             control={form.control}
             name="image"
-            render={({ field }) => (
+            render={() => (
               <FormItem>
                 <FormControl>
                   <Input
@@ -103,9 +108,7 @@ export const ProfileImage = ({
                     type="file"
                     multiple={false}
                     display="none"
-                    onChange={(e) =>
-                      field.onChange(e.target.files ? e.target.files[0] : null)
-                    }
+                    onChange={handleFileChange}
                   />
                 </FormControl>
               </FormItem>
