@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 
-import { Box, Button, Text, useTheme } from '@chakra-ui/react'
+import { Box, Text, useTheme } from '@chakra-ui/react'
+
+import GoBack from '@/components/GoBack'
 
 type NavigateProps = {
   groupId: string
@@ -18,9 +20,7 @@ export default function Navigate({ groupId }: NavigateProps) {
       borderBottom={`1px solid ${borderColor}`}
     >
       <Link to={`/group/${groupId}`}>
-        <Button height="100%" bg="none" _hover={{ bg: 'none' }}>
-          {'<'}
-        </Button>
+        <GoBack goBack />
       </Link>
       <Text height="100%" lineHeight="2" fontWeight="bold">
         그룹 멤버 관리
