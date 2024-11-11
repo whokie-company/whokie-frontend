@@ -1,9 +1,13 @@
 import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { Link, useParams } from 'react-router-dom'
 
 import { Box, Button, Card, Flex, Image, Text } from '@chakra-ui/react'
 
-import { useGroupInfo, useGroupRanking } from '@/api/services/group/group.api'
+import {
+  useGroupInfoSuspense,
+  useGroupRanking,
+} from '@/api/services/group/group.api'
 import { useGroupRole } from '@/api/services/group/member.api'
 import sadCookie from '@/assets/sadCookie.svg'
 import { Cookies } from '@/components/Cookies'
@@ -13,9 +17,9 @@ import ErrorPage from '@/pages/ErrorPage'
 import { colors } from '@/styles/colors'
 
 import { ExitGroupButton } from './ExitGroupButton'
+import { GroupProfile } from './GroupProfile'
 import Management from './Management'
 import Navigate from './Navigate'
-import Profile from './Profile'
 import { useRankingData } from './Ranking'
 
 export default function GroupPage() {
@@ -26,9 +30,11 @@ export default function GroupPage() {
   return (
     <div>
       <Navigate />
-      <Suspense fallback={<Loading />}>
-        <GroupSection groupId={Number(groupId)} />
-      </Suspense>
+      <ErrorBoundary fallback>
+        <Suspense fallback={<Loading />}>
+          <GroupSection groupId={Number(groupId)} />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   )
 }
@@ -41,18 +47,16 @@ const GroupSection = ({ groupId }: GroupSectionProps) => {
   const { data: rankData } = useGroupRanking({
     groupId,
   })
-  const { data: groupData } = useGroupInfo(groupId)
+  const { data: groupData } = useGroupInfoSuspense(groupId)
   const { data: role } = useGroupRole(groupId)
 
   const rankingData = useRankingData(rankData)
-
-  if (!groupData || !role || !rankData) return <ErrorPage />
 
   const rankLength = rankingData.length === 0
 
   return (
     <Flex flexDirection="column">
-      <Profile role={role} gprofile={groupData} />
+      <GroupProfile group={groupData} role={role} />
       <Flex justifyContent="center" paddingY={3}>
         <Card
           width="full"

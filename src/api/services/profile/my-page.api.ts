@@ -1,16 +1,23 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 
 import { authorizationInstance, fetchInstance } from '@/api/instance'
 import { MyPageItem, UserRankingItem } from '@/types'
 
-export const getMyPage = async (userId: string) => {
+export const getMyPage = async (userId: number) => {
   const response = await fetchInstance.get<MyPageItem>(`/api/profile/${userId}`)
 
   return response.data
 }
 
-export const useMyPage = (userId: string) => {
+export const useMyPage = (userId: number) => {
   return useQuery({
+    queryKey: ['myPage', userId],
+    queryFn: () => getMyPage(userId),
+  })
+}
+
+export const useMyPageSuspense = (userId: number) => {
+  return useSuspenseQuery({
     queryKey: ['myPage', userId],
     queryFn: () => getMyPage(userId),
   })

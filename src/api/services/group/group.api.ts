@@ -26,6 +26,13 @@ export const useGroupInfo = (groupId: number) => {
   })
 }
 
+export const useGroupInfoSuspense = (groupId: number) => {
+  return useSuspenseQuery({
+    queryKey: ['group', groupId],
+    queryFn: () => getGroupInfo(groupId),
+  })
+}
+
 type GroupResponse = PagingResponse<Omit<Group, 'groupDescription'>[]>
 
 const getGroupPaging = async (params: PagingRequestParams) => {
@@ -161,13 +168,14 @@ export const approveGroupQuestion = async (
 }
 
 export type ModifyGroupImgRequestBody = {
+  groupId: number
   image: File
 }
 
-export const modifyGroupImg = async (
-  groupId: number,
-  { image }: ModifyGroupImgRequestBody
-) => {
+export const modifyGroupImg = async ({
+  groupId,
+  image,
+}: ModifyGroupImgRequestBody) => {
   const formData = new FormData()
   formData.append('image', image)
   const response = await authorizationInstance.patch(

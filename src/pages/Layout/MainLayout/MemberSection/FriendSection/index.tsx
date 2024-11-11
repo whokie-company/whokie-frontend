@@ -1,13 +1,17 @@
+import { useNavigate } from 'react-router-dom'
+
 import { Box, Center, Flex, Text } from '@chakra-ui/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { friendsQueries } from '@/api/services/friend/queries'
-import { AvatarLabelWithNavigate } from '@/components/AvatarLabelWithNavigate'
+import { AvatarLabel } from '@/components/AvatarLabel'
 import { PageLayout } from '@/components/PageLayout'
 
 import { FriendHeader, FriendHeaderSkeleton } from './FriendHeader'
 
 export const FriendSection = () => {
+  const navigate = useNavigate()
+
   const { data: friends } = useSuspenseQuery(friendsQueries.myFriends())
 
   return (
@@ -19,16 +23,13 @@ export const FriendSection = () => {
         {friends.map((friend) => (
           <Box
             key={friend.friendId}
-            paddingY={1}
+            paddingY={1.5}
             paddingX={2}
             width="full"
             _hover={{ cursor: 'pointer', background: 'brown.50' }}
+            onClick={() => navigate(`/mypage/${friend.friendId}`)}
           >
-            <AvatarLabelWithNavigate
-              avatarSrc={friend.imageUrl}
-              label={friend.name}
-              linkTo={`/mypage/${friend.friendId}`}
-            />
+            <AvatarLabel avatarSrc={friend.imageUrl} label={friend.name} />
           </Box>
         ))}
       </Flex>

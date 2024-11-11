@@ -40,7 +40,7 @@ export default function MembersTable({
     data: profile,
     status: profileStatus,
     isError: isProfileError,
-  } = useMyPage(myUserId.toString())
+  } = useMyPage(myUserId)
 
   const {
     data: memberList,
