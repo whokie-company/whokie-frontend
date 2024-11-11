@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 
-import { Avatar, Box, HStack, Input, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react'
 
 import { Group, GroupRole } from '@/types'
 
 import { EditProfile } from './EditProfile'
+import ImgModify from './ImgModify'
 
 type GroupProps = {
   gprofile: Group
@@ -31,17 +32,7 @@ export default function Profile({ role, gprofile }: GroupProps) {
           paddingLeft="25px"
           marginTop="30px"
         >
-          <Box position="relative">
-            <Avatar
-              src={gprofile?.groupdImageUrl}
-              width="70px"
-              height="70px"
-              sx={{
-                border: '0.8px solid',
-                borderColor: 'black.300',
-              }}
-            />
-          </Box>
+          <ImgModify role={role} gprofile={gprofile} />
           <VStack align="flex-start" spacing={0}>
             <HStack spacing={2} alignItems="center">
               {isEditing ? (
@@ -73,7 +64,6 @@ export default function Profile({ role, gprofile }: GroupProps) {
                 {role === 'LEADER' ? '그룹장' : '그룹원'}
               </Text>
             </HStack>
-
             <HStack spacing={2} alignItems="center">
               {isEditing ? (
                 <Input
