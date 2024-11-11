@@ -13,9 +13,9 @@ import {
 } from '@chakra-ui/react'
 
 import { Loading } from '@/components/Loading'
-import { useClickOutSideElement } from '@/hooks/useClickOutsideElement'
 
 import { CalendarSection } from './CalendarSection'
+import { CalendarSkeleton } from './CalendarSection/CookieCalendar'
 import { CookieRecordErrorFallback } from './CookieRecordErrorFallback'
 import { CookieRecordHeader } from './CookieRecordHeader'
 import { HintDrawer } from './HintDrawer'
@@ -38,15 +38,29 @@ export default function CookieRecordPage() {
   const hintDrawer = useDisclosure()
   const hintModal = useDisclosure()
 
-  useClickOutSideElement(
-    document.getElementById('hint-drawer'),
-    hintDrawer.onClose,
-    hintModal.isOpen
-  )
-
   useEffect(() => {
     setPortalNode(document.getElementById('page-layout'))
   }, [])
+
+  useEffect(() => {
+    const element = document.getElementById('hint-drawer')
+
+    const listener = (event: MouseEvent) => {
+      if (
+        !hintModal.isOpen &&
+        element &&
+        !element.contains(event.target as Node)
+      ) {
+        hintDrawer.onClose()
+      }
+    }
+
+    document.addEventListener('mousedown', listener)
+
+    return () => {
+      document.removeEventListener('mousedown', listener)
+    }
+  }, [hintDrawer, hintModal])
 
   return (
     <Flex flexDirection="column">
@@ -85,7 +99,13 @@ export default function CookieRecordPage() {
           </TabPanel>
           <TabPanel>
             <ErrorBoundary FallbackComponent={CookieRecordErrorFallback}>
-              <Suspense fallback={<Loading />}>
+              <Suspense
+                fallback={
+                  <Flex justifyContent="center">
+                    <CalendarSkeleton />
+                  </Flex>
+                }
+              >
                 <CalendarSection hintDrawer={hintDrawer} />
               </Suspense>
             </ErrorBoundary>

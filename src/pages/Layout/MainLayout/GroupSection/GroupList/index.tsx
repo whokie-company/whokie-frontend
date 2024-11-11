@@ -1,17 +1,14 @@
-import { useNavigate } from 'react-router-dom'
-
 import { Flex } from '@chakra-ui/react'
 
 import { useGroupPaging } from '@/api/services/group/group.api'
 import { ActiveBrownBox } from '@/components/ActiveBrownBox'
-import { AvatarLabelWithNavigate } from '@/components/AvatarLabel'
+import { AvatarLabelWithNavigate } from '@/components/AvatarLabelWithNavigate'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
 import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
 import { useMemberTypeStore } from '@/stores/member-type'
 import { useSelectedGroupStore } from '@/stores/selected-group'
 
 export const GroupList = () => {
-  const navigate = useNavigate()
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useGroupPaging({ size: 8 })
 
@@ -39,12 +36,9 @@ export const GroupList = () => {
           }}
         >
           <AvatarLabelWithNavigate
-            isNavigate
             avatarSrc={group.groupdImageUrl}
             label={group.groupName}
-            tooltipLabel={`${group.groupName} 페이지`}
             linkTo={`/group/${group.groupId}`}
-            onClick={() => navigate('/')}
           />
         </ActiveBrownBox>
       ))}

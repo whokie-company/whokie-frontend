@@ -68,10 +68,12 @@ export const createGroup = async ({
   groupName,
   groupDescription,
 }: CreateGroupRequestBody) => {
-  await authorizationInstance.post('/api/group', {
+  const response = await authorizationInstance.post<Group>('/api/group', {
     groupName,
     groupDescription,
   })
+
+  return response.data
 }
 
 type GroupInviteCodeRequestParams = {

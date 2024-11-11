@@ -25,7 +25,7 @@ export function useProfileRandom<T>(profiles: T[]) {
     const randomProfiles = pickRandomProfiles(combined)
     setPicked(randomProfiles)
 
-    const remainProfiles = remain.filter(
+    const remainProfiles = combined.filter(
       (profile) => !randomProfiles.includes(profile)
     )
     setRemain(remainProfiles)

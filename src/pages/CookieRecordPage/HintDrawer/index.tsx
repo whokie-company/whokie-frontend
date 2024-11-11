@@ -20,7 +20,7 @@ export const HintDrawer = ({ isOpen, modal }: HintDrawerProps) => {
   const { data: point } = useQuery(pointQuries.point())
 
   if (!selectedAnswer) return null
-  if (!point) return null
+  if (point === undefined) return null
 
   return (
     <Slide

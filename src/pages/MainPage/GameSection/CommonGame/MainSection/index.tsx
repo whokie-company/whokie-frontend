@@ -2,9 +2,15 @@ import { useEffect, useState } from 'react'
 import { BiChevronsRight, BiGroup } from 'react-icons/bi'
 
 import { Button, Flex, Heading, Text } from '@chakra-ui/react'
+import { useMutation } from '@tanstack/react-query'
 
-import { useAnswerRandomQuestion } from '@/api/services/answer/question.api'
+import { queryClient } from '@/api/instance'
+import {
+  AnswerQuestionParam,
+  answerRandomQuestion,
+} from '@/api/services/answer/question.api'
 import { useRandomQuestion } from '@/api/services/question/random.api'
+import { pointQuries } from '@/api/services/user/point.api'
 import { Loading } from '@/components/Loading'
 import { useProfileRandom } from '@/hooks/useProfileRandom'
 import { Friend } from '@/types'
@@ -31,7 +37,12 @@ export const MainSection = ({
   } = useRandomQuestion({
     size: QUESTION_SIZE,
   })
-  const { mutate: answerQuestion } = useAnswerRandomQuestion()
+  const { mutate: answerQuestion } = useMutation({
+    mutationFn: (params: AnswerQuestionParam) => answerRandomQuestion(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: pointQuries.all() })
+    },
+  })
   const { pickedProfiles, reloadRandomProfiles } = useProfileRandom(friends)
 
   const [questionIndex, setQuestionIndex] = useState(0)
