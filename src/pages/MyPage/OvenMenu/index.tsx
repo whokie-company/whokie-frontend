@@ -7,7 +7,7 @@ import { CardButton } from '@/components/CardButton'
 
 type OvenMenuProps = {
   isMyPage: boolean
-  userId: string | undefined
+  userId: number
 }
 
 export default function OvenMenu({ userId, isMyPage }: OvenMenuProps) {
