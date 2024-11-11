@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { BiCheck, BiEditAlt } from 'react-icons/bi'
 
-import { Avatar, Center, Flex, Text, useDisclosure } from '@chakra-ui/react'
+import { Center, Flex, Text, useDisclosure } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
@@ -16,6 +16,7 @@ import { ModifyGroupFields, ModifyGroupSchema } from '@/schema/group'
 import { colors } from '@/styles/colors'
 import { Group, GroupRole } from '@/types'
 
+import ImgModify from './ImgModify'
 import { ModifySuccessModal } from './ModifySuccessModal'
 import { GroupFormField } from './ProfileFormField'
 
@@ -78,13 +79,9 @@ export const GroupProfile = ({ group, role }: GroupProfileProps) => {
       paddingX="25px"
       paddingTop="30px"
       height="96px"
+      marginBottom={5}
     >
-      <Avatar
-        src={group.groupdImageUrl}
-        width="70px"
-        height="70px"
-        border={`0.8px solid ${colors.black[300]}`}
-      />
+      <ImgModify role={role} gprofile={group} />
       <Form {...form}>
         <form>
           <Flex flexDirection="column">

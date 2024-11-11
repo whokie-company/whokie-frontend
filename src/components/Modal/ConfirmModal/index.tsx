@@ -1,8 +1,9 @@
-import { ButtonHTMLAttributes, ReactElement, ReactNode } from 'react'
+import { ReactElement, ReactNode } from 'react'
 
 import {
   Box,
   Button,
+  ButtonProps,
   Modal,
   ModalContent,
   ModalFooter,
@@ -75,8 +76,7 @@ export const ConfirmModal = ({
   )
 }
 
-interface ConfirmModalButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {}
+interface ConfirmModalButtonProps extends ButtonProps {}
 
 export const ConfirmModalButton = ({
   children,

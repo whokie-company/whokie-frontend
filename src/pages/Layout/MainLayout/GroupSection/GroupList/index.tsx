@@ -41,7 +41,7 @@ export const GroupList = () => {
           }}
         >
           <AvatarLabel
-            avatarSrc={group.groupdImageUrl}
+            avatarSrc={group.groupImageUrl}
             label={group.groupName}
           />
         </ActiveBrownBox>
