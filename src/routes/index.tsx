@@ -36,11 +36,6 @@ const router = createBrowserRouter([
             element: <MainPage />,
           },
           {
-            path: '/mypage/:userId',
-            element: <MyPage />,
-          },
-
-          {
             path: '/cookie-record',
             element: <CookieRecordPage />,
           },
@@ -109,6 +104,10 @@ const router = createBrowserRouter([
       {
         path: '/login/redirect',
         element: <LoginRedirectPage />,
+      },
+      {
+        path: '/mypage/:userId',
+        element: <MyPage />,
       },
     ],
   },
