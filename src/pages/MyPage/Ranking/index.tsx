@@ -11,7 +11,7 @@ import ErrorPage from '@/pages/ErrorPage'
 import { RankItem } from '@/types'
 
 type RankingProps = {
-  userId: string
+  userId: number
 }
 
 const images = ['', cookie1, cookie2, cookie3]
