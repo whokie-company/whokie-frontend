@@ -139,11 +139,11 @@ const router = createBrowserRouter([
 
 export const Routes = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(false)
-  const [isMobile] = useMediaQuery('(max-width: 768px)')
+  const [isMobile] = useMediaQuery('(max-width: 1024px)')
 
   useEffect(() => {
     const handleResize = throttle(() => {
-      setIsSmallScreen(window.innerWidth < 768)
+      setIsSmallScreen(window.innerWidth < 1024)
     }, 200)
 
     window.addEventListener('resize', handleResize)
