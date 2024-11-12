@@ -36,13 +36,17 @@ export const ProfileImage = ({
   })
 
   const [errorMessage, setErrorMessage] = useState('')
+  const [currentBackgroundImage, setCurrentBackgroundImage] =
+    useState(backgroundImage)
   const errorModal = useDisclosure()
 
   const { mutate: uploadImage } = useMutation({
     mutationFn: (data: { image: File }) => uploadProfileBg(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myPage', userId] })
-      window.location.reload()
+      setTimeout(() => {
+        setCurrentBackgroundImage(URL.createObjectURL(form.getValues('image')))
+      }, 2000)
     },
   })
 
@@ -69,7 +73,7 @@ export const ProfileImage = ({
   return (
     <Box
       height="144px"
-      backgroundImage={`url('${backgroundImage}')`}
+      backgroundImage={`url('${currentBackgroundImage}')`}
       backgroundSize="cover"
       backgroundPosition="center"
       position="relative"
