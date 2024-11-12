@@ -45,6 +45,7 @@ export const MainSection = ({
   })
   const { pickedProfiles, reloadRandomProfiles } = useProfileRandom(friends)
 
+  const [questionSize, setQuestionSize] = useState(QUESTION_SIZE)
   const [questionIndex, setQuestionIndex] = useState(0)
 
   useEffect(() => {
@@ -54,10 +55,18 @@ export const MainSection = ({
     }
   }, [questionIndex, onFinsihGame, refetch])
 
+  useEffect(() => {
+    if (questions?.length && questions.length < QUESTION_SIZE) {
+      setQuestionSize(questions.length)
+    }
+  }, [questions])
+
   if (status === 'pending') return <Loading />
 
-  if (!questions)
+  if (!questions?.length)
     return <Heading>질문이 없습니다 관리자에게 문의해주세요</Heading>
+
+  if (questionIndex === questionSize) return <Loading />
 
   const handleQuestionSkip = () => {
     reloadRandomProfiles()

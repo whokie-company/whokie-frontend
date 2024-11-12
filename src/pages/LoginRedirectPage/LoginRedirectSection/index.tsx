@@ -22,7 +22,7 @@ export const LoginRedirectSection = ({ code }: LoginRedirectSectionProps) => {
       if (data.role === 'TEMP') {
         setAuthToken(data.accessToken)
         setMyUserId(data.userId)
-        navigate('/register')
+        window.location.href = '/register'
         return
       }
       setAuthToken(data.accessToken)
