@@ -21,9 +21,9 @@ export const GlobalErrorFallback = ({
 
   useEffect(() => {
     if (status === 428) {
-      navigate('/register')
+      window.location.href = '/register'
     }
-  }, [status, navigate])
+  }, [status])
 
   return (
     <PageLayout
