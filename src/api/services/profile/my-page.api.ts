@@ -39,7 +39,7 @@ export type MyRankingResponse = {
   ranks: UserRankingItem[]
 }
 
-const getMyRanking = async (userId: string) => {
+const getMyRanking = async (userId: number) => {
   const response = await fetchInstance.get<MyRankingResponse>(
     `/api/ranking/${userId}`
   )
@@ -47,8 +47,8 @@ const getMyRanking = async (userId: string) => {
   return response.data.ranks
 }
 
-export const useMyRanking = (userId: string) => {
-  return useQuery({
+export const useMyRanking = (userId: number) => {
+  return useSuspenseQuery({
     queryKey: ['myRanking', userId],
     queryFn: () => getMyRanking(userId),
   })
