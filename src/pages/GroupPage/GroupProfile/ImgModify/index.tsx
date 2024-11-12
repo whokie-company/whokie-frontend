@@ -39,6 +39,7 @@ export default function ImgModify({ role, gprofile }: ImgModifyProps) {
     onSuccess: () => {
       setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ['group', gprofile.groupId] })
+        queryClient.invalidateQueries({ queryKey: ['groups'] })
       }, 2000)
     },
   })
