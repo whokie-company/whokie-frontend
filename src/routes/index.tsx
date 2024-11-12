@@ -1,5 +1,11 @@
+import { useEffect, useState } from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
+import { useMediaQuery } from '@chakra-ui/react'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { throttle } from 'lodash'
+
+import ComingSoonPage from '@/pages/ComingSoonPage'
 import CookieRecordPage from '@/pages/CookieRecordPage'
 import CreateGroupPage from '@/pages/CreateGroupPage'
 import ErrorPage from '@/pages/ErrorPage'
@@ -108,11 +114,37 @@ const router = createBrowserRouter([
     children: [{ path: '/profile-question', element: <ProfileQuestionPage /> }],
   },
   {
+    path: '/comingsoon',
+    element: <ComingSoonPage />,
+  },
+  {
     path: '*',
     element: <ErrorPage />,
   },
 ])
 
 export const Routes = () => {
+  const [isSmallScreen, setIsSmallScreen] = useState(false)
+  const [isMobile] = useMediaQuery('(max-width: 768px)')
+
+  useEffect(() => {
+    const handleResize = throttle(() => {
+      setIsSmallScreen(window.innerWidth < 768)
+    }, 200)
+
+    window.addEventListener('resize', handleResize)
+    handleResize()
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  if (isSmallScreen) {
+    return <ComingSoonPage />
+  }
+
+  if (isMobile) {
+    return <ComingSoonPage />
+  }
+
   return <RouterProvider router={router} />
 }
