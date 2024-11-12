@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { FallbackProps } from 'react-error-boundary'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,6 +18,12 @@ export const GlobalErrorFallback = ({
   const { message, ErrorButton } = getErrorDetail(status)
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (status === 428) {
+      navigate('/register')
+    }
+  }, [status, navigate])
 
   return (
     <PageLayout
