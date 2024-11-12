@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { useMediaQuery } from '@chakra-ui/react'
@@ -132,22 +132,10 @@ const router = createBrowserRouter([
 ])
 
 export const Routes = () => {
-  const [isSmallScreen, setIsSmallScreen] = useState(false)
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 1024)
   const [isMobile] = useMediaQuery('(max-width: 1024px)')
 
-  useEffect(() => {
-    const handleResize = () => {
-      const newIsSmallScreen = window.innerWidth < 1024
-      if (newIsSmallScreen !== isSmallScreen) {
-        setIsSmallScreen(newIsSmallScreen)
-      }
-    }
-
-    window.addEventListener('resize', handleResize)
-    handleResize()
-
-    return () => window.removeEventListener('resize', handleResize)
-  }, [isSmallScreen])
+  window.onresize = () => setIsSmallScreen(window.innerWidth < 1024)
 
   if (isSmallScreen) {
     return <ComingSoonPage />
