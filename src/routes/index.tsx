@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { useMediaQuery } from '@chakra-ui/react'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { throttle } from 'lodash'
 
 import ComingSoonPage from '@/pages/ComingSoonPage'
 import CookieRecordPage from '@/pages/CookieRecordPage'
@@ -138,15 +136,18 @@ export const Routes = () => {
   const [isMobile] = useMediaQuery('(max-width: 1024px)')
 
   useEffect(() => {
-    const handleResize = throttle(() => {
-      setIsSmallScreen(window.innerWidth < 1024)
-    }, 200)
+    const handleResize = () => {
+      const newIsSmallScreen = window.innerWidth < 1024
+      if (newIsSmallScreen !== isSmallScreen) {
+        setIsSmallScreen(newIsSmallScreen)
+      }
+    }
 
     window.addEventListener('resize', handleResize)
     handleResize()
 
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }, [isSmallScreen])
 
   if (isSmallScreen) {
     return <ComingSoonPage />
