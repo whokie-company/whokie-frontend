@@ -7,20 +7,20 @@ import { Group, GroupRole } from '@/types'
 import { EditProfile } from './EditProfile'
 
 type GroupProps = {
-  gprofile: Group
+  groupProfile: Group
   role: GroupRole
 }
 
-export default function Profile({ role, gprofile }: GroupProps) {
+export default function Profile({ role, groupProfile }: GroupProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [groupNameInput, setGroupNameInput] = useState('')
   const [groupDescriptionInput, setGroupDescriptionInput] = useState('')
 
   useEffect(() => {
     setIsEditing(false)
-    setGroupNameInput(gprofile.groupName)
-    setGroupDescriptionInput(gprofile.groupDescription)
-  }, [gprofile])
+    setGroupNameInput(groupProfile.groupName)
+    setGroupDescriptionInput(groupProfile.groupDescription)
+  }, [groupProfile])
 
   return (
     <header>
@@ -33,7 +33,7 @@ export default function Profile({ role, gprofile }: GroupProps) {
         >
           <Box position="relative">
             <Avatar
-              src={gprofile?.groupdImageUrl}
+              src={groupProfile?.groupdImageUrl}
               width="70px"
               height="70px"
               sx={{
@@ -59,7 +59,7 @@ export default function Profile({ role, gprofile }: GroupProps) {
                   verticalAlign="middle"
                 />
               ) : (
-                <Text fontSize="xl">{gprofile.groupName}</Text>
+                <Text fontSize="xl">{groupProfile.groupName}</Text>
               )}
               <Text
                 fontSize="xs"
@@ -92,7 +92,7 @@ export default function Profile({ role, gprofile }: GroupProps) {
                 />
               ) : (
                 <Text color="text_secondary" fontSize="md">
-                  {gprofile.groupDescription}
+                  {groupProfile.groupDescription}
                 </Text>
               )}
               {role === 'LEADER' && (
@@ -100,7 +100,7 @@ export default function Profile({ role, gprofile }: GroupProps) {
                   isEditing={isEditing}
                   setIsEditing={(isEdit) => setIsEditing(isEdit)}
                   groupInfo={{
-                    groupId: gprofile.groupId,
+                    groupId: groupProfile.groupId,
                     groupName: groupNameInput,
                     groupDescription: groupDescriptionInput,
                   }}
