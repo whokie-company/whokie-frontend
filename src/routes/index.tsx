@@ -128,10 +128,6 @@ const router = createBrowserRouter([
     children: [{ path: '/profile-question', element: <ProfileQuestionPage /> }],
   },
   {
-    path: '/comingsoon',
-    element: <ComingSoonPage />,
-  },
-  {
     path: '*',
     element: <ErrorPage />,
   },
