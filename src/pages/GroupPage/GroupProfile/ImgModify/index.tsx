@@ -37,7 +37,9 @@ export default function ImgModify({ role, gprofile }: ImgModifyProps) {
   const { mutate: uploadImage } = useMutation({
     mutationFn: (data: ModifyGroupImgRequestBody) => modifyGroupImg(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['group', gprofile.groupId] })
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ['group', gprofile.groupId] })
+      }, 2000)
     },
   })
 
