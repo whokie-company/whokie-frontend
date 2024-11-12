@@ -1,5 +1,9 @@
+import { useState } from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
+import { useMediaQuery } from '@chakra-ui/react'
+
+import ComingSoonPage from '@/pages/ComingSoonPage'
 import CookieRecordPage from '@/pages/CookieRecordPage'
 import CreateGroupPage from '@/pages/CreateGroupPage'
 import ErrorPage from '@/pages/ErrorPage'
@@ -128,5 +132,18 @@ const router = createBrowserRouter([
 ])
 
 export const Routes = () => {
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 1024)
+  const [isMobile] = useMediaQuery('(max-width: 1024px)')
+
+  window.onresize = () => setIsSmallScreen(window.innerWidth < 1024)
+
+  if (isSmallScreen) {
+    return <ComingSoonPage />
+  }
+
+  if (isMobile) {
+    return <ComingSoonPage />
+  }
+
   return <RouterProvider router={router} />
 }
