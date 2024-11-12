@@ -8,9 +8,8 @@ export type Friend = {
 export type Group = {
   groupId: number
   groupName: string
-  groupdImageUrl: string
+  groupImageUrl: string
   groupDescription: string
-  groupMemberCount: number
 }
 
 export type ChatItem = {
@@ -35,7 +34,6 @@ export type QuestionItem = {
 export type Question = {
   questionId: number
   content: string
-  users: Friend[]
 }
 
 export type ProfileAnswerItem = {
@@ -130,3 +128,19 @@ export type UserRankingItem = {
 }
 
 export type GroupRole = 'MEMBER' | 'LEADER'
+
+export type GroupRankingItem = {
+  rank: number
+  count: number
+  userId: number
+}
+
+export type MemberTable = {
+  id: number
+  memberImageUrl: string
+  userName: string
+  joinedAt: string
+  isExpel?: string
+  userId: number
+  role: GroupRole
+}

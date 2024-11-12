@@ -1,29 +1,33 @@
 import { BiCheckCircle } from 'react-icons/bi'
-import { useNavigate } from 'react-router-dom'
 
 import { Button, useDisclosure } from '@chakra-ui/react'
-import { useMutation } from '@tanstack/react-query'
 
-import { purchasePoint } from '@/api/services/point/purchase.api'
+import { usePurchasePoint } from '@/api/services/point/purchase.api'
 import {
   ConfirmModal,
   ConfirmModalButton,
 } from '@/components/Modal/ConfirmModal'
 
 export const PointModal = () => {
-  const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const { mutate } = useMutation({
-    mutationFn: () => purchasePoint({ point: 100 }),
-    onError: () => {
-      navigate('/point/failure')
-    },
+  const { data: redirectUrl, refetch: purchasePoint } = usePurchasePoint({
+    point: 100,
   })
+
+  const handleRedirectPurchase = () => {
+    window.location.href = `${redirectUrl}`
+  }
 
   return (
     <div>
-      <Button colorScheme="primary" borderRadius={10} onClick={onOpen}>
+      <Button
+        colorScheme="primary"
+        borderRadius={10}
+        onClick={() => {
+          onOpen()
+          purchasePoint()
+        }}
+      >
         + 100P
       </Button>
       <ConfirmModal
@@ -35,9 +39,10 @@ export const PointModal = () => {
         confirmButton={
           <ConfirmModalButton
             onClick={() => {
-              mutate()
               onClose()
+              handleRedirectPurchase()
             }}
+            isDisabled={!redirectUrl}
           >
             확인
           </ConfirmModalButton>

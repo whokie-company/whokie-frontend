@@ -1,8 +1,9 @@
-// components/WriteReply.tsx
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { BiCheckCircle, BiError } from 'react-icons/bi'
 
 import { Button, Flex, Textarea, useDisclosure } from '@chakra-ui/react'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
 import { queryClient } from '@/api/instance'
@@ -10,7 +11,12 @@ import {
   PostProfileAnswerRequest,
   postProfileAnswer,
 } from '@/api/services/profile/profile-question.api'
+import { Form, FormControl, FormField, FormItem } from '@/components/Form'
 import { AlertModal } from '@/components/Modal/AlertModal'
+import {
+  AnswerProfileQuestionField,
+  AnswerProfileQuestionSchema,
+} from '@/schema/profile'
 
 interface WriteReplyProps {
   userId: number
@@ -18,11 +24,19 @@ interface WriteReplyProps {
 }
 
 export default function WriteReply({ userId, questionId }: WriteReplyProps) {
-  const [replyContent, setReplyContent] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
   const errorAlert = useDisclosure()
   const successAlert = useDisclosure()
+
+  const form = useForm<AnswerProfileQuestionField>({
+    resolver: zodResolver(AnswerProfileQuestionSchema),
+    mode: 'onSubmit',
+    defaultValues: {
+      content: '',
+      profileQuestionId: questionId,
+    },
+  })
 
   const { mutate: submitReply } = useMutation({
     mutationFn: ({ content, profileQuestionId }: PostProfileAnswerRequest) =>
@@ -32,7 +46,6 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
       queryClient.refetchQueries({
         queryKey: ['profileAnswer', userId, questionId],
       })
-      setReplyContent('')
     },
     onError: () => {
       setErrorMessage('답변 전송에 실패하였습니다')
@@ -40,18 +53,16 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
     },
   })
 
-  const handleSend = () => {
-    if (!replyContent.trim()) {
-      setErrorMessage('내용을 입력해주세요')
-      errorAlert.onOpen()
-      return
-    }
+  const handleSend = form.handleSubmit(
+    () => submitReply(form.getValues()),
+    (errors) => {
+      const errorMessages =
+        Object.values(errors).flatMap((error) => error.message)[0] || ''
 
-    submitReply({
-      content: replyContent,
-      profileQuestionId: questionId,
-    })
-  }
+      setErrorMessage(errorMessages)
+      errorAlert.onOpen()
+    }
+  )
 
   return (
     <Flex
@@ -63,31 +74,45 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
       borderLeftColor="brown.400"
       marginTop="auto"
     >
-      <Textarea
-        value={replyContent}
-        onChange={(e) => setReplyContent(e.target.value)}
-        width="100%"
-        height="auto"
-        variant="unstyled"
-        padding="0"
-        margin="5px"
-        placeholder="메시지 입력"
-      />
-      <Flex justifyContent="end" height="29px" margin="14px 0">
-        <Button
-          onClick={handleSend}
-          marginRight="15px"
-          borderRadius={20}
-          width="90px"
-          height="30px"
-          bg="brown.400"
-          fontSize="small"
-          _hover={{ boxShadow: 'md' }}
-          _active={{ bg: 'brown.500' }}
-        >
-          전송
-        </Button>
-      </Flex>
+      <Form {...form}>
+        <form>
+          <FormField
+            control={form.control}
+            name="content"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Textarea
+                    value={field.value}
+                    onChange={field.onChange}
+                    width="100%"
+                    height="auto"
+                    variant="unstyled"
+                    padding="0"
+                    margin="5px"
+                    placeholder="메시지 입력"
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <Flex justifyContent="end" height="29px" margin="14px 0">
+            <Button
+              onClick={handleSend}
+              marginRight="15px"
+              borderRadius={20}
+              width="90px"
+              height="30px"
+              bg="brown.400"
+              fontSize="small"
+              _hover={{ boxShadow: 'md' }}
+              _active={{ bg: 'brown.500' }}
+            >
+              전송
+            </Button>
+          </Flex>
+        </form>
+      </Form>
       <AlertModal
         isOpen={errorAlert.isOpen}
         onClose={errorAlert.onClose}
