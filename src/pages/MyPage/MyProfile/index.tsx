@@ -22,18 +22,23 @@ export const MyProfile = ({ profile }: MyProfileProps) => {
   const { data: point } = useSuspenseQuery(pointQuries.point())
 
   return (
-    <Flex flexDirection="column" padding="0 30px">
+    <Flex flexDirection="column">
       <ProfileImage
         profileImage={profile.imageUrl}
         backgroundImage={profile.backgroundImageUrl}
       />
-      <Flex alignItems="center" gap="8px">
+      <Flex alignItems="center" gap="8px" padding="0 30px">
         <Text fontSize="xl" fontWeight="400">
           {profile.name}
         </Text>
         <PointButton point={point} />
       </Flex>
-      <Flex justifyContent="space-between" alignItems="end" gap={4}>
+      <Flex
+        justifyContent="space-between"
+        alignItems="end"
+        gap={4}
+        padding="0 30px"
+      >
         <ProfileForm description={profile.description} />
         <VisitedTag today={profile.todayVisited} total={profile.totalVisited} />
       </Flex>
