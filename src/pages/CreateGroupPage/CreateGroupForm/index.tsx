@@ -9,9 +9,7 @@ import {
   FormField,
   FormItem,
 } from '@/components/Form'
-import { CreateGroupFields } from '@/schema/create-group'
-
-import { ImageInput } from './ImageInput'
+import { CreateGroupFields } from '@/schema/group'
 
 interface CreateGroupFormProps {
   form: UseFormReturn<CreateGroupFields>
@@ -57,7 +55,6 @@ export const CreateGroupForm = ({
               </FormItem>
             )}
           />
-          <ImageInput />
           <FormField
             control={form.control}
             name="groupDescription"

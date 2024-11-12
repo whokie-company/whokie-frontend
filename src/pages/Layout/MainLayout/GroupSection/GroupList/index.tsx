@@ -1,19 +1,25 @@
+import { useNavigate } from 'react-router-dom'
+
 import { Flex } from '@chakra-ui/react'
 
 import { useGroupPaging } from '@/api/services/group/group.api'
 import { ActiveBrownBox } from '@/components/ActiveBrownBox'
-import { AvatarLabelWithNavigate } from '@/components/AvatarLabel'
+import { AvatarLabel } from '@/components/AvatarLabel'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
 import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
 import { useMemberTypeStore } from '@/stores/member-type'
 import { useSelectedGroupStore } from '@/stores/selected-group'
 
 export const GroupList = () => {
+  const navigate = useNavigate()
+
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useGroupPaging({ size: 8 })
 
-  const groupId = useSelectedGroupStore((state) => state.groupId)
-  const setSeletedGroup = useSelectedGroupStore((state) => state.setGroupId)
+  const selectedGroup = useSelectedGroupStore((state) => state.selectedGroup)
+  const setSeletedGroup = useSelectedGroupStore(
+    (state) => state.setSelectedGroup
+  )
   const setMemberType = useMemberTypeStore((state) => state.setMemberType)
 
   const groups = data?.pages.flatMap((page) => page.groups)
@@ -25,18 +31,18 @@ export const GroupList = () => {
       {groups.map((group) => (
         <ActiveBrownBox
           key={group.groupId}
-          isActive={!!groupId && groupId === group.groupId}
+          isActive={
+            !!selectedGroup?.groupId && selectedGroup?.groupId === group.groupId
+          }
           onClick={() => {
-            setSeletedGroup(group.groupId)
+            setSeletedGroup(group)
             setMemberType('GROUP')
+            navigate(`/group/${group.groupId}`)
           }}
         >
-          <AvatarLabelWithNavigate
-            isNavigate
-            avatarSrc={group.groupdImageUrl}
+          <AvatarLabel
+            avatarSrc={group.groupImageUrl}
             label={group.groupName}
-            tooltipLabel={`${group.groupName} 페이지`}
-            linkTo={`/group/${group.groupId}`}
           />
         </ActiveBrownBox>
       ))}

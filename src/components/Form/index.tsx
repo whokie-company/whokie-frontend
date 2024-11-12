@@ -13,9 +13,17 @@ const FormItem = FormItemProvider
 
 const FormControl = forwardRef<HTMLDivElement, BoxProps>(
   ({ ...props }, ref) => {
-    const { error, formItemId } = useFormField()
+    const { error, formItemId, formMessageId } = useFormField()
 
-    return <Box ref={ref} id={formItemId} aria-invalid={!!error} {...props} />
+    return (
+      <Box
+        ref={ref}
+        id={formItemId}
+        aria-describedby={`${formMessageId}`}
+        aria-invalid={!!error}
+        {...props}
+      />
+    )
   }
 )
 FormControl.displayName = 'FormControl'
@@ -37,4 +45,28 @@ const FormDescription = forwardRef<HTMLParagraphElement, TextProps>(
 )
 FormDescription.displayName = 'FormDescription'
 
-export { Form, FormField, FormItem, FormControl, FormDescription }
+const FormMessage = forwardRef<HTMLParagraphElement, TextProps>(
+  ({ children, ...props }, ref) => {
+    const { error, formMessageId } = useFormField()
+    const body = error ? String(error?.message) : children
+
+    if (!body) {
+      return null
+    }
+
+    return (
+      <Text
+        ref={ref}
+        id={formMessageId}
+        color="red"
+        fontSize="small"
+        {...props}
+      >
+        {body}
+      </Text>
+    )
+  }
+)
+FormMessage.displayName = 'FormMessage'
+
+export { Form, FormField, FormItem, FormControl, FormDescription, FormMessage }

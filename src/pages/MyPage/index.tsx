@@ -1,56 +1,52 @@
+import { Suspense } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { useGetMyPoint, useMyPage } from '@/api/services/profile/my-page.api'
+import { Flex } from '@chakra-ui/react'
+
+import { useMyPageSuspense } from '@/api/services/profile/my-page.api'
 import { Loading } from '@/components/Loading'
 import { useMyUserIdStore } from '@/stores/my-user-id'
 
-import ErrorPage from '../ErrorPage'
+import { MyProfile } from './MyProfile'
 import Navigate from './Navigate'
 import OvenMenu from './OvenMenu'
-import Profile from './Profile'
 import Ranking from './Ranking'
+import { UserProfile } from './UserProfile'
 
 export default function MyPage() {
   const { userId } = useParams<{ userId: string }>()
   const myUserId = useMyUserIdStore((state) => state.myUserId)
 
-  const {
-    data: profile,
-    isLoading: isLoadingProfile,
-    isError: profileError,
-  } = useMyPage(userId || '')
+  return (
+    <Flex flexDirection="column">
+      <Navigate />
+      <Suspense fallback={<Loading />}>
+        <MyPageSection
+          userId={Number(userId)}
+          isMyPage={Number(userId) === myUserId}
+        />
+      </Suspense>
+    </Flex>
+  )
+}
 
-  const isMyPage = Number(userId) === myUserId
-  const {
-    data: point,
-    isLoading: isLoadingPoints,
-    error: pointsError,
-  } = useGetMyPoint()
+interface MyPageSectionProps {
+  userId: number
+  isMyPage: boolean
+}
 
-  if (isLoadingProfile || (isMyPage && isLoadingPoints)) return <Loading />
-  if (profileError || (isMyPage && pointsError)) return <ErrorPage />
-  if (!profile) return <ErrorPage />
-  if (!userId) return <ErrorPage />
+const MyPageSection = ({ userId, isMyPage }: MyPageSectionProps) => {
+  const { data: profile } = useMyPageSuspense(userId)
 
   return (
-    <div>
-      <Navigate />
-      {isMyPage && point ? (
-        <Profile
-          profile={profile}
-          pointAmount={point.amount}
-          isMyPage={isMyPage}
-          userId={Number(userId)}
-        />
+    <Flex flexDirection="column">
+      {isMyPage ? (
+        <MyProfile profile={profile} />
       ) : (
-        <Profile
-          profile={profile}
-          isMyPage={isMyPage}
-          userId={Number(userId)}
-        />
+        <UserProfile profile={profile} />
       )}
       <Ranking userId={userId} />
       <OvenMenu userId={userId} isMyPage={isMyPage} />
-    </div>
+    </Flex>
   )
 }

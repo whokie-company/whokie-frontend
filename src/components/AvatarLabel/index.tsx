@@ -1,60 +1,21 @@
-import { Link } from 'react-router-dom'
+import { Avatar, HStack, StackProps, Text } from '@chakra-ui/react'
 
-import {
-  Avatar,
-  Box,
-  HStack,
-  StackProps,
-  Text,
-  Tooltip,
-} from '@chakra-ui/react'
+import { colors } from '@/styles/colors'
 
 interface AvatarLabelProps extends StackProps {
   avatarSrc?: string
   label: string
-  isNavigate: false
-  tooltipLabel?: never
-  linkTo?: never
 }
 
-interface AvatarLabelWithNavigateProps extends StackProps {
-  avatarSrc?: string
-  label: string
-  isNavigate: true
-  tooltipLabel: string
-  linkTo: string
-}
-
-export const AvatarLabelWithNavigate = ({
-  avatarSrc,
-  label,
-  isNavigate,
-  tooltipLabel,
-  linkTo,
-}: AvatarLabelProps | AvatarLabelWithNavigateProps) => {
+export const AvatarLabel = ({ avatarSrc, label }: AvatarLabelProps) => {
   return (
     <HStack gap={1.5}>
-      {isNavigate ? (
-        <Tooltip
-          label={tooltipLabel}
-          aria-label={`${tooltipLabel}로 이동하기`}
-          placement="top"
-        >
-          <Link to={linkTo}>
-            <Box
-              border="2px"
-              rounded="full"
-              color="transparent"
-              _hover={{ color: 'brown.400' }}
-              marginLeft="-2px"
-            >
-              <Avatar width={7} height={7} src={avatarSrc} />
-            </Box>
-          </Link>
-        </Tooltip>
-      ) : (
-        <Avatar width={7} height={7} src={avatarSrc} />
-      )}
+      <Avatar
+        width={7}
+        height={7}
+        src={avatarSrc}
+        border={`0.8px solid ${colors.black[300]}`}
+      />
       <Text>{label}</Text>
     </HStack>
   )

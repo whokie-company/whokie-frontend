@@ -11,6 +11,7 @@ import CreateGroupPage from '@/pages/CreateGroupPage'
 import ErrorPage from '@/pages/ErrorPage'
 import GroupMembersPage from '@/pages/GroupMembersPage'
 import GroupPage from '@/pages/GroupPage'
+import { QuestionManagement } from '@/pages/GroupPage/Management/Questions'
 import InvitePage from '@/pages/InvitePage'
 import { CardLayout } from '@/pages/Layout/CardLayout'
 import { GroupMemberLayout } from '@/pages/Layout/GroupMemberLayout'
@@ -23,7 +24,9 @@ import MyPage from '@/pages/MyPage'
 import PointPage from '@/pages/PointPage'
 import PointCancelModal from '@/pages/PointPage/PointCancelModal'
 import PointFailureModal from '@/pages/PointPage/PointFailureModal'
+import PointRedirectPage from '@/pages/PointRedirectPage'
 import ProfileQuestionPage from '@/pages/ProfileQuestionPage'
+import RegisterPage from '@/pages/RegisterPage'
 
 import { ProtectedRoute } from './ProtectedRoute'
 
@@ -40,17 +43,16 @@ const router = createBrowserRouter([
             element: <MainPage />,
           },
           {
-            path: '/mypage/:userId',
-            element: <MyPage />,
-          },
-
-          {
             path: '/cookie-record',
             element: <CookieRecordPage />,
           },
           {
             path: '/group/:groupId',
             element: <GroupPage />,
+          },
+          {
+            path: '/group/:groupId/management',
+            element: <QuestionManagement />,
           },
           {
             path: '/group/create',
@@ -60,6 +62,10 @@ const router = createBrowserRouter([
             path: '/point',
             element: <PointPage />,
             children: [
+              {
+                path: '/point/redirect',
+                element: <PointRedirectPage />,
+              },
               {
                 path: '/point/failure',
                 element: <PointFailureModal />,
@@ -93,6 +99,10 @@ const router = createBrowserRouter([
         path: '/invite/:groupId',
         element: <InvitePage />,
       },
+      {
+        path: '/register',
+        element: <RegisterPage />,
+      },
     ],
   },
   {
@@ -105,6 +115,10 @@ const router = createBrowserRouter([
       {
         path: '/login/redirect',
         element: <LoginRedirectPage />,
+      },
+      {
+        path: '/mypage/:userId',
+        element: <MyPage />,
       },
     ],
   },
