@@ -20,6 +20,7 @@ import PointCancelModal from '@/pages/PointPage/PointCancelModal'
 import PointFailureModal from '@/pages/PointPage/PointFailureModal'
 import PointRedirectPage from '@/pages/PointRedirectPage'
 import ProfileQuestionPage from '@/pages/ProfileQuestionPage'
+import RegisterPage from '@/pages/RegisterPage'
 
 import { ProtectedRoute } from './ProtectedRoute'
 
@@ -35,11 +36,6 @@ const router = createBrowserRouter([
             path: '/',
             element: <MainPage />,
           },
-          {
-            path: '/mypage/:userId',
-            element: <MyPage />,
-          },
-
           {
             path: '/cookie-record',
             element: <CookieRecordPage />,
@@ -97,6 +93,10 @@ const router = createBrowserRouter([
         path: '/invite/:groupId',
         element: <InvitePage />,
       },
+      {
+        path: '/register',
+        element: <RegisterPage />,
+      },
     ],
   },
   {
@@ -109,6 +109,10 @@ const router = createBrowserRouter([
       {
         path: '/login/redirect',
         element: <LoginRedirectPage />,
+      },
+      {
+        path: '/mypage/:userId',
+        element: <MyPage />,
       },
     ],
   },
