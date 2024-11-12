@@ -36,7 +36,7 @@ export default function ComingSoonPage() {
         <Text fontSize="md" color="brown.500">
           후키 모바일 버전은 준비중입니다
         </Text>
-        <Text fontSize="xl" fontWeight="bold" color="brown.600">
+        <Text fontSize="2xl" fontWeight="bold" color="brown.600">
           화면의 크기를 키워 주세요
         </Text>
       </VStack>
