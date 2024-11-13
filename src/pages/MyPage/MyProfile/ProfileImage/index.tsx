@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { BiError } from 'react-icons/bi'
 
@@ -36,15 +36,35 @@ export const ProfileImage = ({
   })
 
   const [errorMessage, setErrorMessage] = useState('')
+  const [currentBackgroundImage, setCurrentBackgroundImage] =
+    useState(backgroundImage)
   const errorModal = useDisclosure()
+  const [timeoutId, setTimeoutId] = useState<number | null>(null)
 
   const { mutate: uploadImage } = useMutation({
     mutationFn: (data: { image: File }) => uploadProfileBg(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myPage', userId] })
-      window.location.reload()
+
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+
+      const newTimeoutId = setTimeout(() => {
+        setCurrentBackgroundImage(URL.createObjectURL(form.getValues('image')))
+      }, 2000)
+
+      setTimeoutId(newTimeoutId)
     },
   })
+
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+    }
+  }, [timeoutId])
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null
@@ -69,7 +89,7 @@ export const ProfileImage = ({
   return (
     <Box
       height="144px"
-      backgroundImage={`url('${backgroundImage}')`}
+      backgroundImage={`url('${currentBackgroundImage}')`}
       backgroundSize="cover"
       backgroundPosition="center"
       position="relative"
