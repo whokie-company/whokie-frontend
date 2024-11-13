@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { BiError } from 'react-icons/bi'
 
@@ -33,13 +33,31 @@ export default function ImgModify({ role, gprofile }: ImgModifyProps) {
 
   const [errorMessage, setErrorMessage] = useState('')
   const errorModal = useDisclosure()
+  const [timeoutId, setTimeoutId] = useState<number | null>(null)
 
   const { mutate: uploadImage } = useMutation({
     mutationFn: (data: ModifyGroupImgRequestBody) => modifyGroupImg(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['group', gprofile.groupId] })
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+
+      const newTimeoutId = setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ['group', gprofile.groupId] })
+        queryClient.invalidateQueries({ queryKey: ['groups'] })
+      }, 2000)
+
+      setTimeoutId(newTimeoutId)
     },
   })
+
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+    }
+  }, [timeoutId])
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null

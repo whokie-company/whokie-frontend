@@ -8,8 +8,30 @@ import { useUserInfoStore } from '@/stores/user-info'
 
 export const SideNavigation = () => {
   const clearAuthToken = useAuthTokenStore((state) => state.clearAuthToken)
+  const isLoggedIn = useAuthTokenStore((state) => state.isLoggedIn())
+
   const clearUserInfo = useUserInfoStore((state) => state.clearUserInfo)
   const userId = useUserInfoStore((state) => state.userInfo?.userId)
+
+  if (!isLoggedIn) {
+    return (
+      <Flex
+        background="brown.300"
+        width="40px"
+        height="full"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="end"
+        paddingY={6}
+        color="brown.400"
+        gap={2}
+      >
+        <BiLogOut size={26} />
+        <BiBell size={26} />
+        <BiUserCircle size={26} />
+      </Flex>
+    )
+  }
 
   return (
     <Flex

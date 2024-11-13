@@ -14,8 +14,8 @@ export default function ProfileQuestionPage() {
   const navigate = useNavigate()
   const location = useLocation()
   const userId: number = location.state?.userId
-  const myUserId = useUserInfoStore((state) => state.userInfo?.userId)
-  const questionId = useSelectedQuestionStore((state) => state.questionId)
+  const myUserId = useMyUserIdStore((state) => state.myUserId)
+  const { selectedQuestion } = useSelectedQuestionStore()
 
   const isMyPage = Number(userId) === myUserId
 
@@ -50,8 +50,8 @@ export default function ProfileQuestionPage() {
       {/* 이 영역만 스크롤 */}
       {userId && <Answer userId={userId} isMyPage={isMyPage} />}
 
-      {!isMyPage && questionId && (
-        <WriteReply userId={userId} questionId={questionId} />
+      {!isMyPage && selectedQuestion.questionId && (
+        <WriteReply userId={userId} questionId={selectedQuestion.questionId} />
       )}
     </Flex>
   )

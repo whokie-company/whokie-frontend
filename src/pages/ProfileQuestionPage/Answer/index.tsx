@@ -26,7 +26,7 @@ interface AnswerProps {
 }
 
 const Answer: React.FC<AnswerProps> = ({ userId, isMyPage }: AnswerProps) => {
-  const questionId = useSelectedQuestionStore((state) => state.questionId)
+  const { selectedQuestion } = useSelectedQuestionStore()
   const [selectDeleteAnswerId, setSelectDeleteAnswerId] = useState<
     number | null
   >(null)
@@ -43,7 +43,7 @@ const Answer: React.FC<AnswerProps> = ({ userId, isMyPage }: AnswerProps) => {
     onSuccess: () => {
       deleteAlert.onClose()
       queryClient.refetchQueries({
-        queryKey: ['profileAnswer', userId, questionId],
+        queryKey: ['profileAnswer', userId, selectedQuestion.questionId],
       })
       queryClient.invalidateQueries({ queryKey: ['deleteProfileAnswer'] })
     },
@@ -57,7 +57,7 @@ const Answer: React.FC<AnswerProps> = ({ userId, isMyPage }: AnswerProps) => {
     data: answers,
     isLoading,
     isError,
-  } = useGetProfileAnswer(userId, questionId as number)
+  } = useGetProfileAnswer(userId, selectedQuestion.questionId as number)
 
   const boxRef = useRef<HTMLDivElement>(null)
   useEffect(() => {

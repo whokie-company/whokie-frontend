@@ -12,6 +12,7 @@ import {
   ConfirmModalButton,
 } from '@/components/Modal/ConfirmModal'
 import { useMembersLengthStore } from '@/stores/members-length'
+import { useSelectedGroupStore } from '@/stores/selected-group'
 import { GroupRole } from '@/types'
 
 interface ExitGroupButtonProps {
@@ -28,11 +29,15 @@ export const ExitGroupButton = ({
   const warningAlert = useDisclosure()
   const errorAlert = useDisclosure()
   const navigate = useNavigate()
+  const setSelectedGroup = useSelectedGroupStore(
+    (state) => state.setSelectedGroup
+  )
 
   const { mutate: exitGroup } = useMutation({
     mutationFn: () => exitGroupMember(groupId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['groups'] })
+      setSelectedGroup(undefined)
       navigate('/')
     },
   })
