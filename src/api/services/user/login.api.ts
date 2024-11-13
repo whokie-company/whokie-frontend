@@ -30,9 +30,7 @@ export const useKakaoLogin = ({ code }: KakaoLoginParam) => {
 export type RegisterUserRequestBody = {
   name: string
   gender: string
-  year: number
-  month: number
-  day: number
+  birthDate: string
 }
 
 type RegisterUeserResponse = {

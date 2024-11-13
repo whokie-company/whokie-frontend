@@ -37,9 +37,7 @@ export default function RegisterPage() {
     defaultValues: {
       name: '',
       gender: undefined,
-      year: '',
-      month: '',
-      day: '',
+      birthDate: '',
     },
   })
 
@@ -56,13 +54,7 @@ export default function RegisterPage() {
   })
 
   const onValid = () => {
-    mutate({
-      name: form.getValues('name'),
-      gender: form.getValues('gender'),
-      year: Number(form.getValues('year')),
-      month: Number(form.getValues('month')),
-      day: Number(form.getValues('day')),
-    })
+    mutate(form.getValues())
   }
 
   return (
@@ -126,64 +118,25 @@ export default function RegisterPage() {
                 </FormItem>
               )}
             />
-            <Flex flexDirection="column">
-              <Text fontWeight="bold" mb={2}>
-                생년월일
-              </Text>
-              <Flex gap={2}>
-                <FormField
-                  control={form.control}
-                  name="year"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          value={field.value}
-                          onChange={field.onChange}
-                          type="number"
-                          placeholder="YYYY"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="month"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          value={field.value}
-                          onChange={field.onChange}
-                          type="number"
-                          placeholder="MM"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="day"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          value={field.value}
-                          onChange={field.onChange}
-                          type="number"
-                          placeholder="DD"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </Flex>
-            </Flex>
+            <FormField
+              control={form.control}
+              name="birthDate"
+              render={({ field }) => (
+                <FormItem>
+                  <Text fontWeight="bold" mb={2}>
+                    생년월일
+                  </Text>
+                  <FormControl>
+                    <Input
+                      value={field.value}
+                      onChange={field.onChange}
+                      type="date"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <Button
               bg="brown.500"
               color="secondary_background"
