@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { Box, Button, Flex } from '@chakra-ui/react'
 
-import { useMyUserIdStore } from '@/stores/my-user-id'
 import { useSelectedQuestionStore } from '@/stores/selected-question'
+import { useUserInfoStore } from '@/stores/user-info'
 
 import Answer from './Answer'
 import Question from './Question'
@@ -14,7 +14,7 @@ export default function ProfileQuestionPage() {
   const navigate = useNavigate()
   const location = useLocation()
   const userId: number = location.state?.userId
-  const myUserId = useMyUserIdStore((state) => state.myUserId)
+  const myUserId = useUserInfoStore((state) => state.userInfo?.userId)
   const questionId = useSelectedQuestionStore((state) => state.questionId)
 
   const isMyPage = Number(userId) === myUserId

@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom'
 import { Box, Flex } from '@chakra-ui/react'
 
 import { useAuthTokenStore } from '@/stores/auth-token'
-import { useMyUserIdStore } from '@/stores/my-user-id'
+import { useUserInfoStore } from '@/stores/user-info'
 
 export const SideNavigation = () => {
   const clearAuthToken = useAuthTokenStore((state) => state.clearAuthToken)
-  const clearMyUserID = useMyUserIdStore((state) => state.clearMyUserId)
-  const myUserId = useMyUserIdStore((state) => state.myUserId)
+  const clearUserInfo = useUserInfoStore((state) => state.clearUserInfo)
+  const userId = useUserInfoStore((state) => state.userInfo?.userId)
 
   return (
     <Flex
@@ -28,7 +28,7 @@ export const SideNavigation = () => {
         _hover={{ cursor: 'pointer', color: 'brown.500' }}
         onClick={() => {
           clearAuthToken()
-          clearMyUserID()
+          clearUserInfo()
         }}
       >
         <BiLogOut size={26} />
@@ -38,7 +38,7 @@ export const SideNavigation = () => {
           <BiBell size={26} />
         </Box>
       </Link>
-      <Link to={`/mypage/${myUserId}`}>
+      <Link to={`/mypage/${userId}`}>
         <Box _hover={{ cursor: 'pointer', color: 'brown.500' }}>
           <BiUserCircle size={26} />
         </Box>

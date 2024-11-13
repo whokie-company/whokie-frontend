@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom'
 import { Box } from '@chakra-ui/react'
 
 import { PageLayout } from '@/components/PageLayout'
-import { useMyUserIdStore } from '@/stores/my-user-id'
+import { useUserInfoStore } from '@/stores/user-info'
 
 import { CreateQuestionButton } from '../CreateQuestionButton'
 import { QuestionList } from '../QuestionList'
@@ -12,7 +12,7 @@ import { QuestionList } from '../QuestionList'
 export const QuestionSection = () => {
   const location = useLocation()
   const userId: number = location.state?.userId
-  const myUserId = useMyUserIdStore((state) => state.myUserId)
+  const myUserId = useUserInfoStore((state) => state.userInfo?.userId)
   const isMyPage = Number(userId) === myUserId
 
   return (
