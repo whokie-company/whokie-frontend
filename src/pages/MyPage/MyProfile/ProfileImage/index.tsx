@@ -116,7 +116,13 @@ export const ProfileImage = ({
           />
         </form>
       </Form>
-      <Avatar src={profileImage} size="lg" position="absolute" bottom="-30px" />
+      <Avatar
+        src={profileImage}
+        size="lg"
+        position="absolute"
+        bottom="-30px"
+        left="30px"
+      />
       <AlertModal
         isOpen={errorModal.isOpen}
         onClose={errorModal.onClose}
