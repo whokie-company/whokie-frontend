@@ -7,8 +7,8 @@ import { useMutation } from '@tanstack/react-query'
 
 import { queryClient } from '@/api/instance'
 import {
-  AnswerQuestionParam,
-  answerRandomQuestion,
+  AnswerGroupQuestionParams,
+  answerGroupQuestion,
 } from '@/api/services/answer/question.api'
 import { useGroupRandomQuestion } from '@/api/services/question/random.api'
 import { pointQuries } from '@/api/services/user/point.api'
@@ -39,7 +39,8 @@ export const GroupMainSection = ({
     refetch,
   } = useGroupRandomQuestion({ groupId })
   const { mutate: answerQuestion } = useMutation({
-    mutationFn: (params: AnswerQuestionParam) => answerRandomQuestion(params),
+    mutationFn: (params: AnswerGroupQuestionParams) =>
+      answerGroupQuestion(params),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: pointQuries.all() })
     },
@@ -90,13 +91,14 @@ export const GroupMainSection = ({
   const handleProfileSelect = (pickedId: number) => {
     handleQuestionSkip()
     answerQuestion({
+      groupId,
       questionId: questions[questionIndex].questionId,
       pickedId,
     })
     onClickProfile()
   }
 
-  if (questionIndex === QUESTION_SIZE) return <Loading />
+  if (questionIndex === questionSize) return <Loading />
 
   return (
     <Flex

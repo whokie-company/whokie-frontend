@@ -26,6 +26,13 @@ export const useGroupInfo = (groupId: number) => {
   })
 }
 
+export const useGroupInfoSuspense = (groupId: number) => {
+  return useSuspenseQuery({
+    queryKey: ['group', groupId],
+    queryFn: () => getGroupInfo(groupId),
+  })
+}
+
 type GroupResponse = PagingResponse<Omit<Group, 'groupDescription'>[]>
 
 const getGroupPaging = async (params: PagingRequestParams) => {
@@ -68,10 +75,12 @@ export const createGroup = async ({
   groupName,
   groupDescription,
 }: CreateGroupRequestBody) => {
-  await authorizationInstance.post('/api/group', {
+  const response = await authorizationInstance.post<Group>('/api/group', {
     groupName,
     groupDescription,
   })
+
+  return response.data
 }
 
 type GroupInviteCodeRequestParams = {
@@ -155,5 +164,27 @@ export const approveGroupQuestion = async (
       status: approve ? 'true' : 'false',
     }
   )
+  return response.data
+}
+
+export type ModifyGroupImgRequestBody = {
+  groupId: number
+  image: File
+}
+
+export const modifyGroupImg = async ({
+  groupId,
+  image,
+}: ModifyGroupImgRequestBody) => {
+  const formData = new FormData()
+  formData.append('image', image)
+  const response = await authorizationInstance.patch(
+    `/api/group/modify/image/${groupId}`,
+    formData,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }
+  )
+
   return response.data
 }

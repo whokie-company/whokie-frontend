@@ -1,19 +1,25 @@
 import { Suspense } from 'react'
-import { useParams } from 'react-router-dom'
+import { ErrorBoundary } from 'react-error-boundary'
+import { Link, useParams } from 'react-router-dom'
 
-import { Box, Flex, Image, Text } from '@chakra-ui/react'
+import { Box, Button, Card, Flex, Image, Text } from '@chakra-ui/react'
 
-import { useGroupInfo, useGroupRanking } from '@/api/services/group/group.api'
+import {
+  useGroupInfoSuspense,
+  useGroupRanking,
+} from '@/api/services/group/group.api'
 import { useGroupRole } from '@/api/services/group/member.api'
 import sadCookie from '@/assets/sadCookie.svg'
+import { Cookies } from '@/components/Cookies'
 import { Loading } from '@/components/Loading'
 import { RankingGraph } from '@/components/RankingGraph'
 import ErrorPage from '@/pages/ErrorPage'
+import { colors } from '@/styles/colors'
 
 import { ExitGroupButton } from './ExitGroupButton'
+import { GroupProfile } from './GroupProfile'
 import Management from './Management'
 import Navigate from './Navigate'
-import Profile from './Profile'
 import { useRankingData } from './Ranking'
 
 export default function GroupPage() {
@@ -24,9 +30,11 @@ export default function GroupPage() {
   return (
     <div>
       <Navigate />
-      <Suspense fallback={<Loading />}>
-        <GroupSection groupId={Number(groupId)} />
-      </Suspense>
+      <ErrorBoundary fallback>
+        <Suspense fallback={<Loading />}>
+          <GroupSection groupId={Number(groupId)} />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   )
 }
@@ -39,18 +47,47 @@ const GroupSection = ({ groupId }: GroupSectionProps) => {
   const { data: rankData } = useGroupRanking({
     groupId,
   })
-  const { data: groupData } = useGroupInfo(groupId)
+  const { data: groupData } = useGroupInfoSuspense(groupId)
   const { data: role } = useGroupRole(groupId)
 
   const rankingData = useRankingData(rankData)
-
-  if (!groupData || !role || !rankData) return <ErrorPage />
 
   const rankLength = rankingData.length === 0
 
   return (
     <Flex flexDirection="column">
-      <Profile role={role} gprofile={groupData} />
+      <GroupProfile group={groupData} role={role} />
+      <Flex justifyContent="center" paddingY={3}>
+        <Card
+          width="full"
+          marginX="23px"
+          paddingY={4}
+          borderRadius={10}
+          shadow="none"
+          border={`2.5px solid ${colors.brown[500]}`}
+        >
+          <Flex flexDirection="column" alignItems="center" paddingY={2} gap={4}>
+            <Cookies width={16} />
+            <Link to="/">
+              <Button
+                colorScheme="secondary"
+                background="brown.500"
+                fontSize="1rem"
+              >
+                {groupData.groupName} 멤버에게 쿠키 주기
+              </Button>
+            </Link>
+          </Flex>
+        </Card>
+      </Flex>
+      <Flex flexDirection="column" paddingTop={6} paddingX="30px">
+        <Text fontWeight="bold" color="text">
+          👑 쿠키 랭킹
+        </Text>
+        <Text fontSize="sm" color="text_secondary">
+          가장 많이 쿠키를 주고 받은 사람 Top3
+        </Text>
+      </Flex>
       {rankLength ? (
         <Flex justifyContent="center" textAlign="center" margin="50px auto">
           <Image src={sadCookie} />
@@ -68,7 +105,7 @@ const GroupSection = ({ groupId }: GroupSectionProps) => {
           </Box>
         </Flex>
       ) : (
-        <Box p="0 30px">
+        <Box padding="0 30px">
           <RankingGraph rank={rankingData} />
         </Box>
       )}

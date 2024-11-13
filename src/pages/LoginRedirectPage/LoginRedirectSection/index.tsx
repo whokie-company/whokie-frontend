@@ -19,6 +19,12 @@ export const LoginRedirectSection = ({ code }: LoginRedirectSectionProps) => {
 
   useEffect(() => {
     if (data) {
+      if (data.role === 'TEMP') {
+        setAuthToken(data.accessToken)
+        setMyUserId(data.userId)
+        window.location.href = '/register'
+        return
+      }
       setAuthToken(data.accessToken)
       setMyUserId(data.userId)
       navigate('/')

@@ -8,9 +8,8 @@ export type Friend = {
 export type Group = {
   groupId: number
   groupName: string
-  groupdImageUrl: string
+  groupImageUrl: string
   groupDescription: string
-  groupMemberCount: number
 }
 
 export type ChatItem = {

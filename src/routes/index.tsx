@@ -1,7 +1,10 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
+import { useMediaQuery } from '@chakra-ui/react'
+
 import Admin from '@/pages/Admin'
 import GetQuestionAdminPage from '@/pages/Admin/GetQuestionAdminPage'
+import ComingSoonPage from '@/pages/ComingSoonPage'
 import CookieRecordPage from '@/pages/CookieRecordPage'
 import CreateGroupPage from '@/pages/CreateGroupPage'
 import ErrorPage from '@/pages/ErrorPage'
@@ -22,6 +25,7 @@ import PointCancelModal from '@/pages/PointPage/PointCancelModal'
 import PointFailureModal from '@/pages/PointPage/PointFailureModal'
 import PointRedirectPage from '@/pages/PointRedirectPage'
 import ProfileQuestionPage from '@/pages/ProfileQuestionPage'
+import RegisterPage from '@/pages/RegisterPage'
 
 import { ProtectedRoute } from './ProtectedRoute'
 
@@ -37,11 +41,6 @@ const router = createBrowserRouter([
             path: '/',
             element: <MainPage />,
           },
-          {
-            path: '/mypage/:userId',
-            element: <MyPage />,
-          },
-
           {
             path: '/cookie-record',
             element: <CookieRecordPage />,
@@ -107,6 +106,10 @@ const router = createBrowserRouter([
         path: '/admin/get/questions',
         element: <GetQuestionAdminPage />,
       },
+      {
+        path: '/register',
+        element: <RegisterPage />,
+      },
     ],
   },
   {
@@ -119,6 +122,10 @@ const router = createBrowserRouter([
       {
         path: '/login/redirect',
         element: <LoginRedirectPage />,
+      },
+      {
+        path: '/mypage/:userId',
+        element: <MyPage />,
       },
     ],
   },
@@ -134,5 +141,11 @@ const router = createBrowserRouter([
 ])
 
 export const Routes = () => {
+  const [isMobile] = useMediaQuery('(max-width: 1024px)')
+
+  if (isMobile) {
+    return <ComingSoonPage />
+  }
+
   return <RouterProvider router={router} />
 }
