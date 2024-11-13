@@ -17,7 +17,12 @@ const kakaoLogin = async ({ code }: KakaoLoginParam) => {
   )
   const accessToken = response.headers.authorization
 
-  return { accessToken, userId: response.data.userId, role: response.data.role }
+  const userInfo = {
+    userId: response.data.userId,
+    role: response.data.role,
+  }
+
+  return { accessToken, userInfo }
 }
 
 export const useKakaoLogin = ({ code }: KakaoLoginParam) => {
@@ -30,9 +35,7 @@ export const useKakaoLogin = ({ code }: KakaoLoginParam) => {
 export type RegisterUserRequestBody = {
   name: string
   gender: string
-  year: number
-  month: number
-  day: number
+  birthDate: string
 }
 
 type RegisterUeserResponse = {
@@ -48,5 +51,10 @@ export const registerUser = async (data: RegisterUserRequestBody) => {
   )
   const accessToken = response.headers.authorization
 
-  return { accessToken, userId: response.data.userId }
+  const userInfo = {
+    userId: response.data.userId,
+    role: response.data.role,
+  }
+
+  return { accessToken, userInfo }
 }

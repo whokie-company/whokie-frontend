@@ -102,7 +102,7 @@ export type Member = {
   memberImageUrl?: string
 }
 
-export type PointOptions = 'ALL' | 'CHARGED' | 'USED'
+export type PointOptions = 'ALL' | 'CHARGED' | 'USED' | 'EARN'
 
 export type Point = {
   id: number
@@ -143,4 +143,12 @@ export type MemberTable = {
   isExpel?: string
   userId: number
   role: GroupRole
+}
+
+export type AdminQuestion = {
+  questionId: number
+  questionContent: string
+  groupId: number
+  status: string
+  createdAt: string
 }

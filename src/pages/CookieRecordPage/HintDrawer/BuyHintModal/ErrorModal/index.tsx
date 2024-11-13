@@ -7,11 +7,13 @@ import { AlertModal } from '@/components/Modal/AlertModal'
 interface BuyHintErrorModalProps {
   errorMessage: string
   setErrorMessage: (msg: string) => void
+  resetError: () => void
 }
 
 export const BuyHintErrorModal = ({
   errorMessage,
   setErrorMessage,
+  resetError,
 }: BuyHintErrorModalProps) => {
   const { onClose } = useDisclosure()
 
@@ -21,6 +23,7 @@ export const BuyHintErrorModal = ({
       onClose={() => {
         onClose()
         setErrorMessage('')
+        resetError()
       }}
       icon={<BiError />}
       title={errorMessage}

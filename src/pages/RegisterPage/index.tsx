@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
@@ -26,10 +27,11 @@ import {
 } from '@/components/Form'
 import { RegisterUserFields, RegisterUserSchema } from '@/schema/user'
 import { useAuthTokenStore } from '@/stores/auth-token'
-import { useMyUserIdStore } from '@/stores/my-user-id'
+import { useUserInfoStore } from '@/stores/user-info'
 
 export default function RegisterPage() {
   const navigate = useNavigate()
+  const role = useUserInfoStore((state) => state.userInfo?.role)
 
   const form = useForm<RegisterUserFields>({
     resolver: zodResolver(RegisterUserSchema),
@@ -37,33 +39,31 @@ export default function RegisterPage() {
     defaultValues: {
       name: '',
       gender: undefined,
-      year: '',
-      month: '',
-      day: '',
+      birthDate: '',
     },
   })
 
   const setAuthToken = useAuthTokenStore((state) => state.setAuthToken)
-  const setMyUserId = useMyUserIdStore((state) => state.setMyUserId)
+  const setUserInfo = useUserInfoStore((state) => state.setUserInfo)
 
   const { mutate } = useMutation({
     mutationFn: (data: RegisterUserRequestBody) => registerUser(data),
     onSuccess: (data) => {
       setAuthToken(data.accessToken)
-      setMyUserId(data.userId)
+      setUserInfo(data.userInfo)
       navigate('/')
     },
   })
 
   const onValid = () => {
-    mutate({
-      name: form.getValues('name'),
-      gender: form.getValues('gender'),
-      year: Number(form.getValues('year')),
-      month: Number(form.getValues('month')),
-      day: Number(form.getValues('day')),
-    })
+    mutate(form.getValues())
   }
+
+  useEffect(() => {
+    if (role === 'USER') {
+      navigate('/')
+    }
+  }, [role, navigate])
 
   return (
     <Flex
@@ -126,64 +126,25 @@ export default function RegisterPage() {
                 </FormItem>
               )}
             />
-            <Flex flexDirection="column">
-              <Text fontWeight="bold" mb={2}>
-                생년월일
-              </Text>
-              <Flex gap={2}>
-                <FormField
-                  control={form.control}
-                  name="year"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          value={field.value}
-                          onChange={field.onChange}
-                          type="number"
-                          placeholder="YYYY"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="month"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          value={field.value}
-                          onChange={field.onChange}
-                          type="number"
-                          placeholder="MM"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="day"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          value={field.value}
-                          onChange={field.onChange}
-                          type="number"
-                          placeholder="DD"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </Flex>
-            </Flex>
+            <FormField
+              control={form.control}
+              name="birthDate"
+              render={({ field }) => (
+                <FormItem>
+                  <Text fontWeight="bold" mb={2}>
+                    생년월일
+                  </Text>
+                  <FormControl>
+                    <Input
+                      value={field.value}
+                      onChange={field.onChange}
+                      type="date"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <Button
               bg="brown.500"
               color="secondary_background"
