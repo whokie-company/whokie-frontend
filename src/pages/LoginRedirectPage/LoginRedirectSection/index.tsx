@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useKakaoLogin } from '@/api/services/user/login.api'
 import { Loading } from '@/components/Loading'
 import { useAuthTokenStore } from '@/stores/auth-token'
-import { useMyUserIdStore } from '@/stores/my-user-id'
+import { useUserInfoStore } from '@/stores/user-info'
 
 interface LoginRedirectSectionProps {
   code: string
@@ -15,21 +15,21 @@ export const LoginRedirectSection = ({ code }: LoginRedirectSectionProps) => {
 
   const { data, status, error } = useKakaoLogin({ code })
   const setAuthToken = useAuthTokenStore((state) => state.setAuthToken)
-  const setMyUserId = useMyUserIdStore((state) => state.setMyUserId)
+  const setUserInfo = useUserInfoStore((state) => state.setUserInfo)
 
   useEffect(() => {
     if (data) {
-      if (data.role === 'TEMP') {
+      if (data.userInfo.role === 'TEMP') {
         setAuthToken(data.accessToken)
-        setMyUserId(data.userId)
+        setUserInfo(data.userInfo)
         window.location.href = '/register'
         return
       }
       setAuthToken(data.accessToken)
-      setMyUserId(data.userId)
+      setUserInfo(data.userInfo)
       navigate('/')
     }
-  }, [data, setAuthToken, setMyUserId, navigate])
+  }, [data, setAuthToken, setUserInfo, navigate])
 
   if (status === 'pending') return <Loading />
 

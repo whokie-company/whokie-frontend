@@ -5,7 +5,7 @@ import { Flex } from '@chakra-ui/react'
 
 import { useMyPageSuspense } from '@/api/services/profile/my-page.api'
 import { Loading } from '@/components/Loading'
-import { useMyUserIdStore } from '@/stores/my-user-id'
+import { useUserInfoStore } from '@/stores/user-info'
 
 import { MyProfile } from './MyProfile'
 import Navigate from './Navigate'
@@ -15,7 +15,7 @@ import { UserProfile } from './UserProfile'
 
 export default function MyPage() {
   const { userId } = useParams<{ userId: string }>()
-  const myUserId = useMyUserIdStore((state) => state.myUserId)
+  const myUserId = useUserInfoStore((state) => state.userInfo?.userId)
 
   return (
     <Flex flexDirection="column">

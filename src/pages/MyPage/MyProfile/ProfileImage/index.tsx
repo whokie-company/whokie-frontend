@@ -14,7 +14,7 @@ import {
   ModifyBackgroundImageField,
   ModifyBackgroundImageSchema,
 } from '@/schema/profile'
-import { useMyUserIdStore } from '@/stores/my-user-id'
+import { useUserInfoStore } from '@/stores/user-info'
 
 interface ProfileImageProps {
   backgroundImage: string
@@ -25,7 +25,7 @@ export const ProfileImage = ({
   backgroundImage,
   profileImage,
 }: ProfileImageProps) => {
-  const userId = useMyUserIdStore((state) => state.myUserId)
+  const userId = useUserInfoStore((state) => state.userInfo?.userId)
 
   const form = useForm<ModifyBackgroundImageField>({
     resolver: zodResolver(ModifyBackgroundImageSchema),
