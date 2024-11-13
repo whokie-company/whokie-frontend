@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 
 import { useToast } from '@chakra-ui/react'
 
@@ -24,7 +24,11 @@ export const ProtectedRoute = () => {
         ),
       })
     }
+
+    if (!isLoggedIn) {
+      window.location.href = `/login`
+    }
   }, [toast, message, isLoggedIn])
 
-  return isLoggedIn ? <Outlet /> : <Navigate to="/login" replace />
+  return <Outlet />
 }

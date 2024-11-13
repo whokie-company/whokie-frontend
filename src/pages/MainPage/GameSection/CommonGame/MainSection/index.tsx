@@ -64,7 +64,17 @@ export const MainSection = ({
   if (status === 'pending') return <Loading />
 
   if (!questions?.length)
-    return <Heading>질문이 없습니다 관리자에게 문의해주세요</Heading>
+    return (
+      <Flex
+        flexDirection="column"
+        justifyContent="center"
+        textAlign="center"
+        gap={5}
+      >
+        <Heading size="lg">질문이 없습니다😢</Heading>
+        <Heading size="md">관리자에게 문의해주세요</Heading>
+      </Flex>
+    )
 
   if (questionIndex === questionSize) return <Loading />
 

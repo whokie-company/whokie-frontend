@@ -8,11 +8,7 @@ export const RegisterUserSchema = z.object({
   gender: z.enum(['male', 'female'], {
     errorMap: () => ({ message: '성별을 선택해주세요' }),
   }),
-  year: z
-    .string()
-    .regex(/^[0-9]{4}$/, { message: '연도는 4자리 숫자로 입력해 주세요' }),
-  month: z.string().regex(/^[0-9]{1,2}$/, { message: '숫자만 입력해주세요' }),
-  day: z.string().regex(/^[0-9]{1,2}$/, { message: '숫자만 입력해주세요' }),
+  birthDate: z.string().date(),
 })
 
 export type RegisterUserFields = z.infer<typeof RegisterUserSchema>

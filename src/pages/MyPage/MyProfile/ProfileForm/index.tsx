@@ -17,7 +17,7 @@ import {
 } from '@/components/Form'
 import { AlertModal } from '@/components/Modal/AlertModal'
 import { ModifyProfileFields, ModifyProfileSchema } from '@/schema/profile'
-import { useMyUserIdStore } from '@/stores/my-user-id'
+import { useUserInfoStore } from '@/stores/user-info'
 import { colors } from '@/styles/colors'
 
 interface ProfileFormProps {
@@ -25,7 +25,7 @@ interface ProfileFormProps {
 }
 
 export const ProfileForm = ({ description }: ProfileFormProps) => {
-  const userId = useMyUserIdStore((state) => state.myUserId)
+  const userId = useUserInfoStore((state) => state.userInfo?.userId)
   const form = useForm<ModifyProfileFields>({
     resolver: zodResolver(ModifyProfileSchema),
     mode: 'onChange',

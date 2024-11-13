@@ -1,3 +1,5 @@
+import { ErrorBoundary } from 'react-error-boundary'
+
 import { Flex, Slide } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 
@@ -7,6 +9,7 @@ import { useSelectedAnswerStore } from '@/stores/selected-answer'
 import { Modal } from '@/types'
 
 import { AnswerDetail } from './AnswerDetail'
+import { BuyHintErrorFallback } from './BuyHintErrorFallback'
 import { BuyHintModal } from './BuyHintModal'
 import { HintList } from './HintList'
 
@@ -55,11 +58,9 @@ export const HintDrawer = ({ isOpen, modal }: HintDrawerProps) => {
           </Flex>
         </Flex>
       </div>
-      <BuyHintModal
-        modal={modal}
-        answerId={selectedAnswer.answerId}
-        point={point}
-      />
+      <ErrorBoundary FallbackComponent={BuyHintErrorFallback}>
+        <BuyHintModal modal={modal} answerId={selectedAnswer.answerId} />
+      </ErrorBoundary>
     </Slide>
   )
 }
