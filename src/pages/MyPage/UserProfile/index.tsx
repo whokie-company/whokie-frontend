@@ -8,7 +8,7 @@ interface UserProfileProps {
 
 export const UserProfile = ({ profile }: UserProfileProps) => {
   return (
-    <Flex flexDirection="column" padding="0 30px">
+    <Flex flexDirection="column">
       <Box
         height="144px"
         backgroundImage={`url('${profile.backgroundImageUrl}')`}
@@ -22,12 +22,18 @@ export const UserProfile = ({ profile }: UserProfileProps) => {
           size="lg"
           position="absolute"
           bottom="-30px"
+          left="30px"
         />
       </Box>
-      <Text fontSize="xl" fontWeight="400">
+      <Text fontSize="xl" fontWeight="400" padding="0 30px">
         {profile.name}
       </Text>
-      <Flex justifyContent="space-between" alignItems="end" gap={4}>
+      <Flex
+        justifyContent="space-between"
+        alignItems="end"
+        gap={4}
+        padding="0 30px"
+      >
         <Text color="text_secondary" fontSize="md">
           {profile.description}
         </Text>
