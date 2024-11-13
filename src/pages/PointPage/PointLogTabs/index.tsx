@@ -11,7 +11,7 @@ export const PointLogTabs = () => {
   const [tabIndex, setTableIndex] = useState(0)
   const option = options[tabIndex]
 
-  const { data } = usePointRecordPaging({ option })
+  const { data } = usePointRecordPaging({ option, size: 8 })
   const points = data?.pages.flatMap((page) => page.records)
 
   return (
@@ -26,9 +26,13 @@ export const PointLogTabs = () => {
         <TabList justifyContent="center" height="2rem" gap={4}>
           <Tab>전체</Tab>
           <Tab>적립</Tab>
+          <Tab>구매</Tab>
           <Tab>사용</Tab>
         </TabList>
         <TabPanels>
+          <TabPanel>
+            <PointLogList option={option} points={points} />
+          </TabPanel>
           <TabPanel>
             <PointLogList option={option} points={points} />
           </TabPanel>
@@ -44,4 +48,4 @@ export const PointLogTabs = () => {
   )
 }
 
-const options: PointOptions[] = ['ALL', 'CHARGED', 'USED']
+const options: PointOptions[] = ['ALL', 'EARN', 'CHARGED', 'USED']

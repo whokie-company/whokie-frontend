@@ -3,6 +3,13 @@ import { format } from 'date-fns'
 
 import { Point, PointOptions } from '@/types'
 
+enum PointOption {
+  ALL = 'ALL',
+  CHARGED = '구매',
+  USED = '사용',
+  EARN = '적립',
+}
+
 interface PointLogListProps {
   option: PointOptions
   points: Point[]
@@ -18,7 +25,7 @@ export const PointLogList = ({ option, points }: PointLogListProps) => {
   }
 
   return (
-    <Card padding={4}>
+    <Card padding={4} height="16rem">
       <Flex flexDirection="column" gap={2}>
         {points.map((point) => {
           return (
@@ -30,7 +37,7 @@ export const PointLogList = ({ option, points }: PointLogListProps) => {
               <Text>{format(point.createdAt, 'yyyy.MM.dd')}</Text>
               {option === 'ALL' ? (
                 <Flex gap={2}>
-                  <Text>{point.option === 'CHARGED' ? '적립' : '사용'}</Text>
+                  <Text>{PointOption[point.option]}</Text>
                   <Text>{point.point}</Text>
                 </Flex>
               ) : (

@@ -31,7 +31,7 @@ const getPointRecordPaging = async (params: PointRecordRequestParams) => {
 
 interface PointRecordParams extends PagingRequestParams {
   initPageToken?: string
-  option?: 'ALL' | 'CHARGED' | 'USED'
+  option?: PointOptions
 }
 
 export const usePointRecordPaging = ({
