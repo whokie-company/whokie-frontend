@@ -1,14 +1,31 @@
 import { Card, Flex, Text } from '@chakra-ui/react'
 import { format } from 'date-fns'
 
+import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
 import { Point, PointOptions } from '@/types'
+
+enum PointOption {
+  ALL = 'ALL',
+  CHARGED = '구매',
+  USED = '사용',
+  EARN = '적립',
+}
 
 interface PointLogListProps {
   option: PointOptions
   points: Point[]
+  hasNextPage: boolean
+  isFetchingNextPage: boolean
+  fetchNextPage: () => void
 }
 
-export const PointLogList = ({ option, points }: PointLogListProps) => {
+export const PointLogList = ({
+  option,
+  points,
+  hasNextPage,
+  isFetchingNextPage,
+  fetchNextPage,
+}: PointLogListProps) => {
   if (!points.length) {
     return (
       <Card padding={4}>
@@ -18,7 +35,7 @@ export const PointLogList = ({ option, points }: PointLogListProps) => {
   }
 
   return (
-    <Card padding={4}>
+    <Card padding={4} height="16rem" overflow="scroll">
       <Flex flexDirection="column" gap={2}>
         {points.map((point) => {
           return (
@@ -30,8 +47,10 @@ export const PointLogList = ({ option, points }: PointLogListProps) => {
               <Text>{format(point.createdAt, 'yyyy.MM.dd')}</Text>
               {option === 'ALL' ? (
                 <Flex gap={2}>
-                  <Text>{point.option === 'CHARGED' ? '적립' : '사용'}</Text>
-                  <Text>{point.point}</Text>
+                  <Text fontWeight="bold">{PointOption[point.option]}</Text>
+                  <Text minWidth="1.5rem" textAlign="end">
+                    {point.point}
+                  </Text>
                 </Flex>
               ) : (
                 <Text>{point.point}</Text>
@@ -39,6 +58,15 @@ export const PointLogList = ({ option, points }: PointLogListProps) => {
             </Flex>
           )
         })}
+        {hasNextPage && (
+          <IntersectionObserverLoader
+            callback={() => {
+              if (!isFetchingNextPage) {
+                fetchNextPage()
+              }
+            }}
+          />
+        )}
       </Flex>
     </Card>
   )
