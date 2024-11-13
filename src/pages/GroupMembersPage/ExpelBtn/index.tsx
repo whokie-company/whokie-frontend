@@ -29,6 +29,8 @@ export default function ExpelBtn({
     mutationFn: () => expelMember({ groupId, userId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expelMember'] })
+      queryClient.invalidateQueries({ queryKey: ['group', 'member', groupId] })
+      queryClient.invalidateQueries({ queryKey: ['membersManage', groupId] })
       window.location.reload()
     },
     onError: () => {
