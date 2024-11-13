@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
@@ -26,10 +27,11 @@ import {
 } from '@/components/Form'
 import { RegisterUserFields, RegisterUserSchema } from '@/schema/user'
 import { useAuthTokenStore } from '@/stores/auth-token'
-import { useMyUserIdStore } from '@/stores/my-user-id'
+import { useUserInfoStore } from '@/stores/user-info'
 
 export default function RegisterPage() {
   const navigate = useNavigate()
+  const role = useUserInfoStore((state) => state.userInfo?.role)
 
   const form = useForm<RegisterUserFields>({
     resolver: zodResolver(RegisterUserSchema),
@@ -42,13 +44,13 @@ export default function RegisterPage() {
   })
 
   const setAuthToken = useAuthTokenStore((state) => state.setAuthToken)
-  const setMyUserId = useMyUserIdStore((state) => state.setMyUserId)
+  const setUserInfo = useUserInfoStore((state) => state.setUserInfo)
 
   const { mutate } = useMutation({
     mutationFn: (data: RegisterUserRequestBody) => registerUser(data),
     onSuccess: (data) => {
       setAuthToken(data.accessToken)
-      setMyUserId(data.userId)
+      setUserInfo(data.userInfo)
       navigate('/')
     },
   })
@@ -56,6 +58,12 @@ export default function RegisterPage() {
   const onValid = () => {
     mutate(form.getValues())
   }
+
+  useEffect(() => {
+    if (role === 'USER') {
+      navigate('/')
+    }
+  }, [role, navigate])
 
   return (
     <Flex
