@@ -37,13 +37,13 @@ export const CreateQuestionButton = ({ userId }: CreateQuestionButtonProps) => {
       formModal.onClose()
       setNewQuestionContent('')
       queryClient.invalidateQueries({ queryKey: ['postNewQuestion'] })
-      queryClient.refetchQueries({
-        queryKey: ['profileQuestion', userId],
+      queryClient.invalidateQueries({
+        queryKey: ['profileQuestion', userId.toString()],
       })
     },
     onError: () => {
       formModal.onClose()
-      setErrorMessage('답변 전송에 실패하였습니다')
+      setErrorMessage('질문 생성에 실패하였습니다')
       errorAlert.onOpen()
     },
   })

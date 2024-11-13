@@ -34,16 +34,7 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
   const deleteAlert = useDisclosure()
   const errorAlert = useDisclosure()
 
-  const questionId = useSelectedQuestionStore((state) => state.questionId)
-  const setSelectedQuestion = useSelectedQuestionStore(
-    (state) => state.setQuestionId
-  )
-  const setQuestionContent = useSelectedQuestionStore(
-    (state) => state.setQuestionContent
-  )
-  const setQuestionCreatedAt = useSelectedQuestionStore(
-    (state) => state.setQuestionCreatedAt
-  )
+  const { selectedQuestion, setSelectedQuestion } = useSelectedQuestionStore()
 
   const location = useLocation()
   const userId: string = location.state?.userId.toString()
@@ -70,25 +61,26 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
   }, [])
 
   useEffect(() => {
-    // 첫 렌더링 시 초기 store 지정
     if (isFirstRender.current && questions && questions.length > 0) {
-      setSelectedQuestion(questions[0].profileQuestionId)
-      setQuestionContent(questions[0].profileQuestionContent)
-      setQuestionCreatedAt(questions[0].createdAt)
-
+      setSelectedQuestion({
+        selectQuestion: {
+          questionId: questions[0].profileQuestionId,
+          questionContent: questions[0].profileQuestionContent,
+          questionCreatedAt: questions[0].createdAt,
+        },
+      })
       isFirstRender.current = false
     } else if (isFirstRender.current && questions?.length === 0) {
-      setSelectedQuestion(undefined)
-      setQuestionContent(undefined)
-      setQuestionCreatedAt(undefined)
+      setSelectedQuestion({
+        selectQuestion: {
+          questionId: undefined,
+          questionContent: undefined,
+          questionCreatedAt: undefined,
+        },
+      })
+      isFirstRender.current = false
     }
-  }, [
-    questions,
-    questionId,
-    setSelectedQuestion,
-    setQuestionContent,
-    setQuestionCreatedAt,
-  ])
+  }, [questions, setSelectedQuestion])
 
   const { mutate: deleteQuestion } = useMutation<
     void,
@@ -163,11 +155,17 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
           >
             <ActiveBrownBox
               key={question.profileQuestionId}
-              isActive={questionId === question.profileQuestionId}
+              isActive={
+                selectedQuestion.questionId === question.profileQuestionId
+              }
               onClick={() => {
-                setSelectedQuestion(question.profileQuestionId)
-                setQuestionContent(question.profileQuestionContent)
-                setQuestionCreatedAt(question.createdAt)
+                setSelectedQuestion({
+                  selectQuestion: {
+                    questionId: question.profileQuestionId,
+                    questionContent: question.profileQuestionContent,
+                    questionCreatedAt: question.createdAt,
+                  },
+                })
               }}
             >
               {question.profileQuestionContent}

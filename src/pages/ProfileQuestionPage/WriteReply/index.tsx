@@ -46,6 +46,7 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
       queryClient.refetchQueries({
         queryKey: ['profileAnswer', userId, questionId],
       })
+      form.reset()
     },
     onError: () => {
       setErrorMessage('답변 전송에 실패하였습니다')

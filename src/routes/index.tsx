@@ -2,6 +2,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { useMediaQuery } from '@chakra-ui/react'
 
+import Admin from '@/pages/Admin'
+import GetQuestionAdminPage from '@/pages/Admin/GetQuestionAdminPage'
 import ComingSoonPage from '@/pages/ComingSoonPage'
 import CookieRecordPage from '@/pages/CookieRecordPage'
 import CreateGroupPage from '@/pages/CreateGroupPage'
@@ -95,6 +97,14 @@ const router = createBrowserRouter([
       {
         path: '/invite/:groupId',
         element: <InvitePage />,
+      },
+      {
+        path: '/admin/main',
+        element: <Admin />,
+      },
+      {
+        path: '/admin/get/questions',
+        element: <GetQuestionAdminPage />,
       },
       {
         path: '/register',
