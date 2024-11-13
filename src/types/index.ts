@@ -102,7 +102,7 @@ export type Member = {
   memberImageUrl?: string
 }
 
-export type PointOptions = 'ALL' | 'CHARGED' | 'USED'
+export type PointOptions = 'ALL' | 'CHARGED' | 'USED' | 'EARN'
 
 export type Point = {
   id: number

@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Link, useParams } from 'react-router-dom'
 
@@ -14,6 +14,7 @@ import { Cookies } from '@/components/Cookies'
 import { Loading } from '@/components/Loading'
 import { RankingGraph } from '@/components/RankingGraph'
 import ErrorPage from '@/pages/ErrorPage'
+import { useSelectedGroupStore } from '@/stores/selected-group'
 import { colors } from '@/styles/colors'
 
 import { ExitGroupButton } from './ExitGroupButton'
@@ -50,9 +51,20 @@ const GroupSection = ({ groupId }: GroupSectionProps) => {
   const { data: groupData } = useGroupInfoSuspense(groupId)
   const { data: role } = useGroupRole(groupId)
 
+  const setSelectedGroup = useSelectedGroupStore(
+    (state) => state.setSelectedGroup
+  )
+
   const rankingData = useRankingData(rankData)
 
   const rankLength = rankingData.length === 0
+
+  useEffect(() => {
+    setSelectedGroup({
+      groupId: groupData.groupId,
+      groupName: groupData.groupName,
+    })
+  }, [setSelectedGroup, groupData])
 
   return (
     <Flex flexDirection="column">

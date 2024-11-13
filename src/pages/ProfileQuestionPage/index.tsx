@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { Box, Button, Flex } from '@chakra-ui/react'
 
-import { useMyUserIdStore } from '@/stores/my-user-id'
 import { useSelectedQuestionStore } from '@/stores/selected-question'
+import { useUserInfoStore } from '@/stores/user-info'
 
 import Answer from './Answer'
 import Question from './Question'
