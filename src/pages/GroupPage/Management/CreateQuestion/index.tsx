@@ -6,6 +6,7 @@ import { Box, Flex, useDisclosure } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
+import { queryClient } from '@/api/instance'
 import {
   CreateGroupQuestionPayload,
   createGroupQuestion,
@@ -44,6 +45,10 @@ export const GroupQuestionCreateModal = ({
       createGroupQuestion(payload),
     onSuccess: () => {
       onClose()
+      form.reset({ groupId, content: '' })
+      queryClient.invalidateQueries({
+        queryKey: ['groupQuestions', groupId, 'pending'],
+      })
     },
     onError: () => {
       setErrorMessage('질문 생성에 실패하였습니다')

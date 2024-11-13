@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { Box, Text } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 
+import { queryClient } from '@/api/instance'
 import { approveGroupQuestion } from '@/api/services/group/group.api'
 import { useGroupRole } from '@/api/services/group/member.api'
 import { useGroupQuestion } from '@/api/services/question/group.api'
@@ -24,7 +25,6 @@ export const QuestionManagement = () => {
     data: groupQuestions,
     isLoading,
     isError,
-    refetch,
   } = useGroupQuestion({
     groupId: groupId || '',
     status,
@@ -37,7 +37,12 @@ export const QuestionManagement = () => {
       return approveGroupQuestion(String(groupId), questionId, approve)
     },
     onSuccess: () => {
-      refetch()
+      queryClient.invalidateQueries({
+        queryKey: ['groupQuestions', groupId, status],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['question', 'common', 'random', 'group', groupId],
+      })
     },
   })
 
