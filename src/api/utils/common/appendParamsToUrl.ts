@@ -9,7 +9,7 @@ export function appendParamsToUrl(
       value.forEach((item) => {
         searchParams.append(key, item.toString())
       })
-    } else if (value) {
+    } else if (value !== undefined) {
       searchParams.append(key, value.toString())
     }
   })
