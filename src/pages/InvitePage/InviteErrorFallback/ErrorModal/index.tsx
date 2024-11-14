@@ -30,3 +30,24 @@ export const InviteErrorMoal = ({
     />
   )
 }
+
+export const InviteErrorMoalLogin = ({
+  errorMessage,
+  detailMessage = '',
+}: InviteErrorMoalProps) => {
+  const { onClose } = useDisclosure()
+  const navigate = useNavigate()
+
+  return (
+    <AlertModal
+      isOpen
+      onClose={() => {
+        navigate('/login')
+        onClose()
+      }}
+      icon={<BiError />}
+      title={errorMessage}
+      description={detailMessage}
+    />
+  )
+}
