@@ -2,10 +2,20 @@ import { BiX } from 'react-icons/bi'
 
 import { Box, Button, Flex } from '@chakra-ui/react'
 
-import { ChatBoxProps } from '@/types'
+interface ChatBoxProps {
+  direction: 'left' | 'right'
+  content: string
+  createdAt: string
+  deleteBtn?: boolean
+  onDelete?: () => void
+}
 
 export const ChatBox = ({
-  chatItem: { direction, content, createdAt, deleteBtn = false, onDelete },
+  direction,
+  content,
+  createdAt,
+  deleteBtn = false,
+  onDelete,
 }: ChatBoxProps) => {
   const isRight = direction === 'right'
 
