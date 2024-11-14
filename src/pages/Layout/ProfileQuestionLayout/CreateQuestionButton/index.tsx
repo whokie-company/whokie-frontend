@@ -36,9 +36,8 @@ export const CreateQuestionButton = ({ userId }: CreateQuestionButtonProps) => {
     onSuccess: () => {
       formModal.onClose()
       setNewQuestionContent('')
-      queryClient.invalidateQueries({ queryKey: ['postNewQuestion'] })
       queryClient.invalidateQueries({
-        queryKey: ['profileQuestion', userId.toString()],
+        queryKey: ['profileQuestion', userId],
       })
     },
     onError: () => {
@@ -52,6 +51,7 @@ export const CreateQuestionButton = ({ userId }: CreateQuestionButtonProps) => {
     if (!newQuestionContent.trim()) {
       setErrorMessage('질문을 입력해주세요')
       formModal.onClose()
+      setNewQuestionContent('')
       errorAlert.onOpen()
       return
     }
@@ -82,7 +82,10 @@ export const CreateQuestionButton = ({ userId }: CreateQuestionButtonProps) => {
       </Button>
       <FormModal
         isOpen={formModal.isOpen}
-        onClose={formModal.onClose}
+        onClose={() => {
+          formModal.onClose()
+          setNewQuestionContent('')
+        }}
         icon={<BiPlus />}
         title="프로필 질문 추가하기"
         description="친구들에게 궁금한 질문을 추가해보세요"

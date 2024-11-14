@@ -21,10 +21,6 @@ export type ChatItem = {
   onDelete?: () => void
 }
 
-export type ChatBoxProps = {
-  chatItem: ChatItem
-}
-
 export type QuestionItem = {
   profileQuestionId: number
   profileQuestionContent: string
