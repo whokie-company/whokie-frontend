@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BiError, BiTrash } from 'react-icons/bi'
 
 import { Box, Button, useDisclosure } from '@chakra-ui/react'
@@ -31,6 +31,8 @@ const Answer: React.FC<AnswerProps> = ({
   const deleteAlert = useDisclosure()
   const errorAlert = useDisclosure()
 
+  const [answerId, setAnswerId] = useState<number>()
+
   const { mutate: deleteAnswer } = useMutation<
     void,
     Error,
@@ -40,10 +42,9 @@ const Answer: React.FC<AnswerProps> = ({
       deleteProfileAnswer({ deleteAnswerId }),
     onSuccess: () => {
       deleteAlert.onClose()
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: ['profileAnswer', userId, questionId],
       })
-      queryClient.invalidateQueries({ queryKey: ['deleteProfileAnswer'] })
     },
     onError: () => {
       deleteAlert.onClose()
@@ -70,11 +71,6 @@ const Answer: React.FC<AnswerProps> = ({
   if (isError) return <ErrorPage />
   if (!answers) return ''
 
-  const handleDelete = (deleteAnswerId: number) => {
-    deleteAnswer({ deleteAnswerId })
-    deleteAlert.onOpen()
-  }
-
   return (
     <Box overflowY="auto" ref={boxRef}>
       {isMyPage
@@ -85,7 +81,10 @@ const Answer: React.FC<AnswerProps> = ({
               content={answer.content}
               createdAt={formatDate(answer.createdAt)}
               deleteBtn
-              onDelete={() => handleDelete(Number(answer.profileAnswerId))}
+              onDelete={() => {
+                setAnswerId(Number(answer.profileAnswerId))
+                deleteAlert.onOpen()
+              }}
             />
           ))
         : answers.map((answer) => (
@@ -108,7 +107,9 @@ const Answer: React.FC<AnswerProps> = ({
             fontSize="small"
             height="fit-content"
             paddingY="0.6rem"
-            onClick={() => {}}
+            onClick={() => {
+              if (answerId) deleteAnswer({ deleteAnswerId: answerId })
+            }}
           >
             삭제하기
           </Button>
