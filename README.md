@@ -13,7 +13,7 @@ https://github.com/user-attachments/assets/6d708a1a-8909-48ab-9969-1301c9bf743a
 
 타인의 긍정적 평가로 나를 알아갈 수 있는 소셜 미디어 플랫폼
 
-### [🔗 Whokie 바로가기](https://whokie.com/)
+### [🔗 Whokie 바로가기](https://whokie.com/invite/22?invite-code=T7xkar4KscpMvAXtLFko_apYtrjbcdw49Khsf7zLo1HjdOqC-PxGypAn2eaw0PePtN9vaNOBXZHg4CNXE7cqmg%3D%3D)
 
 
 Whokie와 함께 진정한 나를 알아가보자!
@@ -29,6 +29,7 @@ Whokie와 함께 진정한 나를 알아가보자!
 - [1. Whokie 서비스 소개](#1-whokie-소개)
   - [👉🏻 Whokie 사용 설명서 👈🏻](#-whokie-사용-설명서-보기-)
 - [2. 프로젝트 소개](#2-프로젝트-소개)
+  - [🚀 배포 링크](#-배포-링크)
   - [👋🏻 팀원 소개](#-팀원-소개)
   - [🗓️ 개발 기간](#%EF%B8%8F-개발-기간)
   - [🏃 프로젝트 개요](#-프로젝트-개요)
@@ -78,6 +79,13 @@ Whokie와 함께 진정한 나를 알아가보자!
 <br />
 
 # 2. 프로젝트 소개
+
+## 🚀 배포 링크
+
+|FE|https://whokie.com/|
+|:-----:|:---:|
+|BE|https://whokie.com/api/|
+
 ## 👋🏻 팀원 소개
 
 <div align="center">
@@ -137,6 +145,14 @@ Whokie와 함께 진정한 나를 알아가보자!
 <br />
 
 # 4. FE 프로젝트 이슈
+
+1. [쿠키 주기 기능](https://github.com/kakao-tech-campus-2nd-step3/Team6_FE/pull/80)
+    
+    > 전체 인원을 랜덤으로 제공하고 모든 프로필이 제공된 후 남은 프로필이 선택지로 나오고 싶다면?
+    > 
+    
+    쿠키 주기 기능은 하나의 질문에 5개의 선택지를 제공합니다.  모든 인원이 선택지로 나온 후에는 다시 중복해서 선택지를 제공해야 합니다. 이때 선택된 원소는 picked 배열에, 선택 되지 않은 원소는 remain에 저장합니다. 5개의 선택지를 제공해야하기 때문에  remain 배열의 길이가 5이상인지 확인하고, remain 배열의 길이가 5이상이면 remain에서 랜덤으로 5명을 뽑습니다. remain 배열의 길이가 5 미만이라면 remain과 picked의 배열 원소를 swap하여 picked의 배열에서 추가로 선택지를 뽑습니다. 이러한 로직으로 remain이 비어도 picked 배열에서 선택지를 순차적으로 제공하며, 모든 인원이 선택되었을 때 중복된 인원이 선택지로 제공합니다.
+    
 
 1. [페이지 레이아웃](https://github.com/kakao-tech-campus-2nd-step3/Team6_FE/pull/46)
     
