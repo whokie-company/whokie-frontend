@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { BiError, BiPlus } from 'react-icons/bi'
 
@@ -29,6 +29,7 @@ export const GroupQuestionCreateModal = ({
   groupId,
 }: GroupQuestionCreateModalProps) => {
   const errorAlert = useDisclosure()
+
   const [errorMessage, setErrorMessage] = useState('')
 
   const form = useForm<CreateQuestionFields>({
@@ -57,18 +58,14 @@ export const GroupQuestionCreateModal = ({
     },
   })
 
-  useEffect(() => {
-    form.reset({
-      groupId,
-      content: '',
-    })
-  }, [groupId, form])
-
   return (
     <Box>
       <FormModal
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={() => {
+          onClose()
+          form.reset({ groupId, content: '' })
+        }}
         icon={<BiPlus />}
         title="그룹 질문 추가 요청"
         description="그룹에 새로운 질문을 요청해보세요"
@@ -86,7 +83,6 @@ export const GroupQuestionCreateModal = ({
           <CreateQuestionForm form={form} />
         </Flex>
       </FormModal>
-
       <AlertModal
         isOpen={errorAlert.isOpen}
         onClose={errorAlert.onClose}

@@ -1,27 +1,21 @@
 import { create } from 'zustand'
 
-interface SelectedQuestion {
-  questionId: number | undefined
-  questionContent: string | undefined
-  questionCreatedAt: string | undefined
+export type SelectedQuestion = {
+  questionId: number
+  questionContent: string
+  questionCreatedAt: string
 }
 
 interface SelectedQuestionProps {
-  selectedQuestion: SelectedQuestion
-  setSelectedQuestion: (selectQuestion: {
-    selectQuestion: SelectedQuestion
-  }) => void
+  selectedQuestion?: SelectedQuestion
+  setSelectedQuestion: (selectedQuestion: SelectedQuestion | undefined) => void
 }
 
 export const useSelectedQuestionStore = create<SelectedQuestionProps>(
   (set) => ({
-    selectedQuestion: {
-      questionId: undefined,
-      questionContent: undefined,
-      questionCreatedAt: undefined,
-    },
-    setSelectedQuestion: ({ selectQuestion }) => {
-      set({ selectedQuestion: selectQuestion })
+    selectedQuestion: undefined,
+    setSelectedQuestion: (selectedQuestion) => {
+      set({ selectedQuestion })
     },
   })
 )

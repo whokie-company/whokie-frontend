@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { BiError, BiTrash } from 'react-icons/bi'
-import { useLocation } from 'react-router-dom'
 
 import { Box, Button, Flex, Text, useDisclosure } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
@@ -9,23 +8,24 @@ import { queryClient } from '@/api/instance'
 import {
   DeleteProfileQuestionRequest,
   deleteProfileQuestion,
-  useGetProfileQuestion,
 } from '@/api/services/profile/profile-question.api'
 import { ActiveBrownBox } from '@/components/ActiveBrownBox'
 import { Loading } from '@/components/Loading'
 import { AlertModal } from '@/components/Modal/AlertModal'
 import { ConfirmModal } from '@/components/Modal/ConfirmModal'
-import ErrorPage from '@/pages/ErrorPage'
-import { useSelectedQuestionStore } from '@/stores/selected-question'
+import {
+  SelectedQuestion,
+  useSelectedQuestionStore,
+} from '@/stores/selected-question'
+import { QuestionItem } from '@/types'
 
 interface QuestionListProps {
   isMyPage: boolean
+  userId: number
+  questions: QuestionItem[]
 }
 
-export const QuestionList = ({ isMyPage }: QuestionListProps) => {
-  const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(
-    null
-  )
+const QuestionList = ({ isMyPage, userId, questions }: QuestionListProps) => {
   const [contextMenuPosition, setContextMenuPosition] = useState<{
     x: number
     y: number
@@ -35,17 +35,9 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
   const errorAlert = useDisclosure()
 
   const { selectedQuestion, setSelectedQuestion } = useSelectedQuestionStore()
-
-  const location = useLocation()
-  const userId: string = location.state?.userId.toString()
-
-  const {
-    data: questions,
-    isLoading,
-    error,
-  } = useGetProfileQuestion(userId || '')
-
-  const isFirstRender = useRef(true)
+  const adjustedXPosition = contextMenuPosition
+    ? contextMenuPosition.x - contextMenuPosition.x * 0.6
+    : 0
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -60,42 +52,12 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  useEffect(() => {
-    if (isFirstRender.current && questions && questions.length > 0) {
-      setSelectedQuestion({
-        selectQuestion: {
-          questionId: questions[0].profileQuestionId,
-          questionContent: questions[0].profileQuestionContent,
-          questionCreatedAt: questions[0].createdAt,
-        },
-      })
-      isFirstRender.current = false
-    } else if (isFirstRender.current && questions?.length === 0) {
-      setSelectedQuestion({
-        selectQuestion: {
-          questionId: undefined,
-          questionContent: undefined,
-          questionCreatedAt: undefined,
-        },
-      })
-      isFirstRender.current = false
-    }
-  }, [questions, setSelectedQuestion])
-
-  const { mutate: deleteQuestion } = useMutation<
-    void,
-    Error,
-    DeleteProfileQuestionRequest
-  >({
+  const { mutate: deleteQuestion } = useMutation({
     mutationFn: ({ deleteQuestionId }: DeleteProfileQuestionRequest) =>
       deleteProfileQuestion({ deleteQuestionId }),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profileQuestion', userId] })
       deleteAlert.onClose()
-      queryClient.refetchQueries({
-        queryKey: ['profileQuestion', userId],
-      })
-      queryClient.invalidateQueries({ queryKey: ['deleteProfileQuestion'] })
-      setSelectedQuestionId(null)
     },
     onError: () => {
       deleteAlert.onClose()
@@ -103,21 +65,12 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
     },
   })
 
-  if (isLoading) return <Loading />
-  if (error) return <ErrorPage />
-  if (!Array.isArray(questions) || questions.length === 0)
-    return (
-      <Box textAlign="center" paddingTop={3}>
-        생성된 질문이 없습니다!
-      </Box>
-    )
-
   const handleContextMenu = (
     e: React.MouseEvent,
-    question: { profileQuestionId: number }
+    selectQuestion: SelectedQuestion
   ) => {
     e.preventDefault()
-    setSelectedQuestionId(question.profileQuestionId)
+    setSelectedQuestion(selectQuestion)
     setContextMenuPosition({ x: e.clientX, y: e.clientY })
   }
 
@@ -126,15 +79,21 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
     setContextMenuPosition(null)
   }
 
-  const handleDelete = () => {
-    if (selectedQuestionId !== undefined && selectedQuestionId !== null) {
-      deleteQuestion({ deleteQuestionId: selectedQuestionId })
+  useEffect(() => {
+    if (questions.length > 0) {
+      setSelectedQuestion({
+        questionId: questions[0].profileQuestionId,
+        questionContent: questions[0].profileQuestionContent,
+        questionCreatedAt: questions[0].createdAt,
+      })
     }
-  }
+  }, [userId, questions, setSelectedQuestion])
 
-  const adjustedXPosition = contextMenuPosition
-    ? contextMenuPosition.x - contextMenuPosition.x * 0.6
-    : 0
+  if (!selectedQuestion) return <Loading />
+
+  const handleDelete = () => {
+    deleteQuestion({ deleteQuestionId: selectedQuestion.questionId })
+  }
 
   return (
     <Flex
@@ -145,12 +104,19 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
       gap={2}
     >
       <Flex flexDirection="column" width="full">
-        {questions?.map((question) => (
+        {questions.map((question) => (
           <Box
             key={question.profileQuestionId}
             width="full"
             onContextMenu={
-              isMyPage ? (e) => handleContextMenu(e, question) : undefined
+              isMyPage
+                ? (e) =>
+                    handleContextMenu(e, {
+                      questionId: question.profileQuestionId,
+                      questionContent: question.profileQuestionContent,
+                      questionCreatedAt: question.createdAt,
+                    })
+                : undefined
             }
           >
             <ActiveBrownBox
@@ -160,11 +126,9 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
               }
               onClick={() => {
                 setSelectedQuestion({
-                  selectQuestion: {
-                    questionId: question.profileQuestionId,
-                    questionContent: question.profileQuestionContent,
-                    questionCreatedAt: question.createdAt,
-                  },
+                  questionId: question.profileQuestionId,
+                  questionContent: question.profileQuestionContent,
+                  questionCreatedAt: question.createdAt,
                 })
               }}
             >
@@ -224,5 +188,35 @@ export const QuestionList = ({ isMyPage }: QuestionListProps) => {
         description=""
       />
     </Flex>
+  )
+}
+
+interface QuestionListSectionProps {
+  questions: QuestionItem[]
+  userId: number
+  isMyPage: boolean
+}
+
+export const QuestionListSection = ({
+  questions,
+  userId,
+  isMyPage,
+}: QuestionListSectionProps) => {
+  const setSelectedQuestion = useSelectedQuestionStore(
+    (state) => state.setSelectedQuestion
+  )
+
+  if (!questions.length) {
+    setSelectedQuestion(undefined)
+
+    return (
+      <Box textAlign="center" paddingTop={3}>
+        생성된 질문이 없습니다!
+      </Box>
+    )
+  }
+
+  return (
+    <QuestionList isMyPage={isMyPage} userId={userId} questions={questions} />
   )
 }

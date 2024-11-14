@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { BiCheckCircle, BiError } from 'react-icons/bi'
 
@@ -17,6 +17,9 @@ import {
   AnswerProfileQuestionField,
   AnswerProfileQuestionSchema,
 } from '@/schema/profile'
+import { useAuthTokenStore } from '@/stores/auth-token'
+
+import { LoginModal } from './LoginModal'
 
 interface WriteReplyProps {
   userId: number
@@ -24,10 +27,12 @@ interface WriteReplyProps {
 }
 
 export default function WriteReply({ userId, questionId }: WriteReplyProps) {
+  const isLoggedIn = useAuthTokenStore((state) => state.isLoggedIn())
   const [errorMessage, setErrorMessage] = useState('')
 
   const errorAlert = useDisclosure()
   const successAlert = useDisclosure()
+  const loginModal = useDisclosure()
 
   const form = useForm<AnswerProfileQuestionField>({
     resolver: zodResolver(AnswerProfileQuestionSchema),
@@ -43,7 +48,7 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
       postProfileAnswer({ content, profileQuestionId }),
     onSuccess: () => {
       successAlert.onOpen()
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: ['profileAnswer', userId, questionId],
       })
       form.reset()
@@ -55,7 +60,13 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
   })
 
   const handleSend = form.handleSubmit(
-    () => submitReply(form.getValues()),
+    () => {
+      if (!isLoggedIn) {
+        loginModal.onOpen()
+        return
+      }
+      submitReply(form.getValues())
+    },
     (errors) => {
       const errorMessages =
         Object.values(errors).flatMap((error) => error.message)[0] || ''
@@ -64,6 +75,13 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
       errorAlert.onOpen()
     }
   )
+
+  useEffect(() => {
+    form.reset({
+      content: '',
+      profileQuestionId: questionId,
+    })
+  }, [questionId, form])
 
   return (
     <Flex
@@ -76,7 +94,7 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
       marginTop="auto"
     >
       <Form {...form}>
-        <form>
+        <form onSubmit={handleSend}>
           <FormField
             control={form.control}
             name="content"
@@ -99,7 +117,6 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
           />
           <Flex justifyContent="end" height="29px" margin="14px 0">
             <Button
-              onClick={handleSend}
               marginRight="15px"
               borderRadius={20}
               width="90px"
@@ -108,6 +125,7 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
               fontSize="small"
               _hover={{ boxShadow: 'md' }}
               _active={{ bg: 'brown.500' }}
+              type="submit"
             >
               전송
             </Button>
@@ -123,16 +141,12 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
       />
       <AlertModal
         isOpen={successAlert.isOpen}
-        onClose={() => {
-          successAlert.onClose()
-          queryClient.refetchQueries({
-            queryKey: ['profileAnswer', questionId],
-          })
-        }}
+        onClose={successAlert.onClose}
         icon={<BiCheckCircle />}
         title="답변을 성공적으로 보냈습니다!"
         description="친구들의 다른 프로필 질문에 답변을 보내보세요"
       />
+      <LoginModal modal={loginModal} />
     </Flex>
   )
 }
