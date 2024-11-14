@@ -28,6 +28,7 @@ export const GroupQuestionCreateModal = ({
   groupId,
 }: GroupQuestionCreateModalProps) => {
   const errorAlert = useDisclosure()
+
   const [errorMessage, setErrorMessage] = useState('')
 
   const form = useForm<CreateQuestionFields>({
@@ -81,7 +82,6 @@ export const GroupQuestionCreateModal = ({
           <CreateQuestionForm form={form} />
         </Flex>
       </FormModal>
-
       <AlertModal
         isOpen={errorAlert.isOpen}
         onClose={errorAlert.onClose}
