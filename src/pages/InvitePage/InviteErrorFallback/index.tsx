@@ -1,7 +1,11 @@
 import { FallbackProps } from 'react-error-boundary'
 
 import { InviteCardSkeleton } from '../InviteCard'
-import { InviteErrorMoal, InviteErrorMoalLogin } from './ErrorModal'
+import {
+  InviteErrorMoal,
+  InviteErrorMoalForbidden,
+  InviteErrorMoalLogin,
+} from './ErrorModal'
 
 export const InviteErrorFallback = ({ error }: FallbackProps) => {
   const { status } = error
@@ -19,7 +23,7 @@ export const InviteErrorFallback = ({ error }: FallbackProps) => {
     return (
       <>
         <InviteCardSkeleton />
-        <InviteErrorMoal errorMessage="이미 가입된 그룹입니다." />
+        <InviteErrorMoalForbidden errorMessage="이미 가입된 그룹입니다." />
       </>
     )
   }
