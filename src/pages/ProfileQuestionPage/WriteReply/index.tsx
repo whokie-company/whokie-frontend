@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { BiCheckCircle, BiError } from 'react-icons/bi'
 
@@ -43,7 +43,7 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
       postProfileAnswer({ content, profileQuestionId }),
     onSuccess: () => {
       successAlert.onOpen()
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: ['profileAnswer', userId, questionId],
       })
       form.reset()
@@ -65,6 +65,13 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
     }
   )
 
+  useEffect(() => {
+    form.reset({
+      content: '',
+      profileQuestionId: questionId,
+    })
+  }, [questionId, form])
+
   return (
     <Flex
       bg="white"
@@ -76,7 +83,7 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
       marginTop="auto"
     >
       <Form {...form}>
-        <form>
+        <form onSubmit={handleSend}>
           <FormField
             control={form.control}
             name="content"
@@ -99,7 +106,6 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
           />
           <Flex justifyContent="end" height="29px" margin="14px 0">
             <Button
-              onClick={handleSend}
               marginRight="15px"
               borderRadius={20}
               width="90px"
@@ -108,6 +114,7 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
               fontSize="small"
               _hover={{ boxShadow: 'md' }}
               _active={{ bg: 'brown.500' }}
+              type="submit"
             >
               전송
             </Button>
@@ -123,12 +130,7 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
       />
       <AlertModal
         isOpen={successAlert.isOpen}
-        onClose={() => {
-          successAlert.onClose()
-          queryClient.refetchQueries({
-            queryKey: ['profileAnswer', questionId],
-          })
-        }}
+        onClose={successAlert.onClose}
         icon={<BiCheckCircle />}
         title="답변을 성공적으로 보냈습니다!"
         description="친구들의 다른 프로필 질문에 답변을 보내보세요"

@@ -1,33 +1,22 @@
-import { useEffect, useState } from 'react'
-
 import { Box } from '@chakra-ui/react'
 
 import { ChatBox } from '@/components/ChatBox'
-import { useSelectedQuestionStore } from '@/stores/selected-question'
-import { ChatItem } from '@/types'
+import formatDate from '@/pages/ProfileQuestionPage/utils/formatDate'
+import { SelectedQuestion } from '@/stores/selected-question'
 
-import formatDate from '../Answer/formatDate'
+interface QuestionProps {
+  question: SelectedQuestion
+}
 
-export default function Question() {
-  const { selectedQuestion } = useSelectedQuestionStore()
-
-  const [question, setQuestion] = useState<ChatItem | null>(null)
-
-  useEffect(() => {
-    if (selectedQuestion.questionId && selectedQuestion.questionContent) {
-      setQuestion({
-        chatId: selectedQuestion.questionId,
-        direction: 'left',
-        createdAt: formatDate(selectedQuestion.questionCreatedAt as string),
-        content: selectedQuestion.questionContent,
-        deleteBtn: false,
-      })
-    } else {
-      setQuestion(null)
-    }
-  }, [selectedQuestion])
-
+export default function Question({ question }: QuestionProps) {
   return (
-    <Box padding="3px 0">{question && <ChatBox chatItem={question} />}</Box>
+    <Box padding="3px 0">
+      <ChatBox
+        direction="left"
+        content={question.questionContent}
+        createdAt={formatDate(question.questionCreatedAt)}
+        deleteBtn={false}
+      />
+    </Box>
   )
 }
