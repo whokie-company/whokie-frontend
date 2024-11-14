@@ -15,6 +15,7 @@ import {
 import cookies from '@/assets/cookies.svg'
 import { AlertModal } from '@/components/Modal/AlertModal'
 import { CreateGroupFields, CreateGroupSchema } from '@/schema/group'
+import { useMemberTypeStore } from '@/stores/member-type'
 import { Group } from '@/types'
 
 import { CreateGroupForm } from './CreateGroupForm'
@@ -33,6 +34,7 @@ export default function CreateGroupPage() {
   const [createGroupId, setCreateGroupId] = useState<number>()
   const errorAlert = useDisclosure()
   const successAlert = useDisclosure()
+  const setMemberType = useMemberTypeStore((state) => state.setMemberType)
 
   const navigate = useNavigate()
 
@@ -43,6 +45,9 @@ export default function CreateGroupPage() {
       successAlert.onOpen()
       setCreateGroupId(groupId)
       queryClient.invalidateQueries({ queryKey: ['groups'] })
+      setMemberType('GROUP')
+      queryClient.invalidateQueries({ queryKey: ['group', 'member', groupId] })
+      queryClient.refetchQueries({ queryKey: ['group', 'member', groupId] })
     },
   })
 
