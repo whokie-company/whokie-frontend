@@ -7,15 +7,15 @@ type ProfileQuestionResponse = {
   content: QuestionItem[]
 }
 
-const getProfileQuestion = async (userId: string) => {
+const getProfileQuestion = async (userId: number) => {
   const response = await fetchInstance.get<ProfileQuestionResponse>(
     `/api/profile/question/${userId}`
   )
 
-  return response?.data.content
+  return response.data.content
 }
 
-export const useGetProfileQuestion = (userId: string) => {
+export const useGetProfileQuestion = (userId: number) => {
   return useQuery({
     queryKey: ['profileQuestion', userId],
     queryFn: () => getProfileQuestion(userId),
