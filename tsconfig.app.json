@@ -28,5 +28,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", ".eslintrc.cjs"]
+  "include": ["src", ".eslintrc.cjs", "tests/**/*.test.ts"]
 }
