@@ -29,6 +29,7 @@ export const GroupQuestionCreateModal = ({
   groupId,
 }: GroupQuestionCreateModalProps) => {
   const errorAlert = useDisclosure()
+
   const [errorMessage, setErrorMessage] = useState('')
 
   const form = useForm<CreateQuestionFields>({

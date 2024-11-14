@@ -17,6 +17,9 @@ import {
   AnswerProfileQuestionField,
   AnswerProfileQuestionSchema,
 } from '@/schema/profile'
+import { useAuthTokenStore } from '@/stores/auth-token'
+
+import { LoginModal } from './LoginModal'
 
 interface WriteReplyProps {
   userId: number
@@ -24,10 +27,12 @@ interface WriteReplyProps {
 }
 
 export default function WriteReply({ userId, questionId }: WriteReplyProps) {
+  const isLoggedIn = useAuthTokenStore((state) => state.isLoggedIn())
   const [errorMessage, setErrorMessage] = useState('')
 
   const errorAlert = useDisclosure()
   const successAlert = useDisclosure()
+  const loginModal = useDisclosure()
 
   const form = useForm<AnswerProfileQuestionField>({
     resolver: zodResolver(AnswerProfileQuestionSchema),
@@ -55,7 +60,13 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
   })
 
   const handleSend = form.handleSubmit(
-    () => submitReply(form.getValues()),
+    () => {
+      if (!isLoggedIn) {
+        loginModal.onOpen()
+        return
+      }
+      submitReply(form.getValues())
+    },
     (errors) => {
       const errorMessages =
         Object.values(errors).flatMap((error) => error.message)[0] || ''
@@ -135,6 +146,7 @@ export default function WriteReply({ userId, questionId }: WriteReplyProps) {
         title="답변을 성공적으로 보냈습니다!"
         description="친구들의 다른 프로필 질문에 답변을 보내보세요"
       />
+      <LoginModal modal={loginModal} />
     </Flex>
   )
 }
