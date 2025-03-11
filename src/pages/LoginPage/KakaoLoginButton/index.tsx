@@ -3,7 +3,7 @@ import { Flex, Image, Text } from '@chakra-ui/react'
 import KakaoSymbol from '@/assets/kakao-logo-symbol.svg'
 
 export const KakaoLoginButton = () => {
-  const redirectURL = import.meta.env.DEV ? import.meta.env.VITE_LOGIN_URL : ''
+  const redirectURL = import.meta.env.VITE_LOGIN_URL
 
   const handleLogin = () => {
     window.location.href = `${redirectURL}/api/user/login`
