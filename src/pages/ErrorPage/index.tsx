@@ -12,8 +12,8 @@ export default function ErrorPage() {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      height="full"
       width="full"
+      height="100vh"
       textAlign="center"
       bg="primary_background"
       color="text"
@@ -38,7 +38,6 @@ export default function ErrorPage() {
         <br />
         요청하신 페이지의 주소가 변경, 삭제되어 찾을 수 없습니다.
       </Text>
-
       <Box mt="6">
         <Button
           colorScheme="primary"
