@@ -2,12 +2,12 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { useMediaQuery } from '@chakra-ui/react'
 
+import { GroupPage } from '@/pages'
 import ComingSoonPage from '@/pages/ComingSoonPage'
 import CookieRecordPage from '@/pages/CookieRecordPage'
 import CreateGroupPage from '@/pages/CreateGroupPage'
 // import ErrorPage from '@/pages/ErrorPage'
 import GroupMembersPage from '@/pages/GroupMembersPage'
-import GroupPage from '@/pages/GroupPage'
 import { QuestionManagement } from '@/pages/GroupPage/Management/Questions'
 import InvitePage from '@/pages/InvitePage'
 import { CardLayout } from '@/pages/Layout/CardLayout'
