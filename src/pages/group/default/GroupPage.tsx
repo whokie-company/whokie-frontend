@@ -10,6 +10,7 @@ import {
 } from '@/api/services/group/group.api'
 import { useGroupRole } from '@/api/services/group/member.api'
 import sadCookie from '@/assets/sadCookie.svg'
+import { GroupNavigation } from '@/components'
 import { Cookies } from '@/components/Cookies'
 import { Loading } from '@/components/Loading'
 import { RankingGraph } from '@/components/RankingGraph'
@@ -17,12 +18,7 @@ import ErrorPage from '@/pages/ErrorPage'
 import { useSelectedGroupStore } from '@/stores/selected-group'
 import { colors } from '@/styles/colors'
 
-import {
-  ExitGroupButton,
-  GroupManagement,
-  GroupNavigation,
-  GroupProfile,
-} from './components'
+import { ExitGroupButton, GroupManagement, GroupProfile } from './components'
 import { useRanking } from './hooks'
 
 export default function GroupPage() {
