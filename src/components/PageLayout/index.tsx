@@ -21,7 +21,12 @@ const PageLayout = ({
   pageColor = 'brown.50',
 }: PageLayoutProps) => {
   return (
-    <Flex background="brown.600" height="100vh" flexDirection="column">
+    <Flex
+      background="brown.600"
+      height="100vh"
+      flexDirection="column"
+      sx={{ userSelect: 'none' }}
+    >
       <Flex flex="1" justifyContent="center" alignItems="center">
         <HStack
           background={pageColor}
