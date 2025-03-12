@@ -5,7 +5,7 @@ import { useMediaQuery } from '@chakra-ui/react'
 import ComingSoonPage from '@/pages/ComingSoonPage'
 import CookieRecordPage from '@/pages/CookieRecordPage'
 import CreateGroupPage from '@/pages/CreateGroupPage'
-// import ErrorPage from '@/pages/ErrorPage'
+import ErrorPage from '@/pages/ErrorPage'
 import GroupMembersPage from '@/pages/GroupMembersPage'
 import GroupPage from '@/pages/GroupPage'
 import { QuestionManagement } from '@/pages/GroupPage/Management/Questions'
@@ -124,10 +124,10 @@ const router = createBrowserRouter([
     element: <ProfileQuestionLayout />,
     children: [{ path: '/profile-question', element: <ProfileQuestionPage /> }],
   },
-  // {
-  //   path: '*',
-  //   element: <ErrorPage />,
-  // },
+  {
+    path: '*',
+    element: <ErrorPage />,
+  },
 ])
 
 export const Routes = () => {
