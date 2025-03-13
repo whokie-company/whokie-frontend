@@ -10,8 +10,14 @@ export default function formatDate(dateString: string): string {
     createdAt.getFullYear() === today.getFullYear()
 
   if (isToday) {
-    return format(createdAt, 'HH:MM')
+    return format(createdAt, 'HH:mm')
   }
 
-  return format(createdAt, 'yyyy-MM-dd')
+  const isThisYear = createdAt.getFullYear() === today.getFullYear()
+
+  if (isThisYear) {
+    return format(createdAt, 'MM.dd')
+  }
+
+  return format(createdAt, 'yy.MM.dd')
 }
