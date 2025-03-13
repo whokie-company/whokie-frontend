@@ -10,7 +10,7 @@ import {
 } from '@/pages'
 import ComingSoonPage from '@/pages/ComingSoonPage'
 import CookieRecordPage from '@/pages/CookieRecordPage'
-// import ErrorPage from '@/pages/ErrorPage'
+import ErrorPage from '@/pages/ErrorPage'
 import InvitePage from '@/pages/InvitePage'
 import { CardLayout } from '@/pages/Layout/CardLayout'
 import { GroupMemberLayout } from '@/pages/Layout/GroupMemberLayout'
@@ -129,10 +129,10 @@ const router = createBrowserRouter([
     element: <ProfileQuestionLayout />,
     children: [{ path: '/profile-question', element: <ProfileQuestionPage /> }],
   },
-  // {
-  //   path: '*',
-  //   element: <ErrorPage />,
-  // },
+  {
+    path: '*',
+    element: <ErrorPage />,
+  },
 ])
 
 export const Routes = () => {
