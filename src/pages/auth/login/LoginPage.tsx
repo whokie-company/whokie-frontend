@@ -1,6 +1,6 @@
 import { Flex, Heading, Text } from '@chakra-ui/react'
 
-import { KakaoLoginButton } from './KakaoLoginButton'
+import { KakaoLoginButton } from './components'
 
 export default function LoginPage() {
   return (

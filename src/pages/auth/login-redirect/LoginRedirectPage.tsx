@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom'
 
-import { LoginRedirectSection } from './LoginRedirectSection'
+import { LoginRedirect } from './components'
 
 export default function LoginRedirectPage() {
   const location = useLocation()
@@ -10,5 +10,5 @@ export default function LoginRedirectPage() {
     return <div>잘못된 접근입니다.</div>
   }
 
-  return <LoginRedirectSection code={code} />
+  return <LoginRedirect code={code} />
 }

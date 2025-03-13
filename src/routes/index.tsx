@@ -5,12 +5,15 @@ import { useMediaQuery } from '@chakra-ui/react'
 import {
   CreateGroupPage,
   GroupPage,
+  LoginPage,
+  LoginRedirectPage,
   MemberManagementPage,
   PointCancelModal,
   PointFailureModal,
   PointPage,
   PointRedirectPage,
   QuestionManagementPage,
+  RegisterPage,
 } from '@/pages'
 import ComingSoonPage from '@/pages/ComingSoonPage'
 import CookieRecordPage from '@/pages/CookieRecordPage'
@@ -20,12 +23,9 @@ import { CardLayout } from '@/pages/Layout/CardLayout'
 import { GroupMemberLayout } from '@/pages/Layout/GroupMemberLayout'
 import { MainLayout } from '@/pages/Layout/MainLayout'
 import { ProfileQuestionLayout } from '@/pages/Layout/ProfileQuestionLayout'
-import LoginPage from '@/pages/LoginPage'
-import LoginRedirectPage from '@/pages/LoginRedirectPage'
 import MainPage from '@/pages/MainPage'
 import MyPage from '@/pages/MyPage'
 import ProfileQuestionPage from '@/pages/ProfileQuestionPage'
-import RegisterPage from '@/pages/RegisterPage'
 
 import { ProtectedRoute } from './ProtectedRoute'
 

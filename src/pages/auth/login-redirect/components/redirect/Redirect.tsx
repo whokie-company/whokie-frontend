@@ -6,11 +6,11 @@ import { Loading } from '@/components/Loading'
 import { useAuthTokenStore } from '@/stores/auth-token'
 import { useUserInfoStore } from '@/stores/user-info'
 
-interface LoginRedirectSectionProps {
+interface LoginRedirectProps {
   code: string
 }
 
-export const LoginRedirectSection = ({ code }: LoginRedirectSectionProps) => {
+export const LoginRedirect = ({ code }: LoginRedirectProps) => {
   const navigate = useNavigate()
 
   const { data, status, error } = useKakaoLogin({ code })
