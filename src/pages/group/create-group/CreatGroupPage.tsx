@@ -45,9 +45,8 @@ export default function CreateGroupPage() {
       successAlert.onOpen()
       setCreateGroupId(groupId)
       queryClient.invalidateQueries({ queryKey: ['groups'] })
+      queryClient.invalidateQueries({ queryKey: ['group'] })
       setMemberType('GROUP')
-      queryClient.invalidateQueries({ queryKey: ['group', 'member', groupId] })
-      queryClient.refetchQueries({ queryKey: ['group', 'member', groupId] })
     },
   })
 
