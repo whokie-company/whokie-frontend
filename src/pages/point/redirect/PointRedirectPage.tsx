@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom'
 
-import { PointRedirectSection } from './PointRedirectSection'
+import { PointRedirect } from './components'
 
 export default function PointRedirectPage() {
   const location = useLocation()
@@ -10,5 +10,5 @@ export default function PointRedirectPage() {
     return <div>잘못된 접근입니다.</div>
   }
 
-  return <PointRedirectSection pgToken={pgToken} />
+  return <PointRedirect pgToken={pgToken} />
 }

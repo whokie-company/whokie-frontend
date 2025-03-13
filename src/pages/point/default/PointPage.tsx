@@ -6,9 +6,7 @@ import { Flex } from '@chakra-ui/react'
 import { Loading } from '@/components/Loading'
 import { PageHeader } from '@/components/PageHeader'
 
-import { MyPointCard } from './MyPointCard'
-import { PointLogTabs } from './PointLogTabs'
-import { PurchasePointCard } from './PurchasePointCard'
+import { MyPoint, PointLog, PurchasePoint } from './components'
 
 export default function PointPage() {
   return (
@@ -22,10 +20,10 @@ export default function PointPage() {
       >
         <Suspense fallback={<Loading />}>
           <Flex flexDirection="column" margin={4} gap={4}>
-            <MyPointCard />
-            <PurchasePointCard />
+            <MyPoint />
+            <PurchasePoint />
           </Flex>
-          <PointLogTabs />
+          <PointLog />
         </Suspense>
       </Flex>
       <Outlet />

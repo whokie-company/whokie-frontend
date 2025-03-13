@@ -3,7 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { pointQuries } from '@/api/services/user/point.api'
 
-export const MyPointCard = () => {
+export const MyPoint = () => {
   const { data: point } = useSuspenseQuery(pointQuries.point())
 
   return (

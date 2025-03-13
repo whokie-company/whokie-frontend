@@ -1,0 +1,1 @@
+export { PointRedirect } from './Redirect'

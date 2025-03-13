@@ -1,0 +1,1 @@
+export { MyPoint } from './MyPoint'

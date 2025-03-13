@@ -11,7 +11,7 @@ enum PointOption {
   EARN = '적립',
 }
 
-interface PointLogListProps {
+interface PointLogTabCardProps {
   option: PointOptions
   points: Point[]
   hasNextPage: boolean
@@ -19,13 +19,13 @@ interface PointLogListProps {
   fetchNextPage: () => void
 }
 
-export const PointLogList = ({
+export const PointLogTabCard = ({
   option,
   points,
   hasNextPage,
   isFetchingNextPage,
   fetchNextPage,
-}: PointLogListProps) => {
+}: PointLogTabCardProps) => {
   if (!points.length) {
     return (
       <Card padding={4}>

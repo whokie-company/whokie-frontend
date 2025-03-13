@@ -6,6 +6,10 @@ import {
   CreateGroupPage,
   GroupPage,
   MemberManagementPage,
+  PointCancelModal,
+  PointFailureModal,
+  PointPage,
+  PointRedirectPage,
   QuestionManagementPage,
 } from '@/pages'
 import ComingSoonPage from '@/pages/ComingSoonPage'
@@ -20,10 +24,6 @@ import LoginPage from '@/pages/LoginPage'
 import LoginRedirectPage from '@/pages/LoginRedirectPage'
 import MainPage from '@/pages/MainPage'
 import MyPage from '@/pages/MyPage'
-import PointPage from '@/pages/PointPage'
-import PointCancelModal from '@/pages/PointPage/PointCancelModal'
-import PointFailureModal from '@/pages/PointPage/PointFailureModal'
-import PointRedirectPage from '@/pages/PointRedirectPage'
 import ProfileQuestionPage from '@/pages/ProfileQuestionPage'
 import RegisterPage from '@/pages/RegisterPage'
 

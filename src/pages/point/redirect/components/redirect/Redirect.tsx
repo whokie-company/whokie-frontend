@@ -6,13 +6,11 @@ import { usePurchasePointApprove } from '@/api/services/point/purchase.api'
 import { pointQuries } from '@/api/services/user/point.api'
 import { Loading } from '@/components/Loading'
 
-interface PointRedirectSectionProps {
+interface PointRedirectProps {
   pgToken: string
 }
 
-export const PointRedirectSection = ({
-  pgToken,
-}: PointRedirectSectionProps) => {
+export const PointRedirect = ({ pgToken }: PointRedirectProps) => {
   const navigate = useNavigate()
   const { data, status } = usePurchasePointApprove({ pg_token: pgToken })
 

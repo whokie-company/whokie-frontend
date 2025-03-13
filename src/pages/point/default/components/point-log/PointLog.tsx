@@ -5,9 +5,9 @@ import { Flex, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import { usePointRecordPaging } from '@/api/services/point/record.api'
 import { PointOptions } from '@/types'
 
-import { PointLogList } from './PointLogList'
+import { PointLogTabCard } from './tab-card'
 
-export const PointLogTabs = () => {
+export const PointLog = () => {
   const [tabIndex, setTableIndex] = useState(0)
   const option = options[tabIndex]
 
@@ -36,7 +36,7 @@ export const PointLogTabs = () => {
         <TabPanels>
           {Array.from({ length: 4 }, () => (
             <TabPanel key={tabIndex}>
-              <PointLogList
+              <PointLogTabCard
                 option={option}
                 points={points}
                 hasNextPage={hasNextPage}
