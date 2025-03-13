@@ -1,16 +1,16 @@
-// import { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 
-// import { useAuthTokenStore } from '@/stores/auth-token'
+import { useAuthTokenStore } from '@/stores/auth-token'
 
 export const ProtectedRoute = () => {
-  // const isLoggedIn = useAuthTokenStore((state) => state.isLoggedIn())
+  const isLoggedIn = useAuthTokenStore((state) => state.isLoggedIn())
 
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     window.location.href = `/login`
-  //   }
-  // }, [isLoggedIn])
+  useEffect(() => {
+    if (!isLoggedIn) {
+      window.location.href = `/login`
+    }
+  }, [isLoggedIn])
 
   return <Outlet />
 }
