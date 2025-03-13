@@ -5,6 +5,7 @@ import { Box, Flex } from '@chakra-ui/react'
 
 import { useGrupMemberPagingSuspense } from '@/api/services/group/member.api'
 import { AvatarLabel } from '@/components/AvatarLabel'
+import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
 import { PageLayout } from '@/components/PageLayout'
 import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
 import { useMembersLengthStore } from '@/stores/members-length'
@@ -16,7 +17,8 @@ interface GroupMemberSectionProps {
 export const GroupMemberSection = ({ groupId }: GroupMemberSectionProps) => {
   const navigate = useNavigate()
 
-  const { data } = useGrupMemberPagingSuspense({ groupId })
+  const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    useGrupMemberPagingSuspense({ groupId, size: 10 })
   const members = data?.pages.flatMap((page) => page.records)
   const membersLength = (data?.pages[0]?.records?.length ?? 0) - 1
 
@@ -46,6 +48,15 @@ export const GroupMemberSection = ({ groupId }: GroupMemberSectionProps) => {
             />
           </Box>
         ))}
+        {hasNextPage && (
+          <IntersectionObserverLoader
+            callback={() => {
+              if (!isFetchingNextPage) {
+                fetchNextPage()
+              }
+            }}
+          />
+        )}
       </Flex>
     </PageLayout.SideSection>
   )
