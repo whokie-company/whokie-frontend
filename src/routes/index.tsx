@@ -2,13 +2,15 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { useMediaQuery } from '@chakra-ui/react'
 
+import {
+  CreateGroupPage,
+  GroupPage,
+  MemberManagementPage,
+  QuestionManagementPage,
+} from '@/pages'
 import ComingSoonPage from '@/pages/ComingSoonPage'
 import CookieRecordPage from '@/pages/CookieRecordPage'
-import CreateGroupPage from '@/pages/CreateGroupPage'
 import ErrorPage from '@/pages/ErrorPage'
-import GroupMembersPage from '@/pages/GroupMembersPage'
-import GroupPage from '@/pages/GroupPage'
-import { QuestionManagement } from '@/pages/GroupPage/Management/Questions'
 import InvitePage from '@/pages/InvitePage'
 import { CardLayout } from '@/pages/Layout/CardLayout'
 import { GroupMemberLayout } from '@/pages/Layout/GroupMemberLayout'
@@ -49,7 +51,7 @@ const router = createBrowserRouter([
           },
           {
             path: '/group/:groupId/management',
-            element: <QuestionManagement />,
+            element: <QuestionManagementPage />,
           },
           {
             path: '/group/create',
@@ -78,7 +80,10 @@ const router = createBrowserRouter([
       {
         element: <GroupMemberLayout />,
         children: [
-          { path: '/group/:groupId/members', element: <GroupMembersPage /> },
+          {
+            path: '/group/:groupId/members',
+            element: <MemberManagementPage />,
+          },
         ],
       },
     ],

@@ -1,12 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 
-import { Flex } from '@chakra-ui/react'
+import { Flex, Text } from '@chakra-ui/react'
 
 import { useGroupPaging } from '@/api/services/group/group.api'
 import { ActiveBrownBox } from '@/components/ActiveBrownBox'
 import { AvatarLabel } from '@/components/AvatarLabel'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
-import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
 import { useMemberTypeStore } from '@/stores/member-type'
 import { useSelectedGroupStore } from '@/stores/selected-group'
 
@@ -24,7 +23,18 @@ export const GroupList = () => {
 
   const groups = data?.pages.flatMap((page) => page.groups)
 
-  if (!groups?.length) throw new Error(DATA_ERROR_MESSAGES.GROUP_NOT_FOUND)
+  if (!groups?.length)
+    return (
+      <Text
+        fontSize="smaller"
+        paddingY={1}
+        whiteSpace="pre-wrap"
+        textAlign="center"
+        color="text_second"
+      >
+        {'그룹 멤버가 없습니다.\n 멤버를 초대해보세요!'}
+      </Text>
+    )
 
   return (
     <Flex flexDirection="column" width="full" overflow="scroll">
