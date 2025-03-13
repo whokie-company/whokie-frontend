@@ -50,7 +50,9 @@ export const ChatBox = ({
         padding="4px 15px"
         zIndex="100"
       >
-        <Box fontSize="small">{content}</Box>
+        <Box fontSize="small" wordBreak="break-word">
+          {content}
+        </Box>
       </Flex>
       <Flex fontSize="xx-small">{createdAt}</Flex>
       {deleteBtn && (
