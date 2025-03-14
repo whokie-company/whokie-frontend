@@ -3,8 +3,10 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { useMediaQuery } from '@chakra-ui/react'
 
 import {
+  CommingSoonPage,
   CookieRecordPage,
   CreateGroupPage,
+  ErrorPage,
   GroupPage,
   InvitePage,
   LoginPage,
@@ -20,8 +22,6 @@ import {
   QuestionManagementPage,
   RegisterPage,
 } from '@/pages'
-import ComingSoonPage from '@/pages/ComingSoonPage'
-import ErrorPage from '@/pages/ErrorPage'
 import { CardLayout } from '@/pages/Layout/CardLayout'
 import { GroupMemberLayout } from '@/pages/Layout/GroupMemberLayout'
 import { MainLayout } from '@/pages/Layout/MainLayout'
@@ -139,7 +139,7 @@ export const Routes = () => {
   const [isMobile] = useMediaQuery('(max-width: 1024px)')
 
   if (isMobile) {
-    return <ComingSoonPage />
+    return <CommingSoonPage />
   }
 
   return <RouterProvider router={router} />
