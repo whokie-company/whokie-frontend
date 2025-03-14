@@ -1,61 +1,59 @@
 import { useEffect, useState } from 'react'
 import { BiChevronsRight, BiGroup } from 'react-icons/bi'
-import { Link } from 'react-router-dom'
 
 import { Button, Flex, Heading, Text } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 
 import { queryClient } from '@/api/instance'
 import {
-  AnswerGroupQuestionParams,
-  answerGroupQuestion,
+  AnswerQuestionParam,
+  answerRandomQuestion,
 } from '@/api/services/answer/question.api'
-import { useGroupRandomQuestion } from '@/api/services/question/random.api'
+import { useRandomQuestion } from '@/api/services/question/random.api'
 import { pointQuries } from '@/api/services/user/point.api'
 import { Loading } from '@/components/Loading'
 import { useProfileRandom } from '@/hooks/useProfileRandom'
-import { Member } from '@/types'
+import { Friend } from '@/types'
 
-import ProfileGrid from './ProfileGrid'
+import { ProfileGrid } from './profile-grid'
 
-interface GroupMainSectionProps {
-  groupId: number
-  members: Member[]
+interface CommonMainProps {
+  friends: Friend[]
   onFinsihGame: () => void
   onClickProfile: () => void
 }
 
 const QUESTION_SIZE = 5
 
-export const GroupMainSection = ({
-  groupId,
-  members,
+export const CommonMain = ({
+  friends,
   onFinsihGame,
   onClickProfile,
-}: GroupMainSectionProps) => {
+}: CommonMainProps) => {
   const {
     data: questions,
     status,
     refetch,
-  } = useGroupRandomQuestion({ groupId })
+  } = useRandomQuestion({
+    size: QUESTION_SIZE,
+  })
   const { mutate: answerQuestion } = useMutation({
-    mutationFn: (params: AnswerGroupQuestionParams) =>
-      answerGroupQuestion(params),
+    mutationFn: (params: AnswerQuestionParam) => answerRandomQuestion(params),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: pointQuries.all() })
     },
   })
-  const { pickedProfiles, reloadRandomProfiles } = useProfileRandom(members)
+  const { pickedProfiles, reloadRandomProfiles } = useProfileRandom(friends)
 
   const [questionSize, setQuestionSize] = useState(QUESTION_SIZE)
   const [questionIndex, setQuestionIndex] = useState(0)
 
   useEffect(() => {
-    if (questionIndex === questionSize) {
+    if (questionIndex === QUESTION_SIZE) {
       onFinsihGame()
       refetch()
     }
-  }, [questionIndex, onFinsihGame, refetch, questionSize])
+  }, [questionIndex, onFinsihGame, refetch])
 
   useEffect(() => {
     if (questions?.length && questions.length < QUESTION_SIZE) {
@@ -73,15 +71,12 @@ export const GroupMainSection = ({
         textAlign="center"
         gap={5}
       >
-        <Heading size="lg">그룹 질문이 없습니다😢</Heading>
-        <Heading size="md">그룹 페이지에서 질문을 추가해보세요!</Heading>
-        <Link to={`/group/${groupId}`}>
-          <Button colorScheme="primary" width="full" height="2.5rem">
-            그룹 페이지로 이동하기
-          </Button>
-        </Link>
+        <Heading size="lg">질문이 없습니다😢</Heading>
+        <Heading size="md">관리자에게 문의해주세요</Heading>
       </Flex>
     )
+
+  if (questionIndex === questionSize) return <Loading />
 
   const handleQuestionSkip = () => {
     reloadRandomProfiles()
@@ -91,18 +86,17 @@ export const GroupMainSection = ({
   const handleProfileSelect = (pickedId: number) => {
     handleQuestionSkip()
     answerQuestion({
-      groupId,
       questionId: questions[questionIndex].questionId,
       pickedId,
     })
     onClickProfile()
   }
 
-  if (questionIndex === questionSize) return <Loading />
+  if (questionIndex === QUESTION_SIZE) return <Loading />
 
   return (
     <Flex
-      height="100%"
+      height="full"
       flexDirection="column"
       justifyContent="space-between"
       textAlign="center"

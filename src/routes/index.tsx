@@ -7,6 +7,7 @@ import {
   GroupPage,
   LoginPage,
   LoginRedirectPage,
+  MainPage,
   MemberManagementPage,
   PointCancelModal,
   PointFailureModal,
@@ -25,7 +26,6 @@ import { CardLayout } from '@/pages/Layout/CardLayout'
 import { GroupMemberLayout } from '@/pages/Layout/GroupMemberLayout'
 import { MainLayout } from '@/pages/Layout/MainLayout'
 import { ProfileQuestionLayout } from '@/pages/Layout/ProfileQuestionLayout'
-import MainPage from '@/pages/MainPage'
 
 import { ProtectedRoute } from './ProtectedRoute'
 

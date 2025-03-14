@@ -7,10 +7,12 @@ import { friendsQueries } from '@/api/services/friend/queries'
 import { Loading } from '@/components/Loading'
 import { useSelectedGroupStore } from '@/stores/selected-group'
 
-import { CommonGame } from './GameSection/CommonGame'
-import { GroupGame } from './GameSection/GroupGame'
-import { ReadySection } from './ReadySection'
-import { ReplaySection } from './Replaysection'
+import {
+  CommonGameSection,
+  GroupGameSection,
+  ReadySection,
+  ReplaySection,
+} from './components'
 
 type GameType = 'READY' | 'REPLAY' | 'PLAY'
 
@@ -58,13 +60,13 @@ export default function MainPage() {
   return (
     <Flex flex={1} height="full" justifyContent="center">
       {group?.groupId ? (
-        <GroupGame
+        <GroupGameSection
           groupId={group.groupId}
           handleFinishGame={() => setPlay('REPLAY')}
           handleClickProfile={() => setScore(score + 1)}
         />
       ) : (
-        <CommonGame
+        <CommonGameSection
           handleFinishGame={() => setPlay('REPLAY')}
           handleClickProfile={() => setScore(score + 1)}
         />

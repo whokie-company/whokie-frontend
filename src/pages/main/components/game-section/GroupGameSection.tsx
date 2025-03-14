@@ -5,19 +5,19 @@ import { Button, Flex, Heading } from '@chakra-ui/react'
 import { useGroupMemberList } from '@/api/services/group/member.api'
 import { Loading } from '@/components/Loading'
 
-import { GroupMainSection } from './GroupMainSection'
+import { GroupMain } from './group-main'
 
-interface GroupGameProps {
+interface GroupGameSectionProps {
   groupId: number
   handleFinishGame: () => void
   handleClickProfile: () => void
 }
 
-export const GroupGame = ({
+export const GroupGameSection = ({
   groupId,
   handleFinishGame,
   handleClickProfile,
-}: GroupGameProps) => {
+}: GroupGameSectionProps) => {
   const { data: members, status, error } = useGroupMemberList({ groupId })
 
   if (status === 'pending') return <Loading />
@@ -43,7 +43,7 @@ export const GroupGame = ({
     )
 
   return (
-    <GroupMainSection
+    <GroupMain
       groupId={groupId}
       members={members}
       onFinsihGame={handleFinishGame}
