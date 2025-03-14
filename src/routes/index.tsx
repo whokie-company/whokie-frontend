@@ -12,6 +12,8 @@ import {
   PointFailureModal,
   PointPage,
   PointRedirectPage,
+  ProfilePage,
+  ProfileQuestionPage,
   QuestionManagementPage,
   RegisterPage,
 } from '@/pages'
@@ -24,8 +26,6 @@ import { GroupMemberLayout } from '@/pages/Layout/GroupMemberLayout'
 import { MainLayout } from '@/pages/Layout/MainLayout'
 import { ProfileQuestionLayout } from '@/pages/Layout/ProfileQuestionLayout'
 import MainPage from '@/pages/MainPage'
-import MyPage from '@/pages/MyPage'
-import ProfileQuestionPage from '@/pages/ProfileQuestionPage'
 
 import { ProtectedRoute } from './ProtectedRoute'
 
@@ -120,7 +120,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/mypage/:userId',
-        element: <MyPage />,
+        element: <ProfilePage />,
       },
     ],
   },
