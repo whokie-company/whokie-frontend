@@ -1,0 +1,1 @@
+export { PointLogTabCard } from './TabCard'
