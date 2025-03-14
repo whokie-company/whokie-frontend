@@ -29,7 +29,7 @@ import {
   RegisterPage,
 } from '@/pages'
 
-import { ProtectedRoute } from './ProtectedRoute'
+import { ProtectedRoute } from './protected-route'
 
 const router = createBrowserRouter([
   {
