@@ -1,11 +1,12 @@
 import { FallbackProps } from 'react-error-boundary'
 
-import { InviteCardSkeleton } from '../InviteCard'
+import { InviteCardSkeleton } from '@/components'
+
 import {
   InviteErrorMoal,
   InviteErrorMoalForbidden,
   InviteErrorMoalLogin,
-} from './ErrorModal'
+} from './error-modal'
 
 export const InviteErrorFallback = ({ error }: FallbackProps) => {
   const { status } = error

@@ -5,6 +5,7 @@ import { useMediaQuery } from '@chakra-ui/react'
 import {
   CreateGroupPage,
   GroupPage,
+  InvitePage,
   LoginPage,
   LoginRedirectPage,
   MainPage,
@@ -21,7 +22,6 @@ import {
 import ComingSoonPage from '@/pages/ComingSoonPage'
 import CookieRecordPage from '@/pages/CookieRecordPage'
 import ErrorPage from '@/pages/ErrorPage'
-import InvitePage from '@/pages/InvitePage'
 import { CardLayout } from '@/pages/Layout/CardLayout'
 import { GroupMemberLayout } from '@/pages/Layout/GroupMemberLayout'
 import { MainLayout } from '@/pages/Layout/MainLayout'

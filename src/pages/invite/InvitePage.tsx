@@ -4,11 +4,11 @@ import { useParams, useSearchParams } from 'react-router-dom'
 
 import { Flex, Heading } from '@chakra-ui/react'
 
+import { InviteCard } from '@/components'
 import ErrorPage from '@/pages/ErrorPage'
 import { useInviteUrl } from '@/stores/invite-url'
 
-import { InviteCard } from './InviteCard'
-import { InviteErrorFallback } from './InviteErrorFallback'
+import { InviteErrorFallback } from './components'
 
 export default function InvitePage() {
   const { groupId } = useParams<{ groupId: string }>()
