@@ -1,0 +1,1 @@
+export { CookieLogText } from './CookieLogText'

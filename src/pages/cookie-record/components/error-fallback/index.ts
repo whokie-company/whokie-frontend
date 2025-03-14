@@ -1,0 +1,1 @@
+export { CookieRecordErrorFallback } from './ErrorFallback'

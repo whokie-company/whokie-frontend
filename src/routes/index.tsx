@@ -3,6 +3,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { useMediaQuery } from '@chakra-ui/react'
 
 import {
+  CookieRecordPage,
   CreateGroupPage,
   GroupPage,
   InvitePage,
@@ -20,7 +21,6 @@ import {
   RegisterPage,
 } from '@/pages'
 import ComingSoonPage from '@/pages/ComingSoonPage'
-import CookieRecordPage from '@/pages/CookieRecordPage'
 import ErrorPage from '@/pages/ErrorPage'
 import { CardLayout } from '@/pages/Layout/CardLayout'
 import { GroupMemberLayout } from '@/pages/Layout/GroupMemberLayout'
