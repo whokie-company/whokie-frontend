@@ -3,6 +3,12 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { useMediaQuery } from '@chakra-ui/react'
 
 import {
+  CardLayout,
+  GroupMemberLayout,
+  MainLayout,
+  ProfileQuestionLayout,
+} from '@/components'
+import {
   CommingSoonPage,
   CookieRecordPage,
   CreateGroupPage,
@@ -22,10 +28,6 @@ import {
   QuestionManagementPage,
   RegisterPage,
 } from '@/pages'
-import { CardLayout } from '@/pages/Layout/CardLayout'
-import { GroupMemberLayout } from '@/pages/Layout/GroupMemberLayout'
-import { MainLayout } from '@/pages/Layout/MainLayout'
-import { ProfileQuestionLayout } from '@/pages/Layout/ProfileQuestionLayout'
 
 import { ProtectedRoute } from './ProtectedRoute'
 
