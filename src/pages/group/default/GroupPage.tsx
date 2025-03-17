@@ -14,7 +14,7 @@ import { GroupNavigation } from '@/components'
 import { Cookies } from '@/components/Cookies'
 import { Loading } from '@/components/Loading'
 import { RankingGraph } from '@/components/RankingGraph'
-import ErrorPage from '@/pages/ErrorPage'
+import { ErrorPage } from '@/pages'
 import { useSelectedGroupStore } from '@/stores/selected-group'
 import { colors } from '@/styles/colors'
 

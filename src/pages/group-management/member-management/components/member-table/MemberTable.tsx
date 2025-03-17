@@ -7,7 +7,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { membersManageQuries } from '@/api/services/group/member.api'
 import { useMyPage } from '@/api/services/profile/my-page.api'
 import { Loading } from '@/components/Loading'
-import ErrorPage from '@/pages/ErrorPage'
+import { ErrorPage } from '@/pages'
 import { Member, MemberTable } from '@/types'
 
 import { ChangeLeaderButton } from './change-leader-button'

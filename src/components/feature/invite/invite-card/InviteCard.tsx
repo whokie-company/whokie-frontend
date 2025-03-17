@@ -16,7 +16,7 @@ import { queryClient } from '@/api/instance'
 import { useGroupInfo } from '@/api/services/group/group.api'
 import { joinGroupMember } from '@/api/services/group/member.api'
 import Cookies from '@/assets/cookies.svg'
-import ErrorPage from '@/pages/ErrorPage'
+import { ErrorPage } from '@/pages'
 import { useMemberTypeStore } from '@/stores/member-type'
 
 interface InviteCardProps {
