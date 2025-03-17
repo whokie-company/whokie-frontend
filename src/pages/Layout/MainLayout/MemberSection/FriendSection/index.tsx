@@ -19,7 +19,12 @@ export const FriendSection = () => {
       <Text fontSize="small" color="text_description" paddingY={1} paddingX={2}>
         친한 친구 - {friends.length}
       </Text>
-      <Flex flexDirection="column" width="full" maxHeight="30rem">
+      <Flex
+        flexDirection="column"
+        width="full"
+        maxHeight="30rem"
+        overflow="scroll"
+      >
         {friends.map((friend) => (
           <Box
             key={friend.friendId}
