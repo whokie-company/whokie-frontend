@@ -9,7 +9,7 @@ import { approveGroupQuestion } from '@/api/services/group/group.api'
 import { useGroupRole } from '@/api/services/group/member.api'
 import { useGroupQuestion } from '@/api/services/question/group.api'
 import { Loading } from '@/components/Loading'
-import ErrorPage from '@/pages/ErrorPage'
+import { ErrorPage } from '@/pages'
 
 import Navigate from '../Navigate'
 import { QuestionList } from './QuestionList'

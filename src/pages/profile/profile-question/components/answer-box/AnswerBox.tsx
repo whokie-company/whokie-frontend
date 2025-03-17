@@ -14,7 +14,7 @@ import { ChatBox } from '@/components/ChatBox'
 import { Loading } from '@/components/Loading'
 import { AlertModal } from '@/components/Modal/AlertModal'
 import { ConfirmModal } from '@/components/Modal/ConfirmModal'
-import ErrorPage from '@/pages/ErrorPage'
+import { ErrorPage } from '@/pages'
 
 import { formatDate } from '../../utils'
 

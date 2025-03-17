@@ -3,14 +3,13 @@ import { format } from 'date-fns'
 
 import { useAnswerRecordPaging } from '@/api/services/answer/record.api'
 import { convertToDailyCookies } from '@/api/utils/answer/convertToDailyCookies'
+import { CookieLogList } from '@/components'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
 import {
   SelectedAnswer,
   useSelectedAnswerStore,
 } from '@/stores/selected-answer'
 import { Modal } from '@/types'
-
-import { CookieLogList } from '../../LogSection/CookieLogList'
 
 interface MonthlyCookieLogListProps {
   hintDrawer: Modal

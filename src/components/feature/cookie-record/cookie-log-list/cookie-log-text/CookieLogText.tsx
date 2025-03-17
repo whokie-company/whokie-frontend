@@ -26,8 +26,16 @@ export const CookieLogText = ({
     >
       <Image src={imageSrc} width="20px" />
       <Flex gap={1} fontSize="15px">
-        <Text as="b">{logContent}</Text>
-        <Text display="inline">으로 쿠키를 받았습니다.</Text>
+        <Text
+          as="b"
+          maxWidth="300px"
+          textOverflow="ellipsis"
+          overflow="hidden"
+          whiteSpace="nowrap"
+        >
+          {logContent}
+        </Text>
+        <Text whiteSpace="nowrap">으로 쿠키를 받았습니다.</Text>
       </Flex>
       <HintIcon hintCount={hintCount} />
     </Flex>

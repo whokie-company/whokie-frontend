@@ -5,7 +5,7 @@ import { useParams, useSearchParams } from 'react-router-dom'
 import { Flex, Heading } from '@chakra-ui/react'
 
 import { InviteCard } from '@/components'
-import ErrorPage from '@/pages/ErrorPage'
+import { ErrorPage } from '@/pages'
 import { useInviteUrl } from '@/stores/invite-url'
 
 import { InviteErrorFallback } from './components'
