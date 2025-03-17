@@ -2,6 +2,7 @@ import { Flex } from '@chakra-ui/react'
 
 import { useAnswerRecordPaging } from '@/api/services/answer/record.api'
 import { convertToDailyCookies } from '@/api/utils/answer/convertToDailyCookies'
+import { CookieLogList } from '@/components'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
 import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
 import {
@@ -9,8 +10,6 @@ import {
   useSelectedAnswerStore,
 } from '@/stores/selected-answer'
 import { Modal } from '@/types'
-
-import { CookieLogList } from './cookie-log-list'
 
 interface LogSectionProps {
   hintDrawer: Modal
