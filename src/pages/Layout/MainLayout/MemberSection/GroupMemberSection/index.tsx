@@ -7,7 +7,6 @@ import { useGrupMemberPagingSuspense } from '@/api/services/group/member.api'
 import { AvatarLabel } from '@/components/AvatarLabel'
 import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
 import { PageLayout } from '@/components/PageLayout'
-import { DATA_ERROR_MESSAGES } from '@/constants/error-message'
 import { useMembersLengthStore } from '@/stores/members-length'
 
 interface GroupMemberSectionProps {
@@ -28,11 +27,14 @@ export const GroupMemberSection = ({ groupId }: GroupMemberSectionProps) => {
 
   setMembersLength(membersLength)
 
-  if (!members) throw Error(DATA_ERROR_MESSAGES.MEMBER_NOT_FOUND)
-
   return (
     <PageLayout.SideSection SectionHeader={<GroupMemberHeader />}>
-      <Flex flexDirection="column" width="full" maxHeight="30rem">
+      <Flex
+        flexDirection="column"
+        width="full"
+        maxHeight="32rem"
+        overflow="scroll"
+      >
         {members.map((member) => (
           <Box
             key={member.userId}
@@ -48,6 +50,15 @@ export const GroupMemberSection = ({ groupId }: GroupMemberSectionProps) => {
             />
           </Box>
         ))}
+        {hasNextPage && (
+          <IntersectionObserverLoader
+            callback={() => {
+              if (!isFetchingNextPage) {
+                fetchNextPage()
+              }
+            }}
+          />
+        )}
         {hasNextPage && (
           <IntersectionObserverLoader
             callback={() => {
