@@ -32,7 +32,7 @@ export const GroupList = () => {
         textAlign="center"
         color="text_second"
       >
-        {'그룹 멤버가 없습니다.\n 멤버를 초대해보세요!'}
+        {'그룹이 없습니다.\n 그룹을 생성하고 멤버를 초대해보세요!'}
       </Text>
     )
 
