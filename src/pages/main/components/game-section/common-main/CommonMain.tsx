@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { BiChevronsRight, BiGroup } from 'react-icons/bi'
 
 import { Button, Flex, Heading, Text } from '@chakra-ui/react'
@@ -12,7 +12,6 @@ import {
 import { useRandomQuestion } from '@/api/services/question/random.api'
 import { pointQuries } from '@/api/services/user/point.api'
 import { Loading } from '@/components/Loading'
-import { useProfileRandom } from '@/hooks/useProfileRandom'
 import { Friend } from '@/types'
 
 import { ProfileGrid } from './profile-grid'
@@ -43,7 +42,17 @@ export const CommonMain = ({
       queryClient.invalidateQueries({ queryKey: pointQuries.all() })
     },
   })
-  const { pickedProfiles, reloadRandomProfiles } = useProfileRandom(friends)
+
+  const [pickedProfiles, setPickedProfiles] = useState<Friend[]>([])
+
+  const reloadRandomProfiles = useCallback(() => {
+    if (friends.length < 5) {
+      setPickedProfiles(friends)
+    } else {
+      const shuffled = [...friends].sort(() => Math.random() - 0.5)
+      setPickedProfiles(shuffled.slice(0, 5))
+    }
+  }, [friends])
 
   const [questionSize, setQuestionSize] = useState(QUESTION_SIZE)
   const [questionIndex, setQuestionIndex] = useState(0)
@@ -60,6 +69,10 @@ export const CommonMain = ({
       setQuestionSize(questions.length)
     }
   }, [questions])
+
+  useEffect(() => {
+    reloadRandomProfiles()
+  }, [friends, reloadRandomProfiles])
 
   if (status === 'pending') return <Loading />
 

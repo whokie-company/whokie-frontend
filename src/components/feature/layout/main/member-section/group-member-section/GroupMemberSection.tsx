@@ -29,7 +29,12 @@ export const GroupMemberSection = ({ groupId }: GroupMemberSectionProps) => {
 
   return (
     <PageLayout.SideSection SectionHeader={<GroupMemberHeader />}>
-      <Flex flexDirection="column" width="full" maxHeight="30rem">
+      <Flex
+        flexDirection="column"
+        width="full"
+        maxHeight="32rem"
+        overflow="scroll"
+      >
         {members.map((member) => (
           <Box
             key={member.userId}
@@ -45,6 +50,15 @@ export const GroupMemberSection = ({ groupId }: GroupMemberSectionProps) => {
             />
           </Box>
         ))}
+        {hasNextPage && (
+          <IntersectionObserverLoader
+            callback={() => {
+              if (!isFetchingNextPage) {
+                fetchNextPage()
+              }
+            }}
+          />
+        )}
         {hasNextPage && (
           <IntersectionObserverLoader
             callback={() => {

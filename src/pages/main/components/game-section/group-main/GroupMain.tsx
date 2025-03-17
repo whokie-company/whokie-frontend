@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { BiChevronsRight, BiGroup } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 
@@ -13,7 +13,6 @@ import {
 import { useGroupRandomQuestion } from '@/api/services/question/random.api'
 import { pointQuries } from '@/api/services/user/point.api'
 import { Loading } from '@/components/Loading'
-import { useProfileRandom } from '@/hooks/useProfileRandom'
 import { Member } from '@/types'
 
 import { ProfileGrid } from './profile-grid'
@@ -45,10 +44,19 @@ export const GroupMain = ({
       queryClient.invalidateQueries({ queryKey: pointQuries.all() })
     },
   })
-  const { pickedProfiles, reloadRandomProfiles } = useProfileRandom(members)
 
   const [questionSize, setQuestionSize] = useState(QUESTION_SIZE)
   const [questionIndex, setQuestionIndex] = useState(0)
+  const [pickedProfiles, setPickedProfiles] = useState<Member[]>([])
+
+  const reloadRandomProfiles = useCallback(() => {
+    if (members.length < 5) {
+      setPickedProfiles(members)
+    } else {
+      const shuffled = [...members].sort(() => Math.random() - 0.5)
+      setPickedProfiles(shuffled.slice(0, 5))
+    }
+  }, [members])
 
   useEffect(() => {
     if (questionIndex === questionSize) {
@@ -62,6 +70,10 @@ export const GroupMain = ({
       setQuestionSize(questions.length)
     }
   }, [questions])
+
+  useEffect(() => {
+    reloadRandomProfiles()
+  }, [members, reloadRandomProfiles])
 
   if (status === 'pending') return <Loading />
 
