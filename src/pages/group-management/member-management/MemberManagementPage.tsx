@@ -4,7 +4,7 @@ import { useGroupInfo } from '@/api/services/group/group.api'
 import { useGroupRole } from '@/api/services/group/member.api'
 import { GroupManagementNavigation } from '@/components'
 import { Loading } from '@/components/Loading'
-import ErrorPage from '@/pages/ErrorPage'
+import { ErrorPage } from '@/pages'
 import { useUserInfoStore } from '@/stores/user-info'
 
 import { GroupMemberTable } from './components'

@@ -10,7 +10,7 @@ import { useGroupRole } from '@/api/services/group/member.api'
 import { useGroupQuestion } from '@/api/services/question/group.api'
 import { GroupManagementNavigation } from '@/components'
 import { Loading } from '@/components/Loading'
-import ErrorPage from '@/pages/ErrorPage'
+import { ErrorPage } from '@/pages'
 
 import { GroupQuestionList, StatusButtonList } from './components'
 

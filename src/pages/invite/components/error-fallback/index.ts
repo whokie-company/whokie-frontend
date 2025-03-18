@@ -1,0 +1,1 @@
+export { InviteErrorFallback } from './ErrorFallback'
