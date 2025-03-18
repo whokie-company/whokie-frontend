@@ -5,11 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "test": "vitest",
-    "test:run": "vitest run"
+    "build": "tsc -b && vite build",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
