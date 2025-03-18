@@ -1,1 +1,1 @@
-export { SelectFreindHeader, SelectFreindHeaderSkeleton } from './header'
+export { SelectFreindHeader, SelectFreindHeaderSkeleton } from './Header'
