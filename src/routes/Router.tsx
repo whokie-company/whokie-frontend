@@ -22,6 +22,7 @@ import {
   PointCancelModal,
   PointFailureModal,
   PointPage,
+  PointPurchasePage,
   PointRedirectPage,
   ProfilePage,
   ProfileQuestionPage,
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
           {
             path: '/group/create',
             element: <CreateGroupPage />,
+          },
+          {
+            path: '/point/purchase',
+            element: <PointPurchasePage />,
           },
           {
             path: '/point',

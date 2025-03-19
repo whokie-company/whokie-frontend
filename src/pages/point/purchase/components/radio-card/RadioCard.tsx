@@ -19,6 +19,7 @@ export const PointRadioCard = ({ radio, value }: PointRadioCardProps) => {
         justifyContent="space-between"
         cursor="pointer"
         borderWidth="1px"
+        background="white"
         _checked={{
           borderColor: 'primary',
           background: 'primary_background',
