@@ -1,0 +1,1 @@
+export { PurchasePointModal } from './PurchaseModal'
