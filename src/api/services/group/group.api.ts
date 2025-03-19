@@ -151,11 +151,17 @@ export const useGroupRanking = ({ groupId }: { groupId: number }) => {
   })
 }
 
-export const approveGroupQuestion = async (
-  groupId: string,
-  questionId: number,
+export type ApproveGroupQuestionRequest = {
+  groupId?: number
+  questionId: number
   approve: boolean
-) => {
+}
+
+export const approveGroupQuestion = async ({
+  groupId,
+  questionId,
+  approve,
+}: ApproveGroupQuestionRequest) => {
   const response = await authorizationInstance.patch(
     `/api/group/question/status`,
     {

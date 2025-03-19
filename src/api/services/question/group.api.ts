@@ -1,32 +1,13 @@
-import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { authorizationInstance } from '@/api/instance'
 import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
-import { PagingRequestParams } from '@/types'
-
-interface Question {
-  questionId: number
-  questionContent: string
-  status: 'READY' | 'APPROVED' | 'REJECTED'
-}
-
-export type GroupQuestionResponse = {
-  page: number
-  totalPages: number
-  content: Question[]
-  size: number
-  totalElements: number
-  questions: {
-    questionId: number
-    content: string
-    users: {
-      groupMemberId: number
-      userId: number
-      userName: string
-      imageUrl: string
-    }[]
-  }[]
-}
+import {
+  AdminQuestion,
+  PagingRequestParams,
+  PagingResponse,
+  QuestionStatus,
+} from '@/types'
 
 export type CreateGroupQuestionPayload = {
   groupId: number
@@ -40,36 +21,28 @@ export const createGroupQuestion = async (
   return response.data.message
 }
 
-const getGroupQuestions = async (
-  groupId: string,
-  status: 'READY' | 'APPROVED' | 'REJECTED',
-  page: number,
-  size: number
-) => {
-  const response = await authorizationInstance.get(
-    `/api/group/${groupId}/question`,
-    {
-      params: { status, page, size },
-    }
-  )
-  return response.data
+type GroupQuestionParams = {
+  groupId: number
+  status: QuestionStatus
+  params: PagingRequestParams
 }
 
-type GroupQuestionParams = {
-  groupId: string
-  status: 'READY' | 'APPROVED' | 'REJECTED'
-} & PagingRequestParams
+type GroupQuestionResponse = PagingResponse<AdminQuestion>
 
-const getQuestionPaging = async (
-  groupId: number,
-  params: GroupQuestionParams
-) => {
-  const response = await authorizationInstance.get<GroupQuestionResponse>(
-    appendParamsToUrl(`/api/group/${groupId}/question`, params)
-  )
-  const { data } = response
+const getGroupQuestionPaging = async ({
+  groupId,
+  status,
+  params,
+}: GroupQuestionParams) => {
+  const url = appendParamsToUrl(`/api/group/${groupId}/question`, {
+    ...params,
+    status,
+  })
+
+  const { data } = await authorizationInstance.get<GroupQuestionResponse>(url)
+
   return {
-    data,
+    questions: data.content,
     nextPageToken:
       data.page !== data.totalPages - 1
         ? (data.page + 1).toString()
@@ -77,32 +50,32 @@ const getQuestionPaging = async (
   }
 }
 
-interface GroupQuestionPagingProps extends PagingRequestParams {
+interface GroupQuestionProps extends PagingRequestParams {
+  groupId: number
+  status: QuestionStatus
   initPageToken?: string
-  groupId: string
-  status: 'READY' | 'APPROVED' | 'REJECTED'
-}
-export const useQuestionPaging = ({
-  size = 10,
-  sort,
-  groupId,
-  status,
-  initPageToken,
-}: GroupQuestionPagingProps) => {
-  return useSuspenseInfiniteQuery({
-    queryKey: ['question', initPageToken],
-    queryFn: ({ pageParam = initPageToken }) =>
-      getQuestionPaging(Number(pageParam), { size, sort, groupId, status }),
-    initialPageParam: initPageToken,
-    getNextPageParam: (lastPage) => lastPage.nextPageToken,
-  })
 }
 
-export const useGroupQuestion = ({ groupId, status }: GroupQuestionParams) => {
-  return useQuery<GroupQuestionResponse>({
-    queryKey: ['groupQuestions', groupId, status],
-    queryFn: () => getGroupQuestions(groupId, status, 0, 10),
-    enabled: !!groupId,
-    staleTime: 0,
+export const useGroupQuestionPaging = ({
+  groupId,
+  status,
+  size = 10,
+  sort,
+  initPageToken,
+}: GroupQuestionProps) => {
+  return useInfiniteQuery({
+    queryKey: ['groups', 'question', groupId, status],
+    queryFn: ({ pageParam = initPageToken }) =>
+      getGroupQuestionPaging({
+        groupId,
+        status,
+        params: {
+          page: pageParam,
+          size,
+          sort,
+        },
+      }),
+    initialPageParam: initPageToken,
+    getNextPageParam: (lastPage) => lastPage.nextPageToken,
   })
 }

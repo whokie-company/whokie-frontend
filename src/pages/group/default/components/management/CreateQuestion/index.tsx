@@ -48,7 +48,7 @@ export const GroupQuestionCreateModal = ({
       onClose()
       form.reset({ groupId, content: '' })
       queryClient.invalidateQueries({
-        queryKey: ['groupQuestions', groupId, 'pending'],
+        queryKey: ['groups', 'question'],
       })
     },
     onError: () => {
