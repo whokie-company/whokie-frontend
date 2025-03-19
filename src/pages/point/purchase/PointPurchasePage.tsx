@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -7,6 +7,7 @@ import {
   FormControl,
   Input,
   Text,
+  useDisclosure,
   useRadioGroup,
 } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,7 +18,7 @@ import { Form, FormField, FormItem, FormMessage } from '@/components/Form'
 import { PageHeader } from '@/components/PageHeader'
 import { PurchasePointField, PurchasePointSchema } from '@/schema/point'
 
-import { PointRadioCard } from './components'
+import { ConfirmPointPurchaseModal, PointRadioCard } from './components'
 
 export default function PurchasePointPage() {
   const form = useForm<PurchasePointField>({
@@ -45,7 +46,14 @@ export default function PurchasePointPage() {
   const group = getRootProps()
 
   const onSubmit = ({ point }: PurchasePointField) => {
-    if (point) mutate(point)
+    if (point) {
+      confirmModal.onOpen()
+      setConfirmPoint(point)
+    } else {
+      form.setError('point', {
+        message: '포인트를 입력해주세요.',
+      })
+    }
   }
 
   const inputRef = useRef<HTMLInputElement | null>(null)
@@ -58,6 +66,9 @@ export default function PurchasePointPage() {
       }, 0)
     }
   }
+
+  const confirmModal = useDisclosure()
+  const [confirmPoint, setConfirmPoint] = useState<number>(0)
 
   return (
     <Flex flexDirection="column" height="full">
@@ -140,6 +151,11 @@ export default function PurchasePointPage() {
             </Button>
           </form>
         </Form>
+        <ConfirmPointPurchaseModal
+          modal={confirmModal}
+          purchasePoint={() => mutate(confirmPoint)}
+          point={confirmPoint}
+        />
       </Flex>
     </Flex>
   )
