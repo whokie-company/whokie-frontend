@@ -33,7 +33,9 @@ export default function ImgModify({ role, gprofile }: ImgModifyProps) {
 
   const [errorMessage, setErrorMessage] = useState('')
   const errorModal = useDisclosure()
-  const [timeoutId, setTimeoutId] = useState<number | null>(null)
+  const [timeoutId, setTimeoutId] = useState<ReturnType<
+    typeof setTimeout
+  > | null>(null)
 
   const { mutate: uploadImage } = useMutation({
     mutationFn: (data: ModifyGroupImgRequestBody) => modifyGroupImg(data),

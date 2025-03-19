@@ -9,6 +9,7 @@ export function authErrorInterceptor(error: AxiosError) {
 
   if (error.response) {
     const { status } = error.response
+
     if (status === 401) {
       clearAuthToken()
       clearUserInfo()
