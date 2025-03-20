@@ -12,11 +12,13 @@ import {
 } from '@/components/Form'
 import { CreateQuestionFields } from '@/schema/group'
 
-interface CreateQuestionFormProps {
+interface CreateGroupQuestionFormProps {
   form: UseFormReturn<CreateQuestionFields>
 }
 
-export const CreateQuestionForm = ({ form }: CreateQuestionFormProps) => {
+export const CreateGroupQuestionForm = ({
+  form,
+}: CreateGroupQuestionFormProps) => {
   return (
     <Form {...form}>
       <form>
