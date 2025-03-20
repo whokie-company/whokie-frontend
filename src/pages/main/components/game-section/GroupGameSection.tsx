@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
 
 import { Button, Flex, Heading } from '@chakra-ui/react'
+import { useQuery } from '@tanstack/react-query'
 
-import { useGroupMemberList } from '@/api/services/group/member.api'
+import { groupMemberQueries } from '@/api/services/group/member.api'
 import { Loading } from '@/components/Loading'
 
 import { GroupMain } from './group-main'
@@ -18,7 +19,11 @@ export const GroupGameSection = ({
   handleFinishGame,
   handleClickProfile,
 }: GroupGameSectionProps) => {
-  const { data: members, status, error } = useGroupMemberList({ groupId })
+  const {
+    data: members,
+    status,
+    error,
+  } = useQuery(groupMemberQueries.lists(groupId))
 
   if (status === 'pending') return <Loading />
 

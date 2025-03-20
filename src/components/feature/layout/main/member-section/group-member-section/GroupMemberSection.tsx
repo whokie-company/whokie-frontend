@@ -2,10 +2,10 @@ import { BiSolidGroup } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 
 import { Box, Flex } from '@chakra-ui/react'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
-import { useGrupMemberPagingSuspense } from '@/api/services/group/member.api'
+import { groupMemberQueries } from '@/api/services/group/member.api'
 import { AvatarLabel } from '@/components/AvatarLabel'
-import { IntersectionObserverLoader } from '@/components/IntersectionObserverLoader'
 import { PageLayout } from '@/components/PageLayout'
 import { useMembersLengthStore } from '@/stores/members-length'
 
@@ -16,16 +16,13 @@ interface GroupMemberSectionProps {
 export const GroupMemberSection = ({ groupId }: GroupMemberSectionProps) => {
   const navigate = useNavigate()
 
-  const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
-    useGrupMemberPagingSuspense({ groupId, size: 10 })
-  const members = data?.pages.flatMap((page) => page.records)
-  const membersLength = (data?.pages[0]?.records?.length ?? 0) - 1
+  const { data: members } = useSuspenseQuery(groupMemberQueries.lists(groupId))
 
   const setMembersLength = useMembersLengthStore(
     (state) => state.setMembersLength
   )
 
-  setMembersLength(membersLength)
+  setMembersLength(members.length)
 
   return (
     <PageLayout.SideSection SectionHeader={<GroupMemberHeader />}>
@@ -50,24 +47,6 @@ export const GroupMemberSection = ({ groupId }: GroupMemberSectionProps) => {
             />
           </Box>
         ))}
-        {hasNextPage && (
-          <IntersectionObserverLoader
-            callback={() => {
-              if (!isFetchingNextPage) {
-                fetchNextPage()
-              }
-            }}
-          />
-        )}
-        {hasNextPage && (
-          <IntersectionObserverLoader
-            callback={() => {
-              if (!isFetchingNextPage) {
-                fetchNextPage()
-              }
-            }}
-          />
-        )}
       </Flex>
     </PageLayout.SideSection>
   )

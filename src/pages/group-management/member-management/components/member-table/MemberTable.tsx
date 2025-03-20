@@ -65,7 +65,7 @@ export const GroupMemberTable = ({
   ): MemberTable[] => {
     return membersData.map((member, index) => ({
       id: index + 1 + pageData * 5,
-      memberImageUrl: member.memberImageUrl || '',
+      memberImageUrl: member.memberImageUrl,
       userName: member.userName,
       joinedAt: member.joinedAt,
       isExpel: '내보내기',
@@ -98,20 +98,14 @@ export const GroupMemberTable = ({
       cell: ({ row }) => {
         const imageUrl = row.getValue<string>('memberImageUrl')
         return (
-          <Box>
-            {imageUrl ? (
-              <Image
-                src={imageUrl}
-                alt="Profile"
-                margin="auto"
-                width="40px"
-                height="40px"
-                borderRadius="50%"
-              />
-            ) : (
-              'No Image'
-            )}
-          </Box>
+          <Image
+            src={imageUrl}
+            alt="Profile"
+            margin="auto"
+            width="40px"
+            height="40px"
+            borderRadius="50%"
+          />
         )
       },
     },
