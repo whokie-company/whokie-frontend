@@ -48,7 +48,7 @@ export const GroupQuestionList = ({
 
   if (fetchStatus === 'pending') return <Loading />
   if (error) return <Text>질문을 불러오는 데 실패했습니다.</Text>
-  if (!questions) return <Text>질문이 없습니다.</Text>
+  if (!questions || !questions.length) return <Text>질문이 없습니다.</Text>
 
   return (
     <Box maxHeight="336px" overflowY="scroll">
@@ -63,7 +63,7 @@ export const GroupQuestionList = ({
             justifyContent="space-between"
             alignItems="center"
           >
-            <Text fontSize="16px" flex="1">
+            <Text fontSize="16px" flex="1" paddingRight={2}>
               {question.questionContent}
             </Text>
             <RadioGroup value={question.status}>
