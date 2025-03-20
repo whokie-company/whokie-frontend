@@ -39,7 +39,11 @@ const ProfilePageSection = () => {
         <UserProfile profile={profile} />
       )}
       <ProfileRanking userId={Number(userId)} />
-      <OvenMenu userId={Number(userId)} isMyPage={isMyPage} />
+      <OvenMenu
+        userId={Number(userId)}
+        isMyPage={isMyPage}
+        userName={profile.name}
+      />
     </Flex>
   )
 }
