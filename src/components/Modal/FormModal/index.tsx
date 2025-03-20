@@ -17,7 +17,7 @@ interface FormModalProps {
   onClose: () => void
   icon: ReactElement
   title: string
-  description: string
+  description?: string
   children: ReactNode
   confirmButton: ReactNode
 }

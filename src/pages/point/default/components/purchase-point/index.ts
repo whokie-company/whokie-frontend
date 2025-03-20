@@ -1,1 +1,0 @@
-export { PurchasePoint } from './PurchasePoint'
