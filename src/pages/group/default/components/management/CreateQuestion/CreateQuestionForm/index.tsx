@@ -29,10 +29,7 @@ export const CreateQuestionForm = ({ form }: CreateQuestionFormProps) => {
                 <Flex flexDirection="column" gap={3}>
                   <Text fontSize={14}>질문</Text>
                   <Textarea
-                    rows={1}
-                    resize="none"
-                    whiteSpace="nowrap"
-                    placeholder="25자 이내 입력"
+                    placeholder="40자 이내 입력"
                     value={field.value}
                     onChange={field.onChange}
                   />
