@@ -11,21 +11,12 @@ type PurchasePointRequest = {
   nextRedirectPcUrl: string
 }
 
-const purchasePoint = async ({ point }: PurchasePointResponseParams) => {
+export const purchasePoint = async ({ point }: PurchasePointResponseParams) => {
   const response = await authorizationInstance.get<PurchasePointRequest>(
     appendParamsToUrl('/api/point/purchase', { point })
   )
 
   return response.data.nextRedirectPcUrl
-}
-
-export const usePurchasePoint = ({ point }: PurchasePointResponseParams) => {
-  return useQuery({
-    queryKey: ['point', 'purchase', 'redirect'],
-    queryFn: () => purchasePoint({ point }),
-    refetchOnWindowFocus: false,
-    enabled: false,
-  })
 }
 
 type PurchasePointApproveResponseParams = {

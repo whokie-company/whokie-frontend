@@ -147,4 +147,7 @@ export type AdminQuestion = {
   groupId: number
   status: string
   createdAt: string
+  writer: string
 }
+
+export type QuestionStatus = 'READY' | 'APPROVED' | 'REJECTED'
