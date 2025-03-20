@@ -2,6 +2,8 @@ import { Avatar, Box, Flex, Text } from '@chakra-ui/react'
 
 import { MyPageItem } from '@/types'
 
+import { UserProfileNavigation } from './navigation'
+
 interface UserProfileProps {
   profile: MyPageItem
 }
@@ -9,6 +11,7 @@ interface UserProfileProps {
 export const UserProfile = ({ profile }: UserProfileProps) => {
   return (
     <Flex flexDirection="column">
+      <UserProfileNavigation userName={profile.name} />
       <Box
         height="144px"
         backgroundImage={`url('${profile.backgroundImageUrl}')`}

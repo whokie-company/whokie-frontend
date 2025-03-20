@@ -1,28 +1,26 @@
 import { Suspense } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { Flex } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 
 import { useMyPageSuspense } from '@/api/services/profile/my-page.api'
 import { Loading } from '@/components/Loading'
 import { useUserInfoStore } from '@/stores/user-info'
 
-import {
-  MyProfile,
-  OvenMenu,
-  ProfileNavigation,
-  ProfileRanking,
-  UserProfile,
-} from './components'
+import { MyProfile, OvenMenu, ProfileRanking, UserProfile } from './components'
 
 export default function ProfilePage() {
   return (
-    <Flex flexDirection="column">
-      <ProfileNavigation />
-      <Suspense fallback={<Loading />}>
-        <ProfilePageSection />
-      </Suspense>
-    </Flex>
+    <Suspense
+      fallback={
+        <Flex flexDirection="column">
+          <Box height="32px" />
+          <Loading />
+        </Flex>
+      }
+    >
+      <ProfilePageSection />
+    </Suspense>
   )
 }
 
