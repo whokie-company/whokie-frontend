@@ -21,7 +21,6 @@ import { MemberTable } from '@/types'
 type TableProps = {
   members: MemberTable[]
   columns: ColumnDef<MemberTable>[]
-  borderColor: string
   leaderChangeBtn: boolean
   selectBtn: number | null
   setSelectBtn: (index: number | null) => void
@@ -32,7 +31,6 @@ type TableProps = {
 export const GroupTable = ({
   members,
   columns,
-  borderColor,
   leaderChangeBtn,
   selectBtn,
   setSelectBtn,
@@ -49,10 +47,10 @@ export const GroupTable = ({
     <Table
       borderRadius="20px"
       borderStyle="hidden"
-      boxShadow={`0 0 0 1px ${borderColor}`}
+      boxShadow="0 0 0 1px #E2E2E2"
       bg="white"
     >
-      <Thead top={0} borderBottom={`1px solid ${borderColor}`}>
+      <Thead top={0}>
         {table.getHeaderGroups().map((headerGroup) => (
           <Tr borderTop="1px solid gray" key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
@@ -61,7 +59,6 @@ export const GroupTable = ({
                 colSpan={header.colSpan}
                 fontSize="large"
                 textAlign="center"
-                borderBottom={`1px solid ${borderColor}`}
               >
                 {header.isPlaceholder ? null : (
                   <Box>
@@ -80,12 +77,7 @@ export const GroupTable = ({
         {table.getRowModel().rows.map((row) => (
           <Tr key={row.id} position="relative">
             {row.getVisibleCells().map((cell) => (
-              <Td
-                textAlign="center"
-                borderBottom={`1px solid ${borderColor}`}
-                padding="0"
-                key={cell.id}
-              >
+              <Td textAlign="center" padding="0" key={cell.id}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </Td>
             ))}

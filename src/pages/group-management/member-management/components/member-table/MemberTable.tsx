@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { Box, Image, useTheme } from '@chakra-ui/react'
+import { Box, Image } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 
@@ -27,8 +27,6 @@ export const GroupMemberTable = ({
   myUserId,
   groupName,
 }: GroupMemberTableProps) => {
-  const theme = useTheme()
-  const borderColor = theme.colors.black[300]
   const [page, setPage] = useState<number>(0)
   const [leaderChangeBtn, setLeaderChangeBtn] = useState(false)
   const [selectBtn, setSelectBtn] = useState<number | null>(null)
@@ -147,7 +145,6 @@ export const GroupMemberTable = ({
           <GroupTable
             members={tableList}
             columns={columns}
-            borderColor={borderColor}
             leaderChangeBtn={leaderChangeBtn}
             selectBtn={selectBtn}
             setSelectBtn={setSelectBtn}
