@@ -6,8 +6,8 @@ import { Box, Flex, Text, useDisclosure } from '@chakra-ui/react'
 import { CardButton } from '@/components/CardButton'
 import { GroupRole } from '@/types'
 
-import { GroupQuestionCreateModal } from './CreateQuestion'
-import { InviteMemberModal } from './InviteMemberModal'
+import { CreateGroupQuestionModal } from './create-question-modal'
+import { InviteMemberModal } from './invite-member-modal'
 
 interface ManagementProps {
   role: GroupRole
@@ -86,8 +86,7 @@ export const GroupManagement = ({
           </Flex>
         </Box>
       )}
-
-      <GroupQuestionCreateModal
+      <CreateGroupQuestionModal
         isOpen={isOpen}
         onClose={onClose}
         groupId={parseInt(String(groupId), 10)}

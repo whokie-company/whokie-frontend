@@ -15,19 +15,19 @@ import { AlertModal } from '@/components/Modal/AlertModal'
 import { FormConfirmModalButton, FormModal } from '@/components/Modal/FormModal'
 import { CreateQuestionFields, CreateQuestionSchema } from '@/schema/group'
 
-import { CreateQuestionForm } from './CreateQuestionForm'
+import { CreateGroupQuestionForm } from './create-question-form'
 
-interface GroupQuestionCreateModalProps {
+interface CreateGroupQuestionModalProps {
   isOpen: boolean
   onClose: () => void
   groupId: number
 }
 
-export const GroupQuestionCreateModal = ({
+export const CreateGroupQuestionModal = ({
   isOpen,
   onClose,
   groupId,
-}: GroupQuestionCreateModalProps) => {
+}: CreateGroupQuestionModalProps) => {
   const errorAlert = useDisclosure()
 
   const [errorMessage, setErrorMessage] = useState('')
@@ -80,7 +80,7 @@ export const GroupQuestionCreateModal = ({
         }
       >
         <Flex padding="0 10px" flexDirection="column" gap={3}>
-          <CreateQuestionForm form={form} />
+          <CreateGroupQuestionForm form={form} />
         </Flex>
       </FormModal>
       <AlertModal
