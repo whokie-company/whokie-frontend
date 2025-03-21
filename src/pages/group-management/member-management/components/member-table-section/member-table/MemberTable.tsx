@@ -8,6 +8,7 @@ import {
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
@@ -66,6 +67,7 @@ export const GroupMemberTable = ({
 
   return (
     <Flex
+      paddingTop={3}
       flexDirection="column"
       justifyContent="space-between"
       height="100%"
@@ -135,6 +137,11 @@ export const GroupMemberTable = ({
           ))}
         </Tbody>
       </Table>
+      {data.length === 0 && (
+        <Text fontSize="large" textAlign="center" height="full" paddingTop={4}>
+          그룹 멤버가 없습니다.
+        </Text>
+      )}
       <TablePagination table={table} pageNumList={pageNumList} />
     </Flex>
   )

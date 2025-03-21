@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Box, Flex, Image, Text } from '@chakra-ui/react'
+import { Box, Flex, Image } from '@chakra-ui/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 
@@ -12,7 +12,6 @@ import { Member } from '@/types'
 
 import { ChangeLeaderButton } from './change-leader-button'
 import { ExpelMemberButton } from './expel-member-button'
-import { GroupMemberHeader } from './header'
 import { GroupMemberTable } from './member-table'
 
 type GroupMemberTableSectionProps = {
@@ -38,13 +37,6 @@ export const GroupMemberTableSection = ({
   } = useMyPage(myUserId)
 
   const { data: member } = useSuspenseQuery(groupMemberQueries.list(groupId))
-
-  if (member.length === 0)
-    return (
-      <Text paddingTop={10} paddingLeft={6} fontSize="large">
-        그룹 멤버가 없습니다.
-      </Text>
-    )
 
   if (profileStatus === 'pending') return <Loading />
   if (isProfileError) return <ErrorPage />
@@ -99,27 +91,30 @@ export const GroupMemberTableSection = ({
 
   return (
     <Flex height="100%" flexDirection="column">
-      <GroupMemberHeader groupName={groupName} totalElements={member.length} />
+      <Box fontWeight="bold" fontSize="larger" padding="40px 50px 30px">
+        {groupName}
+      </Box>
       <Flex flex="1" padding="0 40px" flexDirection="column">
-        <ChangeLeaderButton
-          groupId={groupId}
-          leaderChangeBtn={leaderChangeBtn}
-          setLeaderChangeBtn={setLeaderChangeBtn}
-          leader={{ userId: myUserId, userName: profile.name }}
-          changeSelectId={changeSelectId}
-          changeSelectName={changeSelectName}
-        />
-        {member.length && (
-          <GroupMemberTable
-            data={member}
-            columns={columns}
+        <Box textAlign="end">총 {member.length}명</Box>
+        {member.length ? (
+          <ChangeLeaderButton
+            groupId={groupId}
             leaderChangeBtn={leaderChangeBtn}
-            selectBtn={selectBtn}
-            setSelectBtn={setSelectBtn}
-            setChangeSelectId={setChangeSelectId}
-            setChangeSelectName={setChangeSelectName}
+            setLeaderChangeBtn={setLeaderChangeBtn}
+            leader={{ userId: myUserId, userName: profile.name }}
+            changeSelectId={changeSelectId}
+            changeSelectName={changeSelectName}
           />
-        )}
+        ) : null}
+        <GroupMemberTable
+          data={member}
+          columns={columns}
+          leaderChangeBtn={leaderChangeBtn}
+          selectBtn={selectBtn}
+          setSelectBtn={setSelectBtn}
+          setChangeSelectId={setChangeSelectId}
+          setChangeSelectName={setChangeSelectName}
+        />
       </Flex>
     </Flex>
   )
