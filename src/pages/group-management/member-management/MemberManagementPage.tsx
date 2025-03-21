@@ -9,7 +9,7 @@ import { GroupManagementNavigation } from '@/components'
 import { ErrorPage } from '@/pages'
 import { useUserInfoStore } from '@/stores/user-info'
 
-import { GroupMemberTable } from './components'
+import { GroupMemberTableSection } from './components'
 
 export default function MemberManagementPage() {
   const userId = useUserInfoStore((state) => state.userInfo?.userId)
@@ -26,7 +26,7 @@ export default function MemberManagementPage() {
   return (
     <Flex height="100%" flexDirection="column">
       <GroupManagementNavigation groupId={groupId} pageName="그룹 멤버 관리" />
-      <GroupMemberTable
+      <GroupMemberTableSection
         groupId={Number(groupId)}
         myUserId={userId}
         groupName={group.groupName}

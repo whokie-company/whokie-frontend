@@ -1,38 +1,35 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-import { Box, Image } from '@chakra-ui/react'
-import { useQuery } from '@tanstack/react-query'
+import { Box, Flex, Image, Text } from '@chakra-ui/react'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 
-import { membersManageQuries } from '@/api/services/group/member.api'
+import { groupMemberQueries } from '@/api/services/group/member.api'
 import { useMyPage } from '@/api/services/profile/my-page.api'
 import { Loading } from '@/components/Loading'
 import { ErrorPage } from '@/pages'
-import { Member, MemberTable } from '@/types'
+import { Member } from '@/types'
 
 import { ChangeLeaderButton } from './change-leader-button'
 import { ExpelMemberButton } from './expel-member-button'
-import { GroupTable } from './group-table'
 import { GroupMemberHeader } from './header'
-import { TablePagination } from './table-pagination'
+import { GroupMemberTable } from './member-table'
 
-type GroupMemberTableProps = {
+type GroupMemberTableSectionProps = {
   groupId: number
   myUserId: number
   groupName: string
 }
 
-export const GroupMemberTable = ({
+export const GroupMemberTableSection = ({
   groupId,
   myUserId,
   groupName,
-}: GroupMemberTableProps) => {
-  const [page, setPage] = useState<number>(0)
+}: GroupMemberTableSectionProps) => {
   const [leaderChangeBtn, setLeaderChangeBtn] = useState(false)
   const [selectBtn, setSelectBtn] = useState<number | null>(null)
   const [changeSelectId, setChangeSelectId] = useState<number | null>(null)
   const [changeSelectName, setChangeSelectName] = useState<string>('')
-  const [tableList, setTableList] = useState<MemberTable[]>()
 
   const {
     data: profile,
@@ -40,54 +37,25 @@ export const GroupMemberTable = ({
     isError: isProfileError,
   } = useMyPage(myUserId)
 
-  const {
-    data: memberList,
-    status: memberStatus,
-    isError: isMemberError,
-  } = useQuery(membersManageQuries.groupMembers(groupId, page))
+  const { data: member } = useSuspenseQuery(groupMemberQueries.lists(groupId))
 
-  const members = memberList?.members
-  const totalPages = memberList?.totalPages
-  const totalElements = memberList?.totalElements
+  if (member.length === 0)
+    return (
+      <Text paddingTop={10} paddingLeft={6} fontSize="large">
+        그룹 멤버가 없습니다.
+      </Text>
+    )
 
-  useEffect(() => {
-    if (members && members.length > 0) {
-      const transformedData = transformMembersToMemberTable(members, page)
-      setTableList(transformedData)
-    }
-  }, [members, page, setTableList])
-
-  const transformMembersToMemberTable = (
-    membersData: Member[],
-    pageData: number
-  ): MemberTable[] => {
-    return membersData.map((member, index) => ({
-      id: index + 1 + pageData * 5,
-      memberImageUrl: member.memberImageUrl,
-      userName: member.userName,
-      joinedAt: member.joinedAt,
-      isExpel: '내보내기',
-      userId: member.userId,
-      role: member.role,
-    }))
-  }
-
-  if (memberStatus === 'pending' || profileStatus === 'pending')
-    return <Loading />
-  if (isProfileError || isMemberError) return <ErrorPage />
+  if (profileStatus === 'pending') return <Loading />
+  if (isProfileError) return <ErrorPage />
   if (!profile) return <ErrorPage />
-  if (!members || !totalPages) return '멤버가 없어요!'
 
-  const userName = profile.name
-
-  const columns: ColumnDef<MemberTable>[] = [
+  const columns: ColumnDef<Member>[] = [
     {
       header: '',
       accessorKey: 'id',
       cell: ({ row, table }) => (
-        <Box>
-          {table.getSortedRowModel().flatRows.indexOf(row) + 1 + page * 5}
-        </Box>
+        <Box>{table.getSortedRowModel().flatRows.indexOf(row) + 1}</Box>
       ),
     },
     {
@@ -130,20 +98,20 @@ export const GroupMemberTable = ({
   ]
 
   return (
-    <Box>
-      <GroupMemberHeader groupName={groupName} totalElements={totalElements} />
-      <Box padding="0 40px">
+    <Flex height="100%" flexDirection="column">
+      <GroupMemberHeader groupName={groupName} totalElements={member.length} />
+      <Flex flex="1" padding="0 40px" flexDirection="column">
         <ChangeLeaderButton
           groupId={groupId}
           leaderChangeBtn={leaderChangeBtn}
           setLeaderChangeBtn={setLeaderChangeBtn}
-          leader={{ userId: myUserId, userName }}
+          leader={{ userId: myUserId, userName: profile.name }}
           changeSelectId={changeSelectId}
           changeSelectName={changeSelectName}
         />
-        {members && tableList && (
-          <GroupTable
-            members={tableList}
+        {member.length && (
+          <GroupMemberTable
+            data={member}
             columns={columns}
             leaderChangeBtn={leaderChangeBtn}
             selectBtn={selectBtn}
@@ -152,12 +120,7 @@ export const GroupMemberTable = ({
             setChangeSelectName={setChangeSelectName}
           />
         )}
-        <TablePagination
-          page={page}
-          totalPages={totalPages}
-          setPage={setPage}
-        />
-      </Box>
-    </Box>
+      </Flex>
+    </Flex>
   )
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BiError, BiMessageAltError } from 'react-icons/bi'
 
-import { Button, useDisclosure } from '@chakra-ui/react'
+import { Button, Flex, useDisclosure } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 
 import { queryClient } from '@/api/instance'
@@ -77,7 +77,7 @@ export const ChangeLeaderButton = ({
   }
 
   return (
-    <>
+    <Flex>
       {leaderChangeBtn && (
         <Button
           bg="brown.500"
@@ -130,6 +130,6 @@ export const ChangeLeaderButton = ({
         title={errorMessage}
         description=""
       />
-    </>
+    </Flex>
   )
 }
