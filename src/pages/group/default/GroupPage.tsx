@@ -3,12 +3,10 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { Link, useParams } from 'react-router-dom'
 
 import { Box, Button, Card, Flex, Image, Text } from '@chakra-ui/react'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
-import {
-  useGroupInfoSuspense,
-  useGroupRanking,
-} from '@/api/services/group/group.api'
-import { useGroupRole } from '@/api/services/group/member.api'
+import { groupQueries, useGroupRanking } from '@/api/services/group/group.api'
+import { groupMemberQueries } from '@/api/services/group/member.api'
 import sadCookie from '@/assets/sadCookie.svg'
 import { GroupNavigation } from '@/components'
 import { Cookies } from '@/components/Cookies'
@@ -46,8 +44,8 @@ const GroupSection = ({ groupId }: GroupSectionProps) => {
   const { data: rankData } = useGroupRanking({
     groupId,
   })
-  const { data: groupData } = useGroupInfoSuspense(groupId)
-  const { data: role } = useGroupRole(groupId)
+  const { data: groupData } = useSuspenseQuery(groupQueries.info(groupId))
+  const { data: role } = useSuspenseQuery(groupMemberQueries.myRole(groupId))
 
   const setSelectedGroup = useSelectedGroupStore(
     (state) => state.setSelectedGroup

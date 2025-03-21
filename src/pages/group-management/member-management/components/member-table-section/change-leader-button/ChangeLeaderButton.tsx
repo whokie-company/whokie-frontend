@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BiError, BiMessageAltError } from 'react-icons/bi'
 
-import { Button, useDisclosure } from '@chakra-ui/react'
+import { Button, Flex, useDisclosure } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 
 import { queryClient } from '@/api/instance'
@@ -77,14 +77,13 @@ export const ChangeLeaderButton = ({
   }
 
   return (
-    <>
+    <Flex>
       {leaderChangeBtn && (
         <Button
           bg="brown.500"
           color="white"
           fontSize="small"
           height={5}
-          marginBottom={3}
           padding="8px"
           _hover={{ bg: 'brown.600' }}
           onClick={() => onClickChangeBtn()}
@@ -97,7 +96,6 @@ export const ChangeLeaderButton = ({
         color="brown.600"
         fontSize="small"
         height={5}
-        marginBottom={3}
         marginLeft={2}
         padding="8px"
         _hover={{ bg: 'brown.200' }}
@@ -130,6 +128,6 @@ export const ChangeLeaderButton = ({
         title={errorMessage}
         description=""
       />
-    </>
+    </Flex>
   )
 }

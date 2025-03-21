@@ -95,7 +95,7 @@ export type Member = {
   role: GroupRole
   userName: string
   joinedAt: string
-  memberImageUrl?: string
+  memberImageUrl: string
 }
 
 export type PointOptions = 'ALL' | 'CHARGED' | 'USED' | 'EARN'

@@ -1,4 +1,3 @@
-export * from './navigation'
 export * from './my-profile'
 export * from './user-profile'
 export * from './ranking'

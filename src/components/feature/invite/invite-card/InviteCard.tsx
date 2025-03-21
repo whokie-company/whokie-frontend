@@ -10,11 +10,14 @@ import {
   Image,
   Text,
 } from '@chakra-ui/react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { queryClient } from '@/api/instance'
-import { useGroupInfo } from '@/api/services/group/group.api'
-import { joinGroupMember } from '@/api/services/group/member.api'
+import { groupQueries } from '@/api/services/group/group.api'
+import {
+  groupMemberQueries,
+  joinGroupMember,
+} from '@/api/services/group/member.api'
 import Cookies from '@/assets/cookies.svg'
 import { ErrorPage } from '@/pages'
 import { useMemberTypeStore } from '@/stores/member-type'
@@ -28,13 +31,13 @@ export const InviteCard = ({ groupId, inviteCode }: InviteCardProps) => {
   const navigate = useNavigate()
   const setMemberType = useMemberTypeStore((state) => state.setMemberType)
 
-  const { data: group, status, error } = useGroupInfo(groupId)
+  const { data: group, status, error } = useQuery(groupQueries.info(groupId))
   const { mutate } = useMutation({
     mutationFn: () => joinGroupMember(inviteCode),
     onSuccess: () => {
       navigate(`/group/${groupId}`)
       setMemberType('GROUP')
-      queryClient.invalidateQueries({ queryKey: ['group', 'member', groupId] })
+      queryClient.invalidateQueries(groupMemberQueries.list(groupId))
     },
     onError: (inviteError) => {
       throw inviteError

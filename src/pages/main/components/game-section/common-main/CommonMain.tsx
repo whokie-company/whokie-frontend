@@ -111,13 +111,21 @@ export const CommonMain = ({
     <Flex
       height="full"
       flexDirection="column"
-      justifyContent="space-between"
+      justifyContent="center"
       textAlign="center"
-      padding="70px 0"
+      gap={16}
     >
-      <Text fontWeight="600" fontSize="4xl" color="text" paddingX={16}>
-        {questions[questionIndex].content}
-      </Text>
+      <Flex height={40} alignItems="center">
+        <Text
+          fontWeight="bold"
+          fontSize="4xl"
+          color="text"
+          paddingX={16}
+          wordBreak="break-word"
+        >
+          {questions[questionIndex].content}
+        </Text>
+      </Flex>
       <Flex direction="column" align="center">
         <ProfileGrid
           profiles={pickedProfiles.slice(0, 3)}
