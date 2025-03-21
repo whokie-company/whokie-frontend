@@ -1,4 +1,5 @@
 import {
+  queryOptions,
   useQuery,
   useSuspenseInfiniteQuery,
   useSuspenseQuery,
@@ -13,24 +14,21 @@ import {
   PagingResponse,
 } from '@/types'
 
+export const groupQueries = {
+  all: () => ['group'],
+  lists: () => [...groupQueries.all(), 'list'],
+  infos: (groupId: number) => [...groupQueries.all(), 'info', groupId],
+  info: (groupId: number) =>
+    queryOptions({
+      queryKey: [...groupQueries.infos(groupId)],
+      queryFn: () => getGroupInfo(groupId),
+    }),
+}
+
 const getGroupInfo = async (groupId: number) => {
   const response = await fetchInstance.get<Group>(`/api/group/info/${groupId}`)
 
   return response.data
-}
-
-export const useGroupInfo = (groupId: number) => {
-  return useQuery({
-    queryKey: ['group', groupId],
-    queryFn: () => getGroupInfo(groupId),
-  })
-}
-
-export const useGroupInfoSuspense = (groupId: number) => {
-  return useSuspenseQuery({
-    queryKey: ['group', groupId],
-    queryFn: () => getGroupInfo(groupId),
-  })
 }
 
 type GroupResponse = PagingResponse<Omit<Group, 'groupDescription'>[]>
@@ -58,7 +56,7 @@ export const useGroupPaging = ({
   initPageToken,
 }: GroupPagingProps) => {
   return useSuspenseInfiniteQuery({
-    queryKey: ['groups'],
+    queryKey: [...groupQueries.lists(), initPageToken],
     queryFn: ({ pageParam = initPageToken }) =>
       getGroupPaging({ page: pageParam, size, sort }),
     initialPageParam: initPageToken,

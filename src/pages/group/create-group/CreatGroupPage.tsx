@@ -11,6 +11,7 @@ import { queryClient } from '@/api/instance'
 import {
   CreateGroupRequestBody,
   createGroup,
+  groupQueries,
 } from '@/api/services/group/group.api'
 import cookies from '@/assets/cookies.svg'
 import { AlertModal } from '@/components/Modal/AlertModal'
@@ -44,8 +45,7 @@ export default function CreateGroupPage() {
     onSuccess: ({ groupId }: Group) => {
       successAlert.onOpen()
       setCreateGroupId(groupId)
-      queryClient.invalidateQueries({ queryKey: ['groups'] })
-      queryClient.invalidateQueries({ queryKey: ['group'] })
+      queryClient.invalidateQueries({ queryKey: groupQueries.lists() })
       setMemberType('GROUP')
     },
   })

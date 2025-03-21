@@ -9,6 +9,7 @@ import { useMutation } from '@tanstack/react-query'
 import { queryClient } from '@/api/instance'
 import {
   ModifyGroupRequestBody,
+  groupQueries,
   modifyGroup,
 } from '@/api/services/group/group.api'
 import { Form } from '@/components/Form'
@@ -43,8 +44,12 @@ export const GroupProfile = ({ group, role }: GroupProfileProps) => {
     mutationFn: (groupFields: ModifyGroupRequestBody) =>
       modifyGroup(groupFields),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['group', group.groupId] })
-      queryClient.invalidateQueries({ queryKey: ['groups'] })
+      queryClient.invalidateQueries({
+        queryKey: groupQueries.lists(),
+      })
+      queryClient.invalidateQueries({
+        queryKey: groupQueries.infos(group.groupId),
+      })
       successModal.onOpen()
     },
   })
