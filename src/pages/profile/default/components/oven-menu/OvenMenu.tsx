@@ -6,11 +6,12 @@ import { Box, Flex, Text } from '@chakra-ui/react'
 import { CardButton } from '@/components/CardButton'
 
 type OvenMenuProps = {
-  isMyPage: boolean
   userId: number
+  userName: string
+  isMyPage: boolean
 }
 
-export const OvenMenu = ({ userId, isMyPage }: OvenMenuProps) => {
+export const OvenMenu = ({ userId, userName, isMyPage }: OvenMenuProps) => {
   const navigate = useNavigate()
   const goToProfileQuestion = () => {
     navigate('/profile-question', { state: { userId } })
@@ -27,7 +28,11 @@ export const OvenMenu = ({ userId, isMyPage }: OvenMenuProps) => {
       bg="orange.100"
     >
       <Box>
-        <Text fontWeight="bold">나의 오븐</Text>
+        {isMyPage ? (
+          <Text fontWeight="bold">나의 오븐</Text>
+        ) : (
+          <Text fontWeight="bold">{userName}의 오븐</Text>
+        )}
         <Text fontSize="xs" color="text_description">
           질문과 답변을 확인해보세요
         </Text>

@@ -9,6 +9,7 @@ import { PointButton } from '@/components/PointButton'
 import { MyPageItem } from '@/types'
 
 import { EditProfileForm } from './edit-profile-form'
+import { ProfileNavigation } from './navigation'
 import { ProfileImage } from './profile-image'
 import { VisitedTag } from './visited-tag'
 
@@ -23,6 +24,7 @@ export const MyProfile = ({ profile }: MyProfileProps) => {
 
   return (
     <Flex flexDirection="column">
+      <ProfileNavigation />
       <ProfileImage
         profileImage={profile.imageUrl}
         backgroundImage={profile.backgroundImageUrl}
