@@ -9,6 +9,7 @@ import { useMutation } from '@tanstack/react-query'
 import { queryClient } from '@/api/instance'
 import {
   ModifyGroupImgRequestBody,
+  groupQueries,
   modifyGroupImg,
 } from '@/api/services/group/group.api'
 import { Form, FormControl, FormField, FormItem } from '@/components/Form'
@@ -45,8 +46,10 @@ export default function ImgModify({ role, gprofile }: ImgModifyProps) {
       }
 
       const newTimeoutId = setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['group', gprofile.groupId] })
-        queryClient.invalidateQueries({ queryKey: ['groups'] })
+        queryClient.invalidateQueries({ queryKey: groupQueries.lists() })
+        queryClient.invalidateQueries({
+          queryKey: groupQueries.infos(gprofile.groupId),
+        })
       }, 2000)
 
       setTimeoutId(newTimeoutId)

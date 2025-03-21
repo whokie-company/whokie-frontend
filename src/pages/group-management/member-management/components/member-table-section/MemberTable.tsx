@@ -37,7 +37,7 @@ export const GroupMemberTableSection = ({
     isError: isProfileError,
   } = useMyPage(myUserId)
 
-  const { data: member } = useSuspenseQuery(groupMemberQueries.lists(groupId))
+  const { data: member } = useSuspenseQuery(groupMemberQueries.list(groupId))
 
   if (member.length === 0)
     return (

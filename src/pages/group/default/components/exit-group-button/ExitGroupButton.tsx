@@ -5,6 +5,7 @@ import { Button, Flex, useDisclosure } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 
 import { queryClient } from '@/api/instance'
+import { groupQueries } from '@/api/services/group/group.api'
 import { exitGroupMember } from '@/api/services/group/member.api'
 import { AlertModal } from '@/components/Modal/AlertModal'
 import {
@@ -36,7 +37,7 @@ export const ExitGroupButton = ({
   const { mutate: exitGroup } = useMutation({
     mutationFn: () => exitGroupMember(groupId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['groups'] })
+      queryClient.invalidateQueries({ queryKey: groupQueries.lists() })
       setSelectedGroup(undefined)
       navigate('/')
     },

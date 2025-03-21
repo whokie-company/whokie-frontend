@@ -23,7 +23,7 @@ export const GroupGameSection = ({
     data: members,
     status,
     error,
-  } = useQuery(groupMemberQueries.lists(groupId))
+  } = useQuery(groupMemberQueries.list(groupId))
 
   if (status === 'pending') return <Loading />
 

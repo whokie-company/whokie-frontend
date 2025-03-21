@@ -5,9 +5,10 @@ import { GroupRole, Member } from '@/types'
 
 export const groupMemberQueries = {
   all: () => ['member'],
-  lists: (groupId: number) =>
+  lists: (groupId: number) => [...groupMemberQueries.all(), 'list', groupId],
+  list: (groupId: number) =>
     queryOptions({
-      queryKey: ['list', groupId],
+      queryKey: [...groupMemberQueries.lists(groupId)],
       queryFn: () => getGroupMemberList({ groupId }),
     }),
   myRole: (groupId: number) =>

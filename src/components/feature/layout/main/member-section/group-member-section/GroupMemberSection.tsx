@@ -16,7 +16,7 @@ interface GroupMemberSectionProps {
 export const GroupMemberSection = ({ groupId }: GroupMemberSectionProps) => {
   const navigate = useNavigate()
 
-  const { data: members } = useSuspenseQuery(groupMemberQueries.lists(groupId))
+  const { data: members } = useSuspenseQuery(groupMemberQueries.list(groupId))
 
   const setMembersLength = useMembersLengthStore(
     (state) => state.setMembersLength

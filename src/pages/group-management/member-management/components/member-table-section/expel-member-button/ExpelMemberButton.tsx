@@ -4,7 +4,10 @@ import { Button, useDisclosure } from '@chakra-ui/react'
 import { useMutation } from '@tanstack/react-query'
 
 import { queryClient } from '@/api/instance'
-import { expelMember } from '@/api/services/group/member.api'
+import {
+  expelMember,
+  groupMemberQueries,
+} from '@/api/services/group/member.api'
 import { AlertModal } from '@/components/Modal/AlertModal'
 import { ConfirmModal } from '@/components/Modal/ConfirmModal'
 import { GroupRole } from '@/types'
@@ -28,9 +31,9 @@ export const ExpelMemberButton = ({
   const { mutate: onExpelMember } = useMutation({
     mutationFn: () => expelMember({ groupId, userId }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['expelMember'] })
-      queryClient.invalidateQueries({ queryKey: ['group', 'member', groupId] })
-      queryClient.invalidateQueries({ queryKey: ['membersManage', groupId] })
+      queryClient.invalidateQueries({
+        queryKey: groupMemberQueries.lists(groupId),
+      })
       window.location.reload()
     },
     onError: () => {
