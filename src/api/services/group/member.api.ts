@@ -1,46 +1,19 @@
-import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
+import { queryOptions } from '@tanstack/react-query'
 
 import { authorizationInstance } from '@/api/instance'
-import { appendParamsToUrl } from '@/api/utils/common/appendParamsToUrl'
-import { GroupRole, Member, PagingRequestParams } from '@/types'
+import { GroupRole, Member } from '@/types'
 
 export const groupMemberQueries = {
-  all: () => ['group', 'member'],
+  all: () => ['member'],
   lists: (groupId: number) =>
     queryOptions({
       queryKey: ['list', groupId],
       queryFn: () => getGroupMemberList({ groupId }),
     }),
-}
-
-type GroupMembersRequestParams = {
-  groupId: number
-} & PagingRequestParams
-
-type GroupMembersManageResponse = {
-  content: Member[]
-  totalPages?: number
-  totalElements?: number
-}
-
-const getGroupMembers = async (params: GroupMembersRequestParams) => {
-  const response = await authorizationInstance.get<GroupMembersManageResponse>(
-    appendParamsToUrl(`/api/group/${params.groupId}/member`, params)
-  )
-
-  return {
-    members: response.data.content,
-    totalPages: response.data.totalPages,
-    totalElements: response.data.totalElements,
-  }
-}
-
-export const membersManageQuries = {
-  all: () => ['membersManage'],
-  groupMembers: (groupId: number, page?: number) =>
+  myRole: (groupId: number) =>
     queryOptions({
-      queryKey: [...membersManageQuries.all(), groupId, page],
-      queryFn: () => getGroupMembers({ groupId, page: String(page), size: 5 }),
+      queryKey: [...groupMemberQueries.all(), 'role', groupId],
+      queryFn: () => getGroupRole(groupId),
     }),
 }
 
@@ -82,13 +55,6 @@ const getGroupRole = async (groupId: number) => {
   )
 
   return response.data.role
-}
-
-export const useGroupRole = (groupId: number) => {
-  return useSuspenseQuery({
-    queryKey: ['group', 'role', groupId],
-    queryFn: () => getGroupRole(groupId),
-  })
 }
 
 export type ExpelMemberRequest = {
