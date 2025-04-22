@@ -11,7 +11,8 @@ import {
 import {
   CommingSoonPage,
   CookieRecordPage,
-  CreateGroupPage, // ErrorPage,
+  CreateGroupPage,
+  ErrorPage,
   GroupPage,
   InvitePage,
   LoginPage,
@@ -135,10 +136,10 @@ const router = createBrowserRouter([
     element: <ProfileQuestionLayout />,
     children: [{ path: '/profile-question', element: <ProfileQuestionPage /> }],
   },
-  // {
-  //   path: '*',
-  //   element: <ErrorPage />,
-  // },
+  {
+    path: '*',
+    element: <ErrorPage />,
+  },
 ])
 
 export const Routes = () => {
