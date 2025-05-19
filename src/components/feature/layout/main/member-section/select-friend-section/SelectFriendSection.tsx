@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 
 import { Button, Center, Flex, Text } from '@chakra-ui/react'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
-import { useFriendsAndMyFriends } from '@/api/services/friend/queries'
+import { friendsQueries } from '@/api/services/friend/queries'
 import { PageLayout } from '@/components/PageLayout'
 import { useFriendStore } from '@/stores/friends'
 
@@ -10,7 +11,9 @@ import { SelectFreindHeader, SelectFreindHeaderSkeleton } from './header'
 import { MemberList } from './member-list'
 
 export const SelectFriendSection = () => {
-  const { friends, myFriends } = useFriendsAndMyFriends()
+  const { data: friends } = useSuspenseQuery(
+    friendsQueries.groupFriends({ groupId: 0 })
+  )
 
   const setFriends = useFriendStore((state) => state.setFriends)
   const friendList = useFriendStore((state) => state.friendList())
@@ -23,9 +26,7 @@ export const SelectFriendSection = () => {
   }, [friends, setFriends])
 
   return (
-    <PageLayout.SideSection
-      SectionHeader={<SelectFreindHeader initialfriends={myFriends} />}
-    >
+    <PageLayout.SideSection SectionHeader={<SelectFreindHeader />}>
       <Flex
         flexDirection="column"
         paddingLeft={2}

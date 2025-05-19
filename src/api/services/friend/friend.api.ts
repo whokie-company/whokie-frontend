@@ -13,6 +13,18 @@ export const getFriends = async () => {
   return response.data
 }
 
+type GroupFriendsParams = {
+  groupId: number
+}
+
+export const getGroupFriends = async ({ groupId }: GroupFriendsParams) => {
+  const response = await authorizationInstance.get<FriendsResponse>(
+    `/api/friend/group?group-id=${groupId}`
+  )
+
+  return response.data.friends
+}
+
 type AddFriendRequestBody = {
   friends: { id: number }[]
 }
