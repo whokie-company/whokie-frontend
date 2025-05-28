@@ -1,9 +1,19 @@
-import { queryOptions, useSuspenseQueries } from '@tanstack/react-query'
+import { queryOptions } from '@tanstack/react-query'
 
-import { getFriends } from './friend.api'
+import { getFriends, getGroupFriends } from './friend.api'
 
 export const friendsQueries = {
   all: () => ['friends'],
+  groupFriendsKey: ({ groupId }: { groupId: number }) => [
+    ...friendsQueries.all(),
+    'group',
+    groupId,
+  ],
+  groupFriends: ({ groupId }: { groupId: number }) =>
+    queryOptions({
+      queryKey: friendsQueries.groupFriendsKey({ groupId }),
+      queryFn: () => getGroupFriends({ groupId }),
+    }),
   friends: () =>
     queryOptions({
       queryKey: [...friendsQueries.all()],
@@ -17,15 +27,4 @@ export const friendsQueries = {
         return data.friends.filter((friend) => friend.isFriend)
       },
     }),
-}
-
-export const useFriendsAndMyFriends = () => {
-  const result = useSuspenseQueries({
-    queries: [friendsQueries.friends(), friendsQueries.myFriends()],
-  })
-
-  const { friends } = result[0].data
-  const myFriends = result[1].data
-
-  return { friends, myFriends }
 }

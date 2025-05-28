@@ -12,13 +12,7 @@ import { useFriendStore } from '@/stores/friends'
 import { useMemberTypeStore } from '@/stores/member-type'
 import { Friend } from '@/types'
 
-interface SelectFreindHeaderProps {
-  initialfriends?: Friend[]
-}
-
-export const SelectFreindHeader = ({
-  initialfriends,
-}: SelectFreindHeaderProps) => {
+export const SelectFreindHeader = () => {
   const queryClient = useQueryClient()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const navigate = useNavigate()
@@ -34,15 +28,6 @@ export const SelectFreindHeader = ({
     },
   })
 
-  const onClickAddFriends = () => {
-    if (isFriendListUpdated(initialfriends, friendList)) {
-      setMemberType('FRIEND')
-      return
-    }
-
-    mutate()
-  }
-
   return (
     <div>
       <PageLayout.SideSection.SectionHeader
@@ -51,7 +36,7 @@ export const SelectFreindHeader = ({
         Extentions={
           <Box
             _hover={{ color: 'black.800', cursor: 'pointer' }}
-            onClick={() => onClickAddFriends()}
+            onClick={() => mutate()}
           >
             <Text fontSize="small" fontWeight="bold">
               설정 완료
@@ -92,13 +77,4 @@ const convertFriendsToIds = (friendList: Friend[]) => {
   return friendList.map((friend) => ({
     id: friend.friendId,
   }))
-}
-
-const isFriendListUpdated = (
-  initialfriends: Friend[] | undefined,
-  friendList: Friend[]
-) => {
-  if (!initialfriends) return false
-
-  return JSON.stringify(initialfriends) === JSON.stringify(friendList)
 }
